@@ -16,7 +16,7 @@
 					//d($value);
 					$return = $this->numElementsEqual($combination, $value);
 					//d($return);
-					if($return['num'] > 3) {
+					if($return['num'] > 5) {
 						if(!is_array(@$data[$return['subComb']])) {
 							$data[$return['subComb']] = array('total'=>0);
 						}

@@ -1,7 +1,7 @@
 <?php
 
 class Combination {
-	private $id;
+	public $id;
 	public $d = array();
 
 	public function __set($name, $value)

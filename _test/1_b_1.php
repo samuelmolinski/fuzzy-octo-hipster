@@ -81,7 +81,7 @@
 
 	$perf->start_timer('p_test_1b1');
 	//$results = $pTest->p_test_1b1($arrTest, $arrTest);
-	//$results = $pTest->p_test_1b1($winningNumbers, $winningNumbers);
+	$results = $pTest->p_test_1b1($winningNumbers, $winningNumbers);
 	$perf->end_timer('p_test_1b1');
 	//$results = $test->numElementsEqual($c1, $c2);
 
@@ -96,6 +96,7 @@
 		$totalOccurance += ($v['total']/2);
 	}
 	$percent = $totalOccurance/$total *100;
+	d($perf->timers['p_test_1b1']['total']/$total);
 	echo "<p>Test 1.b.1: $percent% of the combinations contain 5 numbers that occured in previous winning combinations.</p>";
 	//d($winningNumbers);
 

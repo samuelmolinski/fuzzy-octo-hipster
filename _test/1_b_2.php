@@ -89,9 +89,11 @@
 	$winningStats = array();
 	
 	$perf->start_timer('p_test_1b2');
+
 	foreach ($winningNumbers as $key => $value) {
 		$n = new CombinationStatistics;
 		$n->set_d($value->d);
+		$n->gen_id();	
 		$n->populateStats();
 		$winningStats[] = $n;
 		unset($n);
@@ -101,6 +103,7 @@
 	$results = $winningStats;
 	$perf->end_timer('p_test_1b2');
 	//$results = $test->numElementsEqual($c1, $c2);
+	d(json_encode($winningStats[0]));
 
 	d($results);
 	//d($perf->timers);
