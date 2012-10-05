@@ -46,19 +46,16 @@
 
 	$test = new CombinationTest;
 	$pTest = new CombinationPreliminarTest;
-	$cs1 = new CombinationStatistics;
-	$c1 = new Combination;
-	$c2 = new Combination;
-	$c3 = new Combination;
-	$c4 = new Combination;
-	$c5 = new Combination;
-	$c6 = new Combination;
-	$c7 = new Combination;
-	$c8 = new Combination;
-	$c9 = new Combination;
+	$c1 = new CombinationStatistics;
+	$c2 = new CombinationStatistics;
+	$c3 = new CombinationStatistics;
+	$c4 = new CombinationStatistics;
+	$c5 = new CombinationStatistics;
+	$c6 = new CombinationStatistics;
+	$c7 = new CombinationStatistics;
+	$c8 = new CombinationStatistics;
+	$c9 = new CombinationStatistics;
 	$perf = new performance;
-
-	$cs1->set_d(array('01','02','06','16','19','46'));
 
 	$c1->set_d(array('01','02','06','16','19','46'));
 	$c2->set_d(array('01','02','06','19','27','46'));
@@ -70,8 +67,6 @@
 	$c8->set_d(array('01','03','06','19','27','46'));
 	$c9->set_d(array('01','03','06','19','27','46'));
 
-	$cs1->gen_id();
-
 	$c1->gen_id();
 	$c2->gen_id();
 	$c3->gen_id();
@@ -82,14 +77,20 @@
 	$c8->gen_id();
 	$c9->gen_id();
 
-	$cs1->populateStats();
+	$c1->populateStats();
+	$c2->populateStats();
+	$c3->populateStats();
+	$c4->populateStats();
+	$c5->populateStats();
+	$c6->populateStats();
+	$c7->populateStats();
+	$c8->populateStats();
+	$c9->populateStats();
 
 	$arrTest = array($c1,$c2,$c3,$c4,$c5,$c6,$c7,$c8,$c9);
 
 	$winningStats = array();
 	
-	$perf->start_timer('p_test_1b2');
-
 	foreach ($winningNumbers as $key => $value) {
 		$n = new CombinationStatistics;
 		$n->set_d($value->d);
@@ -98,9 +99,12 @@
 		$winningStats[] = $n;
 		unset($n);
 	}
+
+	$perf->start_timer('p_test_1b2');
 	//$results = $pTest->p_test_1b1($arrTest, $arrTest
 	//$results = $pTest->p_test_1b1($winningNumbers, $winningNumbers);
-	$results = $winningStats;
+	//$results = $pTest->p_test_1b2($arrTest,$arrTest, 4);
+	$results = $pTest->p_test_1b2($winningStats,$winningStats);
 	$perf->end_timer('p_test_1b2');
 	//$results = $test->numElementsEqual($c1, $c2);
 	d(json_encode($winningStats[0]));

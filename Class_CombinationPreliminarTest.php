@@ -16,7 +16,7 @@
 					//d($value);
 					$return = $this->numElementsEqual($combination, $value);
 					//d($return);
-					if($return['num'] > 5) {
+					if($return['num'] > $threshold) {
 						if(!is_array(@$data[$return['subComb']])) {
 							$data[$return['subComb']] = array('total'=>0);
 						}
@@ -28,7 +28,23 @@
 			return $data;
 		}
 
-		public function p_test_1b2() {
-
+		public function p_test_1b2($sampleData, $list, $threshold = 4) {
+			$data = array();
+			foreach ($sampleData as $k => $combination) {
+				//d($combination);
+				foreach ($list as $j => $value) {
+					//d($value);
+					$return = $this->numElementsEqual($combination, $value);
+					//d($return);
+					if(($return['num'] == $threshold)&&($value->cRd == $combination->cRd)&&($value->cRf == $combination->cRf)) {
+						if(!is_array(@$data[$return['subComb']])) {
+							$data[$return['subComb']] = array('total'=>0);
+						}
+						//d($return['subComb']);
+						$data[$return['subComb']]['total']++;
+					}
+				}
+			}
+			return $data;
 		}
 	}
