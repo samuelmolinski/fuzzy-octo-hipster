@@ -120,14 +120,13 @@
 	d($count);
 	d($totalTime/$count);
 
-	$total = count($winningNumbers);
 	$totalOccurance = 0;
 
 	foreach($results as $k=>$v) {
 		$totalOccurance += ($v['total']);
 	}
-	$percent = $totalOccurance/$total *100;
-	echo "<p>Test 1.b.1: $percent% of the combinations contain 5 numbers that occured in previous winning combinations.</p>";
+	$percent = $totalOccurance/$count *100;
+	echo "<p>Test 1.b.1: $percent% of the combinations contain 4 numbers that occured in previous winning combinations.</p>";
 	//d($winningNumbers);
 
 	/*
