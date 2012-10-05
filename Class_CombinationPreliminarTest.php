@@ -8,7 +8,7 @@
 		 * @param2 Array of Conbinations to compare against 
 		 * @return Bool - does the combination pass the test
 		 */
-		public function p_test_1b1($sampleData, $list) {
+		public function p_test_1b1($sampleData, $list, $threshold = 5) {
 			$data = array();
 			foreach ($sampleData as $k => $combination) {
 				//d($combination);
@@ -31,16 +31,12 @@
 		public function p_test_1b2($sampleData, $list, $threshold = 4) {
 			$data = array();
 			foreach ($sampleData as $k => $combination) {
-				//d($combination);
 				foreach ($list as $j => $value) {
-					//d($value);
 					$return = $this->numElementsEqual($combination, $value);
-					//d($return);
 					if(($return['num'] == $threshold)&&($value->cRd == $combination->cRd)&&($value->cRf == $combination->cRf)) {
 						if(!is_array(@$data[$return['subComb']])) {
-							$data[$return['subComb']] = array('total'=>0);
+							$data[$return['subComb']] = array('total'=>0, 'value'=>);
 						}
-						//d($return['subComb']);
 						$data[$return['subComb']]['total']++;
 					}
 				}

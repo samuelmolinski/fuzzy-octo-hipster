@@ -100,20 +100,22 @@
 		unset($n);
 	}
 
+	$sub = $winningStats; //array_slice($winningStats, 0, 499);
+
 	$perf->start_timer('p_test_1b2');
 	//$results = $pTest->p_test_1b1($arrTest, $arrTest
 	//$results = $pTest->p_test_1b1($winningNumbers, $winningNumbers);
 	//$results = $pTest->p_test_1b2($arrTest,$arrTest, 4);
-	$results = $pTest->p_test_1b2($winningStats,$winningStats);
+	$results = $pTest->p_test_1b2($sub,$sub);
 	$perf->end_timer('p_test_1b2');
-	//$results = $test->numElementsEqual($c1, $c2);
-	d(json_encode($winningStats[0]));
+
+	//d(json_encode($winningStats[0]));
 
 	d($results);
 	//d($perf->timers);
 	d($perf->timeToReadable($perf->timers['p_test_1b2']['total']));
 	$totalTime = $perf->timers['p_test_1b2']['total'];
-	$count = count($winningNumbers);
+	$count = count($sub);
 	d($totalTime);
 	d($count);
 	d($totalTime/$count);
@@ -122,7 +124,7 @@
 	$totalOccurance = 0;
 
 	foreach($results as $k=>$v) {
-		$totalOccurance += ($v['total']/2);
+		$totalOccurance += ($v['total']);
 	}
 	$percent = $totalOccurance/$total *100;
 	echo "<p>Test 1.b.1: $percent% of the combinations contain 5 numbers that occured in previous winning combinations.</p>";
