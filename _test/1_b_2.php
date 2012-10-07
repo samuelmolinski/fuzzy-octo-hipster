@@ -106,12 +106,14 @@
 	//$results = $pTest->p_test_1b1($arrTest, $arrTest
 	//$results = $pTest->p_test_1b1($winningNumbers, $winningNumbers);
 	//$results = $pTest->p_test_1b2($arrTest,$arrTest, 4);
-	$results = $pTest->p_test_1b2($sub,$sub);
+	//$results = $pTest->p_test_1b2($sub,$sub);
+	$randNum = $test->generateRandCombs(100);
 	$perf->end_timer('p_test_1b2');
 
 	//d(json_encode($winningStats[0]));
 
-	d($results);
+	d($randNum);
+	//d($results);
 	//d($perf->timers);
 	d($perf->timeToReadable($perf->timers['p_test_1b2']['total']));
 	$totalTime = $perf->timers['p_test_1b2']['total'];
