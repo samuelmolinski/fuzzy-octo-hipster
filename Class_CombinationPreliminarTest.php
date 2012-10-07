@@ -35,7 +35,7 @@
 					$return = $this->numElementsEqual($combination, $value);
 					if(($return['num'] == $threshold)&&($value->cRd == $combination->cRd)&&($value->cRf == $combination->cRf)) {
 						if(!is_array(@$data[$return['subComb']])) {
-							$data[$return['subComb']] = array('total'=>0, 'value'=>);
+							$data[$return['subComb']] = array('total'=>0, 'cRd'=>$value->cRd, 'cRf'=>$value->cRf);
 						}
 						$data[$return['subComb']]['total']++;
 					}

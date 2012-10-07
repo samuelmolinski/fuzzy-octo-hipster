@@ -46,4 +46,29 @@
 			}
 				return array('num'=>$num,'subComb'=>$subComb);
 		}
+
+		public function generateRandCombs($num) {
+			$return = array();
+			for ($i=0; $i < $num; $i++) { 
+				$temp = $this->randCombination();
+				$return[] = $temp;
+			}
+			return $return;
+		}
+
+		public function randCombination() {
+			$comb = array();
+			for ($i=0; $i < 6; $i++) { 
+				$c = new Combination;
+				$next = FALSE;
+				do {
+					$r = mt_rand(1,60);
+					if (!in_array($r, $c->d)){
+						$c->d[] = $r;
+						$next = TRUE;
+					}
+				} while ($next);
+			}
+			return $comb;
+		}
 	}
