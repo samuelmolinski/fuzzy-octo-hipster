@@ -16,11 +16,10 @@
 					//d($value);
 					$return = $this->numElementsEqual($combination, $value);
 					//d($return);
-					if($return['num'] > $threshold) {
+					if($return['num'] >= $threshold) {
 						if(!is_array(@$data[$return['subComb']])) {
 							$data[$return['subComb']] = array('total'=>0);
 						}
-						//d($return['subComb']);
 						$data[$return['subComb']]['total']++;
 					}
 				}
