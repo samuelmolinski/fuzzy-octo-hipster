@@ -26,21 +26,14 @@
 		public function numElementsEqual($c1, $c2) {
 			$num = 0;
 			$subComb = '';
-			//d($c1);
-			//d($c2);
 			if($c1 != $c2) {
 				foreach ($c2->d as $key => $value) {
-				//d($c2->d);
-				//d($value);
 					if(in_array($value, $c1->d)) {
 						$num++;
 						$subComb .= $value;
-						//d('in_array');
 					}
 				}
 			}
-			//d($num);
-			//if both values are equal or the sets of combinations are equal
 			if(($c1 == $c2)||($num==6)) {
 				return array('num'=>-1,'subComb'=>$subComb);
 			}
@@ -59,16 +52,17 @@
 		public function randCombination() {
 			$comb = array();
 			for ($i=0; $i < 6; $i++) { 
-				$c = new Combination;
 				$next = FALSE;
 				do {
-					$r = mt_rand(1,60);
-					if (!in_array($r, $c->d)){
-						$c->d[] = $r;
+					$r = (string)mt_rand(1,60);
+					if($r < 10) {$r = '0'.$r;}
+					if (!in_array($r, $comb)){
+						$comb[] = $r;
 						$next = TRUE;
 					}
-				} while ($next);
-			}
-			return $comb;
+				} while (!$next);
+			}			
+			$c = new CombinationStatistics($comb);
+			return $c;
 		}
 	}

@@ -36,11 +36,15 @@
 		}
 
 		public function timeToReadable($time) {
-			$readable['y'] = (integer)($time / (365*24*60*60));
-			$readable['d'] = (integer)(($time - $readable['y']) / (24*60*60));
-			$readable['h'] = (integer)(($time - $readable['d']) / (60*60));
-			$readable['m'] = (integer)(($time - $readable['h']) / 60);
-			$readable['s'] = $time - $readable['m'];
+			$y = 30758400;
+			$d = 86400;
+			$h = 3600;
+			$m = 60;
+			$readable['y'] = (integer)($time / $y);
+			$readable['d'] = (integer)(($time % $y) / $d);
+			$readable['h'] = (integer)(($time % $d) / $h);
+			$readable['m'] = (integer)(($time % $h) / $m);
+			$readable['s'] = $time - $readable['m']*$m - $readable['h']*$h - $readable['d']*$d -$readable['y']*$y;
 			return $readable;
 		}
 	}

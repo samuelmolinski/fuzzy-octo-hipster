@@ -4,6 +4,14 @@ class Combination {
 	public $id;
 	public $d = array();
 
+    public function Combination($d = NULL) {
+        if (is_array($d) && (count($d) == 6)) {
+            $this->set_d($d);
+            $this->order_d();
+            $this->gen_id();
+        }
+    }
+
 	public function __set($name, $value)
     {
     	switch($name){
@@ -36,5 +44,6 @@ class Combination {
 
     public function order_d(){
         //order d by ascending values
+        sort($this->d);
     }
 }
