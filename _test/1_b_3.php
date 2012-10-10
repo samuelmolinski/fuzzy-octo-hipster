@@ -160,7 +160,7 @@
 	echo "<p>Starting percentage: $ptotal% - after 3 years, $petotal%</p>";
 
 	//d($winningNumbers);
-	//d($wresults);
+	d($wresults);
 	//d($results);
 	//d($results2);
 	//d($results3);

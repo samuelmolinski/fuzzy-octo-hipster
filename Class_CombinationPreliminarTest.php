@@ -55,6 +55,26 @@
 			return $data;
 		}
 
+		public function p_test_1b2_data($sampleData, $threshold = 4) {
+			$data = array();
+			foreach ($sampleData as $k => $combination) {
+				if(!array_key_exists($combination->cRd_cRf, $data)) {
+					$data[$combination->cRd_cRf] = array('combinations'=>array(),'repeated'=>array());
+				}
+				foreach ($data[$combination->cRd_cRf]['combinations'] as $key => $value) {
+					$return = $this->numElementsEqual($combination, $value);
+					if(($return['num'] == $threshold)){
+						if(!in_array($value, $data[$combination->cRd_cRf]['repeated'])){
+							$data[$combination->cRd_cRf]['repeated'][] = $value;
+						}
+						break;
+					}
+				}
+				$data[$combination->cRd_cRf]['combinations'][] = $combination;
+			}
+			return $data;
+		}
+
 		public function p_test_1b3($sampleData) {
 			$return = array();	
 			foreach ($sampleData as $k => $combination) {

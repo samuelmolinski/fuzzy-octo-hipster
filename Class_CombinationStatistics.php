@@ -145,61 +145,61 @@
 				case '411-21111':
 				case '3111-3111':
 						$cDf = $this->print_cDf();
-						$cDf = preg_replace('/[0-9]\([0-9]\)/', 'X', $cDf);
+						$cDf = preg_replace('/[0-9]\([0-9]\)/', '', $cDf);
 						$this->foe = $cDf;
 					break;
 				//8 pairs cRd-Cdf using CRf in part with cRd to eliminate
 				case '2211-21111'://???
 						$cDd = $this->print_cDd();
-						$cDd = preg_replace('/(?<!\()[0-9](?!\()/', 'X', $cDd);
+						$cDd = preg_replace('/(?<!\()[0-9](?!\()/', '', $cDd);
 						$cDf = $this->print_cDf();
-						$cDf = preg_replace('/[0-9]\([0-9]\)/', 'X', $cDf);
-						$this->foe = $cDd.'-'.$cDf;
+						$cDf = preg_replace('/[0-9]\([0-9]\)/', '', $cDf);
+						$this->foe = $cDd.''.$cDf;
 					break;
 				case '2211-111111': 
 						$cDd = $this->print_cDd();
-						$cDd = preg_replace('/(?<!\()[0-9](?!\()/', 'X', $cDd);
+						$cDd = preg_replace('/(?<!\()[0-9](?!\()/', '', $cDd);
 						$cDf = $this->print_cDf();
-						$this->foe = $cDd.'-'.$cDf;
+						$this->foe = $cDd.''.$cDf;
 					break;
 				case '21111-21111': //???
 						$cDd = $this->print_cDd();
-						$cDd = preg_replace('/[0-9]\([0-9]\)/', 'X', $cDd);
+						$cDd = preg_replace('/[0-9]\([0-9]\)/', '', $cDd);
 						$cDf = $this->print_cDf();
-						$cDf = preg_replace('/[0-9]\([0-9]\)/', 'X', $cDf);
-						$this->foe = $cDd.'-'.$cDf;
+						$cDf = preg_replace('/[0-9]\([0-9]\)/', '', $cDf);
+						$this->foe = $cDd.''.$cDf;
 					break;
 				case '21111-111111':
 						$cDd = $this->print_cDd();
-						$cDd = preg_replace('/(?<!\()[0-9](?!\()/', 'X', $cDd);
+						$cDd = preg_replace('/(?<!\()[0-9](?!\()/', '', $cDd);
 						$cDf = $this->print_cDf();
-						$this->foe = $cDd.'-'.$cDf;
+						$this->foe = $cDd.''.$cDf;
 					break;
 				case '321-111111':
 						$cDd = $this->print_cDd();
-						$cDd = preg_replace('/(?<!\()[0-9](?!\()/', 'X', $cDd);
+						$cDd = preg_replace('/(?<!\()[0-9](?!\()/', '', $cDd);
 						$cDf = $this->print_cDf();
-						$this->foe = $cDd.'-'.$cDf;
+						$this->foe = $cDd.''.$cDf;
 					break;
 				case '3111-111111':
 						$cDd = $this->print_cDd();
-						$cDd = preg_replace('/(?<!\()[0-9](?!\()/', 'X', $cDd);
+						$cDd = preg_replace('/(?<!\()[0-9](?!\()/', '', $cDd);
 						$cDf = $this->print_cDf();
-						$this->foe = $cDd.'-'.$cDf;
+						$this->foe = $cDd.''.$cDf;
 					break;
 				case '2211-321':
 						$cDd = $this->print_cDd();
-						$cDd = preg_replace('/(?<!\()[0-9](?!\()/', 'X', $cDd);
+						$cDd = preg_replace('/(?<!\()[0-9](?!\()/', '', $cDd);
 						$cDf = $this->print_cDf();
-						$cDf = preg_replace('/(?<!\()[0-9](?!\()/', 'X', $cDf);
-						$this->foe = $cDd.'-'.$cDf;
+						$cDf = preg_replace('/(?<!\()[0-9](?!\()/', '', $cDf);
+						$this->foe = $cDd.''.$cDf;
 					break;
 				case '21111-321':
 						$cDd = $this->print_cDd();
-						$cDd = preg_replace('/[0-9]\([0-9]\)/', 'X', $cDd);
+						$cDd = preg_replace('/[0-9]\([0-9]\)/', '', $cDd);
 						$cDf = $this->print_cDf();
-						$cDf = preg_replace('/(?<!\()[0-9](?!\()/', 'X', $cDf);
-						$this->foe = $cDd.'-'.$cDf;
+						$cDf = preg_replace('/(?<!\()[0-9](?!\()/', '', $cDf);
+						$this->foe = $cDd.''.$cDf;
 					break;				
 				default:
 						$this->foe ="DNE";
