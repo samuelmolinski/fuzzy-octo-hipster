@@ -105,4 +105,15 @@
 			}
 			return $b;
 		}
+
+		public function sort_cRd_cRf($list) {
+			$return = array();
+			foreach ($list as $key => $combination) {
+				if(!array_key_exists($combination->cRd_cRf, $return)) {
+					$return[$combination->cRd_cRf] = array();
+				}
+				$return[$combination->cRd_cRf][] = $combination->print_id();
+			}
+			return $return;
+		}
 	}
