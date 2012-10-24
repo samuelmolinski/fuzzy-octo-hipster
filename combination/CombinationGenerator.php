@@ -20,7 +20,7 @@
 			sort($r);
 
 			foreach ($comb as $k => $v) {
-				$t = $v
+				$t = $v;
 				if (!(($ranges[$k]['min']<=$t->n)&&($ranges[$k]['max']>=$t->n))) {
 					$comb[$k] = genUniqueRand($list, $ranges[$k]['min'], $ranges[$k]['max']);
 					$list[] = $comb[$k];
@@ -88,7 +88,7 @@
 			$last = count($finalDigits)-1;
 			if($finalDigits[$last]<=$finalDigits[0]+5){
 				for ($i=0; $i < $last; $i++) { 
-					if($finalDigits[i+1]!=$finalDigits[i]+1)){
+					if($finalDigits[i+1]!=$finalDigits[i]+1){
 						return TRUE;
 					} 
 				}

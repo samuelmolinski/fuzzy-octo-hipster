@@ -1,0 +1,24 @@
+{
+    "event": "suiteStart",
+    "suite": "Unit Tests",
+    "tests": 1
+}{
+    "event": "suiteStart",
+    "suite": "CombinationTest",
+    "tests": 1
+}{
+    "event": "testStart",
+    "suite": "CombinationTest",
+    "test": "Warning"
+}{
+    "event": "test",
+    "suite": "CombinationTest",
+    "test": "Warning",
+    "status": "fail",
+    "time": 0.001054048538208,
+    "trace": [
+
+    ],
+    "message": "No tests found in class \"CombinationTest\".",
+    "output": ""
+}
