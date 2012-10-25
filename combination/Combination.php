@@ -1,7 +1,7 @@
 <?php
 
 class Combination {
-	public $id;
+	public $id; 
 	public $d = array();
 
     public function Combination($d = NULL) {
@@ -36,8 +36,8 @@ class Combination {
 
     public function gen_id() {
         $id = '';
-        foreach($this->d as $k=>$d){
-            $id = $id.$d;
+        foreach($this->d as $k=>$N){
+            $id = $id.$N->n;
         }
         $this->id = (string)$id;
     }

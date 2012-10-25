@@ -1,7 +1,11 @@
 <?php 
 	class CombinationGenerator {
 
-		public function rule_a1() {
+		/*	Com todos os DF consecutivos (ex: 01-11-22-33-44-54)
+			Generates the base Combination based on the Rule 1a1
+			@return CombinationStatistic
+		 */
+		public function rule_1a1() {
 			//1º N- 01 a 30; 2º N- 02 a 40; 3º N- 04 a 49; 4º N- 11 a 55; 5º N- 18 a 59; 6º N- 31 a 60;
 			$comb = array();
 			$list = array();
@@ -43,21 +47,32 @@
 			}
 		}
 
-		function rule_a2($comb) {
+		/*	6N pares (even number) ou ímpares (odd or uneven number)
+			@param array of Numbers(class)
+			@return TRUE if it passes the rule and 
+			False if it fails
+		 */
+		function rule_1a2($comb) {
 			$total = 0;
-			//6N pares (even number) ou ímpares (odd or uneven number)
+			$count = count($comb); 
+
 			foreach($comb as $k=>$N){
 				$total += $N->n % 2;
 			}
 			//if the N are all even the total will be 0; if the N are all odd then the total will be 6
-			if((0 == $total)||(6 == $total)){
+			if((0 == $total)||($count == $total)){
 				return FALSE;
 			}
 			return TRUE;
 		}
 
-		public function rule_a3($comb) {
-			//6N em 3 D (ten) consecutivas
+		/*	6N em 3 D (ten) consecutivas
+			@param array of Numbers(class)
+			@return TRUE if it passes the rule and 
+			False if it fails
+		 */
+		public function rule_1a3($comb) {
+
 			$tens = array();
 			foreach ($comb as $k => $n) {
 				if(!in_array($n->D, $tens)) {
@@ -76,7 +91,12 @@
 			}
 		}
 
-		public function rule_a4($comb) {
+		/*	Com todos os DF consecutivos (ex: 01-11-22-33-44-54)
+			@param array of Numbers(class)
+			@return TRUE if it passes the rule and 
+			False if it fails
+		 */
+		public function rule_1a4($comb) {
 			$finalDigits = array();
 			foreach ($comb as $k => $n) {
 				if(!in_array($n->DF, $finalDigits)) {
@@ -98,8 +118,89 @@
 			}
 		}
 
-		public function rule_a5() {
-			//com o menor DF > 4 ou com o maior DF < 5 (05-15-26-28-37-49 ou 02-10-33-43-52-54)
+		/*	Com o menor DF > 4 ou com o maior DF < 5 (05-15-26-28-37-49 ou 02-10-33-43-52-54)
+			@param array of Numbers(class)
+			@return TRUE if it passes the rule and 
+			False if it fails
+		 */
+		public function rule_1a5($comb) {
 
+			$DFs = array();
+			foreach ($comb as $k => $N) {
+				$DFs[] = $N->DF;
+			}
+			sort($DFs);
+			if(($DFs[0] > 4)||($DFs[5] < 5)) {
+				return FALSE;
+			}
+			return TRUE;
+		}
+
+		/*	Com 2 NDif = 1 (~ 1 trinca ou 2 duplas de N consecutivos)
+			@param array of Numbers(class)
+			@return TRUE if it passes the rule and 
+			False if it fails
+		 */
+		public funciton rule_1a6($comb){
+			$count = count($comb);
+			$limit = 0;
+			for ($i=0; $i < $count; $i++) { 
+				if($comb[$i]->n+1 == $comb[$i+1]->n) { 
+					$limit++;
+				}
+				if($limit >= 2) {
+					return FALSE;
+				}
+			}
+			return TRUE;
+		}		
+
+		/*	Com 3 NDif iguais e/ou com todos os NDif > 6 ou < 6
+			@param array of Numbers(class)
+			@return TRUE if it passes the rule and 
+			False if it fails
+		 */
+		public funciton rule_1a7($comb){
+			$count = count($comb);
+			$limit = 0;
+			$NDifs = array();
+			for ($i=0; $i < $count; $i++) { 
+				$NDifs[] = $comb[$i]->n+1 - $comb[$i+1]->n
+			}
+			sort($NDifs);
+			if(($NDifs[0]>6)||($NDifs[4]<6)) {
+				return FALSE;
+			}
+			$freq = array_count_values($NDifs);
+			foreach ($freq as $k => $NDif) {
+				if($NDif>=3) {
+					return FALSE;
+				}
+			}
+			return TRUE;
+		}
+
+		/*	Com os 44 pares de cRd-cRf não jogáveis
+			@param array of Numbers(class)
+			@return TRUE if it passes the rule and 
+			False if it fails
+		 */
+		public funciton rule_1a8($comb){
+			$C = new Combination($comb);
+			$permited = array(	'2211-2211',	'21111-2211',
+								'3111-2211',	'321-2211',
+								'3111-21111',	'321-21111',
+								'2211-3111',	'21111-3111',
+								'111111-21111',	'222-21111',
+								'411-21111',	'3111-3111',
+								'2211-21111',	'2211-111111',
+								'21111-21111',	'21111-111111',
+								'321-111111',	'3111-111111',
+								'2211-321',		'21111-321',
+								);
+			if(in_array($C->cRd_cRf, $permited)) {
+				return TRUE;
+			}
+			return FALSE;
 		}
 	}

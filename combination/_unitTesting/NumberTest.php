@@ -5,9 +5,11 @@
 class NumberTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Number
+     * @var Numbers
      */
-    protected $object;
+    protected $N1;
+    protected $N2;
+    protected $N3;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -15,7 +17,9 @@ class NumberTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new Number;
+        $this->N1 = new Number('01');
+        $this->N2 = new Number('18');
+        $this->N3 = new Number('55');
     }
 
     /**

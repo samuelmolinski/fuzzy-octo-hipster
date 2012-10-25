@@ -5,9 +5,17 @@
 		public $DF; // final digit
 
 		public function Number($v) {
-			$this->$n = $v;
-			$this->set_D();
+			if(count((string)$v)==2) { 
+				$this->$n = $v;
+				$this->set_D();
+				$this->set_DF();
+			} 
 		}
+
+		public function set_DF() {
+			$this->DF = $this->n[1];
+		}
+
 		public function set_D(){
 			switch($this->$n) {
 				case ((1 <= $v)&&($v <=10)):
