@@ -143,13 +143,13 @@
 				case '111111-21111':
 				case '222-21111':
 				case '411-21111':
-				case '3111-3111':
+				case '3111-3111':// only the 111 of cDf
 						$cDf = $this->print_cDf();
 						$cDf = preg_replace('/[0-9]\([0-9]\)/', '', $cDf);
 						$this->foe = $cDf;
 					break;
 				//8 pairs cRd-Cdf using CRf in part with cRd to eliminate
-				case '2211-21111'://???
+				case '2211-21111'://
 						$cDd = $this->print_cDd();
 						$cDd = preg_replace('/(?<!\()[0-9](?!\()/', '', $cDd);
 						$cDf = $this->print_cDf();
