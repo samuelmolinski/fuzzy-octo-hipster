@@ -4,7 +4,10 @@
 		public $limit_2_1c;
 		public $groups_2_2;
 		public $wCombs; // inteneded tobo an array of all previous winning combinations
-		public $rule_2_2a_valid; // -1 if we do not use it, 0-4 to indicate which group to exclude
+		public $rule_2_2_1a_invalid; // -1 if we do not use it, 0-4 to indicate which group to exclude
+		public $rule_2_2_1b_invalid; // Boolean
+		public $rule_2_2_1c_invalid; // Boolean
+		public $rule_2_2_1d_invalid; // -1 if we do not use it
 
 		public function CombinationGenerator($winningCombinations) {
 			$this->groups_2_2 = array(
@@ -15,7 +18,10 @@
 									  array('411-21111','321-21111','222-21111','11111-21111','321-2211','321-111111','3111-3111', '2211-321', '21111-321')
 									  );
 			$this->wCombs = $winningCombinations;
-			$this->rule_2_2a_valid = $this->check_rule_2_2a();
+			$this->rule_2_2_1a_invalid = $this->check_rule_2_2_1a();
+			$this->rule_2_2_1b_invalid = $this->check_rule_2_2_1b($this->wCombs[0], TRUE);
+			$this->rule_2_2_1c_invalid = $this->check_rule_2_2_1c($this->wCombs[0], TRUE);
+			$this->rule_2_2_1c_invalid = $this->check_rule_2_2_1d($this->wCombs[1], TRUE, $this->check_rule_2_2_1d($this->wCombs[0], TRUE));
 		}
 
 		/*	Com todos os DF consecutivos (ex: 01-11-22-33-44-54)
@@ -164,9 +170,9 @@
 			for ($i=0; $i < $count; $i++) { 
 				if($comb[$i]->n+1 == $comb[$i+1]->n) { 
 					$limit++;
-				}
-				if($limit >= 2) {
-					return FALSE;
+					if($limit >= 2) {
+						return FALSE;
+					}
 				}
 			}
 			return TRUE;
@@ -399,7 +405,7 @@
 			return TRUE;
 		}
 
-		public function check_rule_2_2a(){
+		public function check_rule_2_2_1a(){
 			$forbidden = -1;
 			foreach ($this->groups_2_2 as $k => $gp) {
 				$fiveGroupsPairs = 0;
@@ -423,10 +429,56 @@
 			return -1;
 		}
 
-		public function rule_2_2a($combination){
-			if(-1 == $this->rule_2_2a_valid) {
-			
+		public function rule_2_2_1a($combination){
+			if((-1 >= $this->rule_2_2_1a_invalid)&&(in_array($combination->cRd_cRf, $this->groups_2_2[$this->rule_2_2_1a_invalid]))){
+				return FALSE;				
 			}
+			return TRUE;
+		}
+
+		public function rule_2_2_1b($combination, $override = False){
+			if(!$this->rule_2_2_1b_invalid || $override) {
+				$c = 0;
+				foreach ($combination->d as $k => $v) {
+					if($v <=30) {$c++}
+				}
+				if(($c==1)||($c==5)) {
+					return FALSE;
+				}
+			}
+			return TRUE;
+		}
+
+		public function rule_2_2_1c($combination, $override = False) {
+			if(!$this->rule_2_2_1c_invalid || $override) {
+				$total = 0;
+				$count = count($comb); 
+
+				foreach($comb as $k=>$N){
+					$total += $N->n % 2;
+				}
+				//if the N are all even the total will be 0; if the N are all odd then the total will be 6
+				if((1 == $total)||($count-1 == $total)){
+					return FALSE;
+				}
+			}	
+			return TRUE;
+		}
+
+		public function rule_2_2_1d($combination, $override = False, $carryOver = 0) {
+			if(!(-1 == $this->rule_2_2_1d_invalid) || $override) {
+				$count = count($combination->d);
+				$limit = 0;
+				for ($i=0; $i < $count; $i++) { 
+					if($comb[$i]->n+1 == $comb[$i+1]->n) { 
+						$limit++;
+						if($limit >= 1) {
+							return $carryOver++;
+						}
+					}
+				}
+			}	
+			return $carryOver;
 		}
 
 	}
