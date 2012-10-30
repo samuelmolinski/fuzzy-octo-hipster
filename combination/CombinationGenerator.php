@@ -2,6 +2,21 @@
 	class CombinationGenerator {
 
 		public $limit_2_1c;
+		public $groups_2_2;
+		public $wCombs; // inteneded tobo an array of all previous winning combinations
+		public $rule_2_2a_valid; // -1 if we do not use it, 0-4 to indicate which group to exclude
+
+		public function CombinationGenerator($winningCombinations) {
+			$this->groups_2_2 = array(
+									  array('2211-21111'),
+									  array('2211-3111','2211-2211','2211-111111'),
+									  array('21111-21111','3111-21111'),
+									  array('3111-2211','3111-111111','21111-3111','21111-2211','21111-111111'),
+									  array('411-21111','321-21111','222-21111','11111-21111','321-2211','321-111111','3111-3111', '2211-321', '21111-321')
+									  );
+			$this->wCombs = $winningCombinations;
+			$this->rule_2_2a_valid = $this->check_rule_2_2a();
+		}
 
 		/*	Com todos os DF consecutivos (ex: 01-11-22-33-44-54)
 			Generates the base Combination based on the Rule 1a1
@@ -382,6 +397,36 @@
 				}					
 			}
 			return TRUE;
+		}
+
+		public function check_rule_2_2a(){
+			$forbidden = -1;
+			foreach ($this->groups_2_2 as $k => $gp) {
+				$fiveGroupsPairs = 0;
+				if(in_array($jthis->wCombs[0], $gp)){
+					$fiveGroupsPairs++;
+				}
+				if(in_array($jthis->wCombs[1], $gp)){
+					$fiveGroupsPairs++;
+				}
+				if(in_array($jthis->wCombs[2], $gp)){
+					$fiveGroupsPairs++;
+				}
+				if($fiveGroupsPairs > 1) {
+					$forbidden = $k;
+					break;
+				}
+			}
+			if(3 != count($fiveGroupsPairs)){
+				return $forbidden;
+			}
+			return -1;
+		}
+
+		public function rule_2_2a($combination){
+			if(-1 == $this->rule_2_2a_valid) {
+			
+			}
 		}
 
 	}
