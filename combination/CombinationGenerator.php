@@ -1,4 +1,8 @@
 <?php 
+	
+	require_once("CombinationStatistics.php");
+	require_once("Number.php");
+
 	class CombinationGenerator {
 
 		public $limit_2_1c;
@@ -9,7 +13,11 @@
 		public $rule_2_2_1c_invalid; // Boolean
 		public $rule_2_2_1d_invalid; // -1 if we do not use it
 
-		public function CombinationGenerator($winningCombinations) {
+		public function CombinationGenerator($winningCombinations = null) {
+			if($winningCombinations != null) {
+				$this->wCombs = $winningCombinations;
+			}
+
 			$this->groups_2_2 = array(
 									  array('2211-21111'),
 									  array('2211-3111','2211-2211','2211-111111'),
@@ -17,11 +25,11 @@
 									  array('3111-2211','3111-111111','21111-3111','21111-2211','21111-111111'),
 									  array('411-21111','321-21111','222-21111','11111-21111','321-2211','321-111111','3111-3111', '2211-321', '21111-321')
 									  );
-			$this->wCombs = $winningCombinations;
-			$this->rule_2_2_1a_invalid = $this->check_rule_2_2_1a();
-			$this->rule_2_2_1b_invalid = $this->check_rule_2_2_1b($this->wCombs[0], TRUE);
-			$this->rule_2_2_1c_invalid = $this->check_rule_2_2_1c($this->wCombs[0], TRUE);
-			$this->rule_2_2_1c_invalid = $this->check_rule_2_2_1d($this->wCombs[1], TRUE, $this->check_rule_2_2_1d($this->wCombs[0], TRUE));
+
+			//$this->rule_2_2_1a_invalid = $this->check_rule_2_2_1a();
+			//$this->rule_2_2_1b_invalid = $this->rule_2_2_1b($this->wCombs[0], TRUE);
+			//$this->rule_2_2_1c_invalid = $this->rule_2_2_1c($this->wCombs[0], TRUE);
+			//$this->rule_2_2_1c_invalid = $this->rule_2_2_1d($this->wCombs[1], TRUE, $this->rule_2_2_1d($this->wCombs[0], TRUE));
 		}
 
 		/*	Com todos os DF consecutivos (ex: 01-11-22-33-44-54)
@@ -41,20 +49,22 @@
 							);
 			// sort them by boxes
 			for ($i=0; $i < 6; $i++) { 
-				$comb[$i] = genUniqueRand($list, 1, 60);
+				$comb[$i] = $this->genUniqueRand($list, 1, 60);
 				$list[] = $comb[$i];
 			}
-			sort($r);
+			sort($comb);
+			d($comb);
+			d($list);
 
 			foreach ($comb as $k => $v) {
-				$t = $v;
-				if (!(($ranges[$k]['min']<=$t->n)&&($ranges[$k]['max']>=$t->n))) {
-					$comb[$k] = genUniqueRand($list, $ranges[$k]['min'], $ranges[$k]['max']);
+				$t = $v->n;
+				if (!(($ranges[$k]['min']<=$t)&&($ranges[$k]['max']>=$t))) {
+					$comb[$k] = $this->genUniqueRand($list, $ranges[$k]['min'], $ranges[$k]['max']);
 					$list[] = $comb[$k];
 				}
 			}
 
-			return $comb;
+			return new CombinationStatistics($comb);
 		}
 
 		private function genUniqueRand($comb, $min, $max) {
@@ -62,12 +72,14 @@
 			$N = new Number(mt_rand($min, $max));
 
 			while (in_array($N, $comb)) {
+				unset($N);
 				$N = new Number(mt_rand($min, $max));
 				//add additional test
 				/*if((6 == count($comb))&&($this->rule_a2($comb))) {
 					continue;
 				}*/
 			}
+			return $N;
 		}
 
 		/*	6N pares (even number) ou ímpares (odd or uneven number)
@@ -188,7 +200,7 @@
 			$limit = 0;
 			$NDifs = array();
 			for ($i=0; $i < $count; $i++) { 
-				$NDifs[] = $comb[$i]->n+1 - $comb[$i+1]->n
+				$NDifs[] = $comb[$i]->n+1 - $comb[$i+1]->n;
 			}
 			sort($NDifs);
 			if(($NDifs[0]>6)||($NDifs[4]<6)) {
@@ -309,7 +321,7 @@
 				if($value->cDf == '21111') {
 					$cDf = preg_replace('/[0-9]\([0-9]\)/', '', $value->cDf);
 					if(!in_array($cDf, $limits['c1'])) {
-						$limits['c1'][] == $cDf;
+						$limits['c1'][] = $cDf;
 					}					
 				}
 				if(count($limits['c1'])>=21) {break;}
@@ -318,7 +330,7 @@
 			foreach ($winningCombinations as $key => $value) {
 				if($value->cDd == '2211') {
 					if(!in_array($value->cDd, $limits['c2'])) {
-						$limits['c2'][] == $value->cDd;
+						$limits['c2'][] = $value->cDd;
 					}					
 				}
 				if(count($limits['c2'])>=9) {break;}
@@ -327,7 +339,7 @@
 			foreach ($winningCombinations as $key => $value) {
 				if($value->cDd == '21111') {
 					if(!in_array($value->cDd, $limits['c3'])) {
-						$limits['c3'][] == $value->cDd;
+						$limits['c3'][] = $value->cDd;
 					}					
 				}
 				if(count($limits['c3'])>=3) {break;}
@@ -336,7 +348,7 @@
 			foreach ($winningCombinations as $key => $value) {
 				if($value->cDf == '111111') {
 					if(!in_array($value->cDf, $limits['c4'])) {
-						$limits['c4'][] == $value->cDf;
+						$limits['c4'][] = $value->cDf;
 					}					
 				}
 				if(count($limits['c4'])>=21) {break;}
@@ -346,7 +358,7 @@
 				if($value->cDf == '2211 ') {
 					$cDf = preg_replace('/(?<!\()[0-9](?!\()/', '', $value->cDf);
 					if(!in_array($cDf, $limits['c5'])) {
-						$limits['c5'][] == $cDf;
+						$limits['c5'][] = $cDf;
 					}					
 				}
 				if(count($limits['c5'])>=5) {break;}
@@ -355,7 +367,7 @@
 			foreach ($winningCombinations as $key => $value) {
 				if($value->cDd == '3111') {
 					if(!in_array($value->cDd, $limits['c6'])) {
-						$limits['c6'][] == $value->cDd;
+						$limits['c6'][] = $value->cDd;
 					}					
 				}
 				if(count($limits['c6'])>=6) {break;}
@@ -409,13 +421,13 @@
 			$forbidden = -1;
 			foreach ($this->groups_2_2 as $k => $gp) {
 				$fiveGroupsPairs = 0;
-				if(in_array($jthis->wCombs[0], $gp)){
+				if(in_array($this->wCombs[0], $gp)){
 					$fiveGroupsPairs++;
 				}
-				if(in_array($jthis->wCombs[1], $gp)){
+				if(in_array($this->wCombs[1], $gp)){
 					$fiveGroupsPairs++;
 				}
-				if(in_array($jthis->wCombs[2], $gp)){
+				if(in_array($this->wCombs[2], $gp)){
 					$fiveGroupsPairs++;
 				}
 				if($fiveGroupsPairs > 1) {
@@ -440,7 +452,7 @@
 			if(!$this->rule_2_2_1b_invalid || $override) {
 				$c = 0;
 				foreach ($combination->d as $k => $v) {
-					if($v <=30) {$c++}
+					if($v <=30) {$c++;}
 				}
 				if(($c==1)||($c==5)) {
 					return FALSE;
@@ -452,10 +464,10 @@
 		public function rule_2_2_1c($combination, $override = False) {
 			if(!$this->rule_2_2_1c_invalid || $override) {
 				$total = 0;
-				$count = count($comb); 
+				$count = count($combination->d); 
 
-				foreach($comb as $k=>$N){
-					$total += $N->n % 2;
+				foreach($combination->d as $k=>$N){
+					$total += $N % 2;
 				}
 				//if the N are all even the total will be 0; if the N are all odd then the total will be 6
 				if((1 == $total)||($count-1 == $total)){
@@ -469,8 +481,8 @@
 			if(!(-1 == $this->rule_2_2_1d_invalid) || $override) {
 				$count = count($combination->d);
 				$limit = 0;
-				for ($i=0; $i < $count; $i++) { 
-					if($comb[$i]->n+1 == $comb[$i+1]->n) { 
+				for ($i=0; $i < $count-1; $i++) { 
+					if($combination->d[$i]+1 == $combination->d[$i+1]) { 						
 						$limit++;
 						if($limit >= 1) {
 							return $carryOver++;

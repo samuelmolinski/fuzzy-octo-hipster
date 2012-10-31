@@ -1,6 +1,6 @@
 <?php
 	
-	require_once('Class_Combination.php');
+	require_once('Combination.php');
 	//require_once('Class_CombinationStatistics.php');
 
 	class CombinationTest {

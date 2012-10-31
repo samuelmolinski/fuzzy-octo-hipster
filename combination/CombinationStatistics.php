@@ -1,6 +1,6 @@
 <?php
 	
-	require_once('Class_Combination.php');
+	require_once('Combination.php');
 
 	class CombinationStatistics extends Combination {
 		public $cRd;
@@ -65,23 +65,23 @@
 			$d = $this->d;
 			$cDd = array(0,0,0,0,0,0);
 			foreach ($d as $k => $v) {
-				switch($v) {
-					case ((1 <= $v)&&($v <=10)):
+				switch($v->n) {
+					case ((1 <= $v->n)&&($v->n <=10)):
 						$cDd[0]++;
 						break;
-					case ((11 <= $v)&&($v <=20)):
+					case ((11 <= $v->n)&&($v->n <=20)):
 						$cDd[1]++;
 						break;
-					case ((21 <= $v)&&($v <=30)):
+					case ((21 <= $v->n)&&($v->n <=30)):
 						$cDd[2]++;
 						break;
-					case ((31 <= $v)&&($v <=40)):
+					case ((31 <= $v->n)&&($v->n <=40)):
 						$cDd[3]++;
 						break;
-					case ((41 <= $v)&&($v <=50)):
+					case ((41 <= $v->n)&&($v->n <=50)):
 						$cDd[4]++;
 						break;
-					case ((51 <= $v)&&($v <=60)):
+					case ((51 <= $v->n)&&($v->n <=60)):
 						$cDd[5]++;
 						break;
 				}
@@ -92,7 +92,7 @@
 			$d = $this->d;
 			$cDf = array(0,0,0,0,0,0,0,0,0,0);
 			foreach ($d as $k => $v) {
-				$Df = $v[1];
+				$Df = $v->DF;
 				$cDf[$Df]++;
 			}
 			$this->cDf = $cDf;

@@ -3,30 +3,27 @@
 	
 	set_time_limit(0);
 	
-	require_once('../m_toolbox/m_toolbox.php');
-	require_once('../Class_Performance.php');
-	require_once('../Class_CombinationStatistics.php');
-	require_once('../Class_CombinationWinning.php');
-	require_once('../Class_CombinationTest.php');
-	require_once('../Class_CombinationPreliminarTest.php');
+	require_once('../../m_toolbox/m_toolbox.php');
+	require_once('../Performance.php');
+	require_once('../CombinationStatistics.php');
+	require_once('../CombinationWinning.php');
+	require_once('../CombinationEvaluation.php');
+	require_once('../CombinationPreliminarEvaluation.php');
 
-	$megaSc = mLoadXml('d_megasc.htm');
+	$megaSc = mLoadXml('dd_megasc.htm');
 	$megaSc = $megaSc->body->table->xpath('tr');
 	array_shift($megaSc);
 
 	$winningNumbers = array();
 	foreach($megaSc as $k=>$combination) {
-		$c = new CombinationWinning;
-		//d($combination);
-		//d($c);
-		$c->date = (string)$combination->td[1];
-		$c->d[] = (string)$combination->td[2];
-		$c->d[] = (string)$combination->td[3];
-		$c->d[] = (string)$combination->td[4];
-		$c->d[] = (string)$combination->td[5];
-		$c->d[] = (string)$combination->td[6];
-		$c->d[] = (string)$combination->td[7];
-		$c->gen_id();
+		$d = array();
+		$d[] = (string)$combination->td[2];
+		$d[] = (string)$combination->td[3];
+		$d[] = (string)$combination->td[4];
+		$d[] = (string)$combination->td[5];
+		$d[] = (string)$combination->td[6];
+		$d[] = (string)$combination->td[7];
+		$c = new CombinationStatistics($d);
 		$winningNumbers[] = $c;
 		unset($c);
 	}
@@ -41,7 +38,7 @@
 		return strcmp($a, $b);
 	}
 
-	//d($winningNumbers);
+	d($winningNumbers);
 
 	$test = new CombinationTest;
 	$pTest = new CombinationPreliminarTest;

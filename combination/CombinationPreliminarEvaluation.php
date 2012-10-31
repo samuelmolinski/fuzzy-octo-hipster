@@ -1,6 +1,6 @@
 <?php
 	
-	require_once('Class_CombinationTest.php');
+	require_once('CombinationEvaluation.php');
 
 	class CombinationPreliminarTest extends CombinationTest {
 		/*
