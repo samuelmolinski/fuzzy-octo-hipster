@@ -19,7 +19,8 @@
 	function start() {
 		$test = new AllTests();	
 		
-        $test->addFile(TESTPATH .'CombinationGeneratorTest.php');
+        //$test->addFile(TESTPATH .'CombinationGeneratorTest.php');
+        $test->addFile(TESTPATH .'CombinationTest.php');
         $test->addFile(TESTPATH .'NumberTest.php');
 	}
 

@@ -1,5 +1,7 @@
 <?php
 
+require_once("Number.php");
+
 class Combination {
 	public $id; 
 	public $d = array();

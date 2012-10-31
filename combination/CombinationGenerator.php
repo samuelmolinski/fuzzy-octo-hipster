@@ -67,7 +67,7 @@
 			return new CombinationStatistics($comb);
 		}
 
-		private function genUniqueRand($comb, $min, $max) {
+		public function genUniqueRand($comb, $min, $max) {
 			
 			$N = new Number(mt_rand($min, $max));
 
