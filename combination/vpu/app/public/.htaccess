@@ -1,8 +1,0 @@
-<IfModule mod_rewrite.c>
-    RewriteEngine On    
-    RewriteBase /fuzzy-octo-hipster/combination/vpu/app/public
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !favicon.ico$
-    RewriteRule ^(.*)$ index.php [QSA,L]
-</IfModule>
