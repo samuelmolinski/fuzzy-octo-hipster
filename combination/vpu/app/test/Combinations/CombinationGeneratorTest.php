@@ -12,6 +12,7 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      * @var CombinationGenerator
      */
     protected $combGen;
+    protected $rule_1a1_ranges;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -19,7 +20,7 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        /*$megaSc = mLoadXml( TESTPATH.'d_megasc.htm');
+        /*$megaSc = mLoadXml( '../../../../d_megasc.htm');
         //d($megaSc);
         $megaSc = $megaSc->body->table->xpath('tr');
         array_shift($megaSc);
@@ -43,6 +44,14 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
         //d($winningNumbers);
         $this->combGen = new CombinationGenerator($winningNumbers);*/
         $this->combGen = new CombinationGenerator();
+        $this->rule_1a1_ranges = array(
+                    array('min'=>1,'max'=>30),
+                    array('min'=>2,'max'=>40),
+                    array('min'=>4,'max'=>49),
+                    array('min'=>11,'max'=>55),
+                    array('min'=>18,'max'=>59),
+                    array('min'=>31,'max'=>60)
+                );
     }
 
     /**
@@ -51,18 +60,67 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function tearDown()
     {
+
+    }
+
+
+    /**
+     * @covers CombinationGenerator::rule_1a1
+     * @todo   Implement testRule_1a1().
+     */
+    public function testRule_1a1_generation()
+    {
+        $list = array();
+        $ranges = $this->rule_1a1_ranges;
+        // Remove the following lines when you implement this test.
+        $c = $this->combGen->rule_1a1(array(), true);
+        //print_r($c->d);
+        //print_r($c);
+        $this->assertEquals(FALSE, empty($c->d), 'Ensure the Combination is not empty after generation');
+        foreach ($c->d as $key => $value) {
+            $list[] = $value->n;
+        }
+        foreach ($c->d as $k => $Num) {
+            $t = $Num->n;
+            $this->assertTrue((($ranges[$k]['min']<=$t)&&($ranges[$k]['max']>=$t)), 'Check if all value are inside their proper ranges');
+        }
+    }
+
+    /**
+     * @covers CombinationGenerator::rule_1a1
+     */
+    public function testRule_1a1_generate_from_seed()
+    {
+        $list = array();
+        $ranges = $this->rule_1a1_ranges;
+        // Remove the following lines when you implement this test.
+        $C = new CombinationStatistics('123742434448');
+        $c = $this->combGen->rule_1a1($C, true);
+        $this->assertEquals(FALSE, empty($c->d), 'Ensure the Combination is not empty after generation');
+        foreach ($c->d as $key => $value) {
+            $list[] = $value->n;
+        }
+        foreach ($c->d as $k => $Num) {
+            $t = $Num->n;
+            $this->assertTrue((($ranges[$k]['min']<=$t)&&($ranges[$k]['max']>=$t)), 'Check if all value are inside their proper ranges');
+        }
     }
 
     /**
      * @covers CombinationGenerator::rule_1a1
      * @todo   Implement testRule_1a1().
      */
-    public function testRule_1a1()
-    {
-        // Remove the following lines when you implement this test.
-        $c = $this->combGen->rule_1a1();;
-        d($c);
-        $this->assertTrue(FALSE);
+    public function testRule_1a1_checking()
+    {        
+        $C = new CombinationStatistics('123742434448');
+        $ranges = $this->rule_1a1_ranges;
+        $r = $this->combGen->rule_1a1($C);
+        $this->assertEquals(true, $r, 'Did the check pass (true)');
+
+        $C = new CombinationStatistics('013703430248');
+        $ranges = $this->rule_1a1_ranges;
+        $r = $this->combGen->rule_1a1($C);
+        $this->assertEquals(false, $r, 'Did the check pass (true)');
     }
 
     /**
@@ -71,8 +129,11 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_1a2()
     {
+        $C1 = new CombinationStatistics('123642464448');
+        $C2 = new CombinationStatistics('113741434559');
         // Remove the following lines when you implement this test.
-        $this->assertTrue(FALSE);
+        $this->assertTrue(!$this->combGen->rule_1a2($C1), 'Does it reject all even N');
+        $this->assertTrue(!$this->combGen->rule_1a2($C2), 'Does it reject all odd N');
     }
 
     /**
@@ -81,8 +142,11 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_1a3()
     {
+        $C1 = new CombinationStatistics('273642464448');
+        $C2 = new CombinationStatistics('113741434559');
         // Remove the following lines when you implement this test.
-        $this->assertTrue(FALSE);
+        $this->assertTrue(!$this->combGen->rule_1a3($C1), 'Does it prevent 6N from being in 3 tens groups (false)');
+        $this->assertTrue(!$this->combGen->rule_1a3($C2), 'Does it prevent 6N from being in 3 tens groups (true)');
     }
 
     /**
@@ -91,8 +155,11 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_1a4()
     {
+        $C1 = new CombinationStatistics('011122334454');
+        $C2 = new CombinationStatistics('113741434559');
         // Remove the following lines when you implement this test.
-        $this->assertTrue(FALSE);
+        $this->assertTrue(!$this->combGen->rule_1a4($C1), 'Does it prevent all DF consecutive from being in 3 tens groups (false)');
+        $this->assertTrue($this->combGen->rule_1a4($C2), 'Does it prevent all DF consecutive from being in 3 tens groups (true)');
     }
 
     /**
@@ -101,8 +168,13 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_1a5()
     {
+        $C1 = new CombinationStatistics('011122334352');
+        $C2 = new CombinationStatistics('193746474859');
+        $C3 = new CombinationStatistics('113741434559');
         // Remove the following lines when you implement this test.
-        $this->assertTrue(FALSE);
+        $this->assertTrue(!$this->combGen->rule_1a5($C1), 'Does it prevent all DF from being in less than or equal 4 (false)');
+        $this->assertTrue(!$this->combGen->rule_1a5($C2), 'Does it prevent all DF from being in greater than  or equal 5 (false)');
+        $this->assertTrue($this->combGen->rule_1a5($C3), 'Does it allow DF to be less than and greater than 4/5 (true)');
     }
 
     /**
@@ -111,8 +183,11 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_1a6()
     {
+        $C1 = new CombinationStatistics('010222234454');
+        $C2 = new CombinationStatistics('010223234454');
         // Remove the following lines when you implement this test.
-        $this->assertTrue(FALSE);
+        $this->assertTrue(!$this->combGen->rule_1a6($C1), 'Does it prevent 2 pairs consecutive from occuring (false)');
+        $this->assertTrue($this->combGen->rule_1a6($C2), 'Does it prevent 2 pairs consecutive from occuring (true)');
     }
 
     /**
@@ -121,8 +196,11 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_1a7()
     {
+        $C1 = new CombinationStatistics('010407234447');
+        $C2 = new CombinationStatistics('010223234454');
         // Remove the following lines when you implement this test.
-        $this->assertTrue(FALSE);
+        $this->assertTrue(!$this->combGen->rule_1a7($C1), 'Does it prevent 3NDif != 6 (false)');
+        $this->assertTrue($this->combGen->rule_1a7($C2), 'Does it prevent 3NDif != 6 (true)');
     }
 
     /**
@@ -130,9 +208,14 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      * @todo   Implement testRule_1a8().
      */
     public function testRule_1a8()
-    {
+    {        
+        $C1 = new CombinationStatistics('010421234347');
+        $C2 = new CombinationStatistics('010223234454');
+        //print_r($C1);
+        //print_r('"'.$C2->cRd_cRf.'"');
         // Remove the following lines when you implement this test.
-        $this->assertTrue(FALSE);
+        $this->assertTrue(!$this->combGen->rule_1a8($C1), 'Does it prevent 3NDif != 6 (222-2211:false)');
+        $this->assertTrue($this->combGen->rule_1a8($C2), 'Does it prevent 3NDif != 6 (true)');
     }
 
     /**
@@ -140,9 +223,17 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      * @todo   Implement testNumElementsEqual().
      */
     public function testNumElementsEqual()
-    {
+    {        
+        $C1 = new CombinationStatistics('010421234347');
+        $C2 = new CombinationStatistics('010421234347');
+        $C3 = new CombinationStatistics('010522234347');
+        //print_r($C1);
+        //print_r('"'.$C2->cRd_cRf.'"');
         // Remove the following lines when you implement this test.
-        $this->assertTrue(FALSE);
+        print_r($this->combGen->numElementsEqual($C1, $C2));
+        print_r($this->combGen->numElementsEqual($C1, $C3));
+        $this->assertEquals(6, $this->combGen->numElementsEqual($C1, $C2), 'Counts then number of matching N in two Combinations (value:6)');
+        $this->assertEquals(4, $this->combGen->numElementsEqual($C1, $C3), 'Counts then number of matching N in two Combinations (value:4)');
     }
 
     /**
@@ -151,8 +242,8 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_matchingNumberThreshold()
     {
-        // Remove the following lines when you implement this test.
-        $this->assertTrue(FALSE);
+        $C1 = new CombinationStatistics('010421234347');
+        $this->assertTrue(!rule_matchingNumberThreshold($c1, $this->combGen->wCombs), 'message');
     }
 
     /**
@@ -162,7 +253,9 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
     public function testRule_1b2()
     {
         // Remove the following lines when you implement this test.
-        $this->assertTrue(FALSE);
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
     }
 
     /**
@@ -172,7 +265,9 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
     public function testRule_1b3()
     {
         // Remove the following lines when you implement this test.
-        $this->assertTrue(FALSE);
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
     }
 
     /**
@@ -182,7 +277,9 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
     public function testGenerate2_1cLimit()
     {
         // Remove the following lines when you implement this test.
-        $this->assertTrue(FALSE);
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
     }
 
     /**
@@ -192,7 +289,9 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
     public function testRule_2_1c()
     {
         // Remove the following lines when you implement this test.
-        $this->assertTrue(FALSE);
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
     }
 
     /**
@@ -202,7 +301,9 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
     public function testCheck_rule_2_2_1a()
     {
         // Remove the following lines when you implement this test.
-        $this->assertTrue(FALSE);
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
     }
 
     /**
@@ -212,7 +313,9 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
     public function testRule_2_2_1a()
     {
         // Remove the following lines when you implement this test.
-        $this->assertTrue(FALSE);
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
     }
 
     /**
@@ -222,7 +325,9 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
     public function testRule_2_2_1b()
     {
         // Remove the following lines when you implement this test.
-        $this->assertTrue(FALSE);
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
     }
 
     /**
@@ -232,7 +337,9 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
     public function testRule_2_2_1c()
     {
         // Remove the following lines when you implement this test.
-        $this->assertTrue(FALSE);
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
     }
 
     /**
@@ -242,6 +349,8 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
     public function testRule_2_2_1d()
     {
         // Remove the following lines when you implement this test.
-        $this->assertTrue(FALSE);
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
     }
 }

@@ -5,6 +5,7 @@
 
 	class CombinationGenerator {
 
+		public $rule_1a1_ranges;
 		public $limit_2_1c;
 		public $groups_2_2;
 		public $wCombs; // inteneded tobo an array of all previous winning combinations
@@ -14,17 +15,27 @@
 		public $rule_2_2_1d_invalid; // -1 if we do not use it
 
 		public function CombinationGenerator($winningCombinations = null) {
+			//seed the random mt_rand()
+			mt_srand($this->make_seed());
+			$this->rule_1a1_ranges = array(
+					array('min'=>1,'max'=>30),
+					array('min'=>2,'max'=>40),
+					array('min'=>4,'max'=>49),
+					array('min'=>11,'max'=>55),
+					array('min'=>18,'max'=>59),
+					array('min'=>31,'max'=>60)
+				);
 			if($winningCombinations != null) {
 				$this->wCombs = $winningCombinations;
 			}
 
 			$this->groups_2_2 = array(
-									  array('2211-21111'),
-									  array('2211-3111','2211-2211','2211-111111'),
-									  array('21111-21111','3111-21111'),
-									  array('3111-2211','3111-111111','21111-3111','21111-2211','21111-111111'),
-									  array('411-21111','321-21111','222-21111','11111-21111','321-2211','321-111111','3111-3111', '2211-321', '21111-321')
-									  );
+				array('2211-21111'),
+				array('2211-3111','2211-2211','2211-111111'),
+				array('21111-21111','3111-21111'),
+				array('3111-2211','3111-111111','21111-3111','21111-2211','21111-111111'),
+				array('411-21111','321-21111','222-21111','11111-21111','321-2211','321-111111','3111-3111', '2211-321', '21111-321')
+			);
 
 			//$this->rule_2_2_1a_invalid = $this->check_rule_2_2_1a();
 			//$this->rule_2_2_1b_invalid = $this->rule_2_2_1b($this->wCombs[0], TRUE);
@@ -36,35 +47,54 @@
 			Generates the base Combination based on the Rule 1a1
 			@return CombinationStatistic
 		 */
-		public function rule_1a1() {
+		public function rule_1a1($C = array(), $generating = false) {
 			//1º N- 01 a 30; 2º N- 02 a 40; 3º N- 04 a 49; 4º N- 11 a 55; 5º N- 18 a 59; 6º N- 31 a 60;
-			$comb = array();
 			$list = array();
-			$ranges = array(array('min'=>1,'max'=>30),
-							array('min'=>2,'max'=>40),
-							array('min'=>4,'max'=>49),
-							array('min'=>11,'max'=>55),
-							array('min'=>18,'max'=>59),
-							array('min'=>31,'max'=>60)
-							);
-			// sort them by boxes
-			for ($i=0; $i < 6; $i++) { 
-				$comb[$i] = $this->genUniqueRand($list, 1, 60);
-				$list[] = $comb[$i];
-			}
-			sort($comb);
-			d($comb);
-			d($list);
+			$ranges = $this->rule_1a1_ranges;
+			//pre existing combination does this with recursion
+			if (!empty($C) && $generating) {
+				sort($C->d);
 
-			foreach ($comb as $k => $v) {
-				$t = $v->n;
-				if (!(($ranges[$k]['min']<=$t)&&($ranges[$k]['max']>=$t))) {
-					$comb[$k] = $this->genUniqueRand($list, $ranges[$k]['min'], $ranges[$k]['max']);
-					$list[] = $comb[$k];
+				foreach ($C->d as $key => $value) {
+					$list[] = $value->n;
+				}
+
+				//checking ranges
+				foreach ($C->d as $k => $Num) {
+					$t = $Num->n;
+					if (!(($ranges[$k]['min']<=$t)&&($ranges[$k]['max']>=$t))) {
+						$C->d[$k] = $this->genUniqueRand($list, 1, 60);
+						$list[$k] = $C->d[$k]->n;
+						sort($C->d);
+						//sort($list);
+						//print_r($list);
+						$C = $this->rule_1a1($C, $list, true);
+						break;
+					}
+				}
+				
+				return $C;
+			} elseif ($generating) {
+
+				//if its for generation initial value
+				for ($i=0; $i < 6; $i++) { 
+					$comb[$i] = $this->genUniqueRand($list, 1, 60);
+					$list[] = $comb[$i]->n;
+				}
+				//must return a CombinationStatistics
+				return $this->rule_1a1(new CombinationStatistics($comb), true);
+			} else {
+				//not generating, just checking if the value passes or fails
+				//checking ranges
+				foreach ($C->d as $k => $Num) {
+					$t = $Num->n;
+					if (!(($ranges[$k]['min']<=$t)&&($ranges[$k]['max']>=$t))) {
+						return false;
+					}
 				}
 			}
 
-			return new CombinationStatistics($comb);
+			return true;
 		}
 
 		public function genUniqueRand($comb, $min, $max) {
@@ -74,12 +104,14 @@
 			while (in_array($N, $comb)) {
 				unset($N);
 				$N = new Number(mt_rand($min, $max));
-				//add additional test
-				/*if((6 == count($comb))&&($this->rule_a2($comb))) {
-					continue;
-				}*/
 			}
 			return $N;
+		}
+
+		public function make_seed()
+		{
+			list($usec, $sec) = explode(' ', microtime());
+  			return (float) $sec + ((float) $usec * 100000);
 		}
 
 		/*	6N pares (even number) ou ímpares (odd or uneven number)
@@ -87,11 +119,11 @@
 			@return TRUE if it passes the rule and 
 			False if it fails
 		 */
-		function rule_1a2($comb) {
+		function rule_1a2($C) {
 			$total = 0;
-			$count = count($comb); 
+			$count = count($C->d); 
 
-			foreach($comb as $k=>$N){
+			foreach($C->d as $k=>$N){
 				$total += $N->n % 2;
 			}
 			//if the N are all even the total will be 0; if the N are all odd then the total will be 6
@@ -106,10 +138,10 @@
 			@return TRUE if it passes the rule and 
 			False if it fails
 		 */
-		public function rule_1a3($comb) {
+		public function rule_1a3($C) {
 
 			$tens = array();
-			foreach ($comb as $k => $n) {
+			foreach ($C->d as $k => $n) {
 				if(!in_array($n->D, $tens)) {
 					$tens[] = $n->D;
 				}
@@ -131,9 +163,9 @@
 			@return TRUE if it passes the rule and 
 			False if it fails
 		 */
-		public function rule_1a4($comb) {
+		public function rule_1a4($C) {
 			$finalDigits = array();
-			foreach ($comb as $k => $n) {
+			foreach ($C->d as $k => $n) {
 				if(!in_array($n->DF, $finalDigits)) {
 					$finalDigits[] = $n->DF;
 				}
@@ -142,8 +174,10 @@
 			sort($finalDigits);
 			$last = count($finalDigits)-1;
 			if($finalDigits[$last]<=$finalDigits[0]+5){
-				for ($i=0; $i < $last; $i++) { 
-					if($finalDigits[i+1]!=$finalDigits[i]+1){
+				for ($i=0; $i < $last; $i++) {
+				print_r($finalDigits[$i].'-'.$finalDigits[$i+1].'|');
+				//print_r($finalDigits[$i+1]);
+					if(($finalDigits[$i+1]!=$finalDigits[$i]+1)&&($finalDigits[$i+1]!=$finalDigits[$i])){
 						return TRUE;
 					} 
 				}
@@ -153,19 +187,19 @@
 			}
 		}
 
-		/*	Com o menor DF > 4 ou com o maior DF < 5 (05-15-26-28-37-49 ou 02-10-33-43-52-54)
+		/*	Com o menor DF >= 4 ou com o maior DF <= 5 (05-15-26-28-37-49 ou 02-10-33-43-52-54)
 			@param array of Numbers(class)
 			@return TRUE if it passes the rule and 
 			False if it fails
 		 */
-		public function rule_1a5($comb) {
+		public function rule_1a5($C) {
 
 			$DFs = array();
-			foreach ($comb as $k => $N) {
+			foreach ($C->d as $k => $N) {
 				$DFs[] = $N->DF;
 			}
 			sort($DFs);
-			if(($DFs[0] > 4)||($DFs[5] < 5)) {
+			if(($DFs[0] >= 4)||($DFs[5] <= 5)) {
 				return FALSE;
 			}
 			return TRUE;
@@ -176,11 +210,11 @@
 			@return TRUE if it passes the rule and 
 			False if it fails
 		 */
-		public function rule_1a6($comb){
-			$count = count($comb);
+		public function rule_1a6($C){
+			$count = count($C->d);
 			$limit = 0;
-			for ($i=0; $i < $count; $i++) { 
-				if($comb[$i]->n+1 == $comb[$i+1]->n) { 
+			for ($i=0; $i < $count-2; $i++) { 
+				if($C->d[$i]->n+1 == $C->d[$i+1]->n) { 
 					$limit++;
 					if($limit >= 2) {
 						return FALSE;
@@ -195,17 +229,14 @@
 			@return TRUE if it passes the rule and 
 			False if it fails
 		 */
-		public function rule_1a7($comb){
-			$count = count($comb);
+		public function rule_1a7($C){
+			$count = count($C->d);
 			$limit = 0;
 			$NDifs = array();
-			for ($i=0; $i < $count; $i++) { 
-				$NDifs[] = $comb[$i]->n+1 - $comb[$i+1]->n;
+			for ($i=0; $i < $count-1; $i++) { 
+				$NDifs[] = $C->d[$i+1]->n - $C->d[$i]->n+1;
 			}
 			sort($NDifs);
-			if(($NDifs[0]>6)||($NDifs[4]<6)) {
-				return FALSE;
-			}
 			$freq = array_count_values($NDifs);
 			foreach ($freq as $k => $NDif) {
 				if($NDif>=3) {
@@ -220,8 +251,7 @@
 			@return TRUE if it passes the rule and 
 			False if it fails
 		 */
-		public function rule_1a8($comb){
-			$C = new Combination($comb);
+		public function rule_1a8($C){
 			$permited = array(	'2211-2211',	'21111-2211',
 								'3111-2211',	'321-2211',
 								'3111-21111',	'321-21111',
@@ -249,18 +279,16 @@
 		 */
 		public function numElementsEqual($c1, $c2) {
 			$num = 0;
-			$subComb = '';
 			if($c1 != $c2) {
 				foreach ($c2->d as $key => $value) {
 					if(in_array($value, $c1->d)) {
 						$num++;
 					}
 				}
+			} else {
+				$num = 6;
 			}
-			if(($c1 == $c2)||($num==6)) {
-				return array('num'=>-1,'subComb'=>$subComb);
-			}
-				return array('num'=>$num,'subComb'=>$subComb);
+			return $num;
 		}
 
 		/*	com $threshold N iguais ao ocorrido num teste anterior
@@ -272,8 +300,8 @@
 		 */
 		public function rule_matchingNumberThreshold($combination, $list, $threshold = 5) {
 			foreach ($list as $j => $value) {
-				$return = $this->numElementsEqual($combination, $value);
-				if($return['num'] >= $threshold) {
+				if($this->numElementsEqual($combination, $value) >= $threshold) {
+					print_r($value->print_id());
 					return FALSE;
 				}
 			}
@@ -289,8 +317,8 @@
 		public function rule_1b2($combination, $list, $threshold = 4) {
 			
 			foreach ($list as $j => $value) {
-				$return = $this->numElementsEqual($combination, $value);
-				if(($return['num'] == $threshold)&&($value->cRd_cRf == $combination->cRd_cRf)) {
+				//$return = $this->numElementsEqual($combination, $value);
+				if(($this->numElementsEqual($combination, $value) == $threshold)&&($value->cRd_cRf == $combination->cRd_cRf)) {
 					return FALSE;
 				}
 			}
