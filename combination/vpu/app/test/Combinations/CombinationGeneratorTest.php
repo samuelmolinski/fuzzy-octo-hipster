@@ -20,30 +20,31 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        /*$megaSc = mLoadXml( '../../../../d_megasc.htm');
+        $megaSc = mLoadXml( '../../../d_megasc100.htm');
         //d($megaSc);
         $megaSc = $megaSc->body->table->xpath('tr');
         array_shift($megaSc);
 
         $winningNumbers = array();
         foreach($megaSc as $k=>$combination) {
-            $d = array();
+            /*$d = array();
             //d($combination);
             //d($c);
             //$c->date = (string)$combination->td[1];
-            $d[] = (string)$combination->td[2];
-            $d[] = (string)$combination->td[3];
-            $d[] = (string)$combination->td[4];
-            $d[] = (string)$combination->td[5];
-            $d[] = (string)$combination->td[6];
-            $d[] = (string)$combination->td[7];
+            $d[] = new Number((string)$combination->td[2]);
+            $d[] = new Number((string)$combination->td[3]);
+            $d[] = new Number((string)$combination->td[4]);
+            $d[] = new Number((string)$combination->td[5]);
+            $d[] = new Number((string)$combination->td[6]);
+            $d[] = new Number((string)$combination->td[7]);*/
+            $d = (string)$combination->td[2].(string)$combination->td[3].(string)$combination->td[4].(string)$combination->td[5].(string)$combination->td[6].(string)$combination->td[7];
+            //print_r($d.'.');
             $c = new CombinationStatistics($d);
             $winningNumbers[] = $c;
             unset($c);
         }
-        //d($winningNumbers);
-        $this->combGen = new CombinationGenerator($winningNumbers);*/
-        $this->combGen = new CombinationGenerator();
+        $this->combGen = new CombinationGenerator($winningNumbers);
+        //$this->combGen = new CombinationGenerator();
         $this->rule_1a1_ranges = array(
                     array('min'=>1,'max'=>30),
                     array('min'=>2,'max'=>40),
@@ -243,7 +244,9 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
     public function testRule_matchingNumberThreshold()
     {
         $C1 = new CombinationStatistics('010421234347');
-        $this->assertTrue(!rule_matchingNumberThreshold($c1, $this->combGen->wCombs), 'message');
+        $C2 = new CombinationStatistics('171928454856');
+        $this->assertTrue($this->combGen->rule_matchingNumberThreshold($C1, $this->combGen->wCombs));
+        $this->assertTrue(!$this->combGen->rule_matchingNumberThreshold($C2, $this->combGen->wCombs));
     }
 
     /**
@@ -252,10 +255,15 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_1b2()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $C1 = new CombinationStatistics('010421234347');
+        $C2 = new CombinationStatistics('171928454755');
+        $C3 = new CombinationStatistics('040530334257');
+        //print_r($C1);
+        //print_r($C2);
+        //$this->combGen->rule_1b2($C2, $this->combGen->wCombs);
+        $this->assertTrue($this->combGen->rule_1b2($C1, $this->combGen->wCombs));
+        $this->assertTrue($this->combGen->rule_1b2($C2, $this->combGen->wCombs));
+        $this->assertTrue(!$this->combGen->rule_1b2($C3, $this->combGen->wCombs));
     }
 
     /**
@@ -264,10 +272,16 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_1b3()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $C1 = new CombinationStatistics('010421234347');
+        $C2 = new CombinationStatistics('171928454755');
+        $C3 = new CombinationStatistics('040530334257');
+        //print_r($C1);
+        //print_r($C2);
+        //print_r($C3);
+        //$this->combGen->rule_1b2($C2, $this->combGen->wCombs);
+        $this->assertTrue(!$this->combGen->rule_1b3($C1, $this->combGen->wCombs));
+        $this->assertTrue($this->combGen->rule_1b3($C2, $this->combGen->wCombs));
+        $this->assertTrue($this->combGen->rule_1b3($C3, $this->combGen->wCombs));
     }
 
     /**
@@ -276,10 +290,16 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testGenerate2_1cLimit()
     {
+        $r = '{"c1":["1346","1368","2459","2359","2567","1347","0137","1257","0147","0278","1678","1389","3468","2568","0124","2348","0156","0249","3489","1589","0569"],"c2":["12(2)4(2)5","01(2)35(2)","02(2)3(2)5","02(2)35(2)","134(2)5(2)","0(2)123(2)","02(2)3(2)5","1(2)235(2)","024(2)5(2)"],"c3":["12(2)345","0(2)2345","01234(2)"],"c4":["014689","024678","012469","345789","012458","135689","145679","123468","013458","012579","024578","012346","134679","256789","235678","045789","024678","034679","034568","013568","125679"],"c5":["13","46","57","04","37"],"c6":["034(3)5","0125(3)","023(3)4","0134(3)","2345(3)","1(3)245"]}';
+        //print_r($C1);
+        //echo json_encode($this->combGen->limit_2_1c);
+        //print_r($this->combGen->wCombs);
         // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        //$this->combGen->generate2_1cLimit();
+        //print_r($this->combGen->limit_2_1c);
+        //echo '.';
+        //print_r((array)json_decode($r));
+        $this->assertEquals($this->combGen->limit_2_1c, (array)json_decode($r), 'Check that it reproduces the same values');
     }
 
     /**
@@ -288,10 +308,13 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_2_1c()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $C1 = new CombinationStatistics('010423254556');
+        $C2 = new CombinationStatistics('171928355557');
+        $C3 = new CombinationStatistics('040530334257');
+        //print_r($C2);
+        //$this->combGen->rule_2_1c($C2, $this->combGen->limit_2_1c);
+        $this->assertTrue(!$this->combGen->rule_2_1c($C1), 'Does it match one of the last forms forbidden by 2.1c (FALSE)');
+        $this->assertTrue(!$this->combGen->rule_2_1c($C2), 'Does it match one of the last forms forbidden by 2.1c (FAIL)');
     }
 
     /**
@@ -299,11 +322,9 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      * @todo   Implement testCheck_rule_2_2_1a().
      */
     public function testCheck_rule_2_2_1a()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+    {   
+        print_r($this->combGen->rule_2_2_1a_invalid);
+        $this->assertequals( -1, $this->combGen->rule_2_2_1a_invalid, 'Is the rule 2.2.1c valid (FALSE)');
     }
 
     /**
@@ -312,10 +333,8 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_2_2_1a()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $C1 = new CombinationStatistics('010423254556');
+        $this->assertTrue($this->combGen->rule_2_2_1a($C1), 'pass the rule 2.2.1c valid (true)');
     }
 
     /**

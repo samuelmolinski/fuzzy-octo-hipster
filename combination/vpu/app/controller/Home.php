@@ -2,6 +2,7 @@
 
 namespace app\controller;
 
+    error_reporting(E_ALL);
 class Home extends \app\core\Controller {
 
     protected function _create_snapshot($view_data) {

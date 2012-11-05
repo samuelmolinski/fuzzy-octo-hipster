@@ -26,8 +26,12 @@
 					array('min'=>31,'max'=>60)
 				);
 			if($winningCombinations != null) {
-				$this->wCombs = $winningCombinations;
+				// this assumes chronological order (most recent drawings are last)
+				// need the more recent drawings first so use "array_reverse"
+				$this->wCombs = array_reverse($winningCombinations);
 			}
+
+			$this->generate2_1cLimit();
 
 			$this->groups_2_2 = array(
 				array('2211-21111'),
@@ -37,7 +41,7 @@
 				array('411-21111','321-21111','222-21111','11111-21111','321-2211','321-111111','3111-3111', '2211-321', '21111-321')
 			);
 
-			//$this->rule_2_2_1a_invalid = $this->check_rule_2_2_1a();
+			$this->rule_2_2_1a_invalid = $this->check_rule_2_2_1a();
 			//$this->rule_2_2_1b_invalid = $this->rule_2_2_1b($this->wCombs[0], TRUE);
 			//$this->rule_2_2_1c_invalid = $this->rule_2_2_1c($this->wCombs[0], TRUE);
 			//$this->rule_2_2_1c_invalid = $this->rule_2_2_1d($this->wCombs[1], TRUE, $this->rule_2_2_1d($this->wCombs[0], TRUE));
@@ -301,7 +305,6 @@
 		public function rule_matchingNumberThreshold($combination, $list, $threshold = 5) {
 			foreach ($list as $j => $value) {
 				if($this->numElementsEqual($combination, $value) >= $threshold) {
-					print_r($value->print_id());
 					return FALSE;
 				}
 			}
@@ -318,7 +321,11 @@
 			
 			foreach ($list as $j => $value) {
 				//$return = $this->numElementsEqual($combination, $value);
-				if(($this->numElementsEqual($combination, $value) == $threshold)&&($value->cRd_cRf == $combination->cRd_cRf)) {
+					//print_r($value->print_id());
+					//print_r(':'.$value->cRd_cRf);
+					//print_r(':'.$combination->cRd_cRf);
+					//print_r(':'.$this->numElementsEqual($combination, $value)."||");
+				if(($this->numElementsEqual($combination, $value) >= $threshold)&&($value->cRd_cRf == $combination->cRd_cRf)) {
 					return FALSE;
 				}
 			}
@@ -342,60 +349,72 @@
 
 		// part 2
  
-		public function generate2_1cLimit($winningCombinations){
+		public function generate2_1cLimit(){
 			$limits = array('c1'=>array(),'c2'=>array(),'c3'=>array(),'c4'=>array(),'c5'=>array(),'c6'=>array());
 			//c1
-			foreach ($winningCombinations as $key => $value) {
-				if($value->cDf == '21111') {
-					$cDf = preg_replace('/[0-9]\([0-9]\)/', '', $value->cDf);
-					if(!in_array($cDf, $limits['c1'])) {
-						$limits['c1'][] = $cDf;
-					}					
+			foreach ($this->wCombs as $key => $value) {
+
+				if($value->cRf == '21111') {
+					$cDfs = '';
+					foreach ($value->cDf as $k => $vDF) {
+						if($vDF==1){
+							$cDfs .= $k;
+						}
+					}
+					if(!in_array($cDfs, $limits['c1'])) {
+						$limits['c1'][] = $cDfs;
+					}	
+					if(count($limits['c1'])>=21) {break;}
 				}
-				if(count($limits['c1'])>=21) {break;}
 			}
 			//c2
-			foreach ($winningCombinations as $key => $value) {
-				if($value->cDd == '2211') {
+			foreach ($this->wCombs as $key => $value) {
+				if($value->cRd == '2211') {
 					if(!in_array($value->cDd, $limits['c2'])) {
-						$limits['c2'][] = $value->cDd;
+						$limits['c2'][] = $value->print_cDd();
 					}					
 				}
 				if(count($limits['c2'])>=9) {break;}
 			}
 			//c3
-			foreach ($winningCombinations as $key => $value) {
-				if($value->cDd == '21111') {
+			foreach ($this->wCombs as $key => $value) {
+				if($value->cRd == '21111') {
 					if(!in_array($value->cDd, $limits['c3'])) {
-						$limits['c3'][] = $value->cDd;
+						$limits['c3'][] = $value->print_cDd();
 					}					
 				}
 				if(count($limits['c3'])>=3) {break;}
 			}
 			//c4
-			foreach ($winningCombinations as $key => $value) {
-				if($value->cDf == '111111') {
+			foreach ($this->wCombs as $key => $value) {
+				if($value->cRf == '111111') {
 					if(!in_array($value->cDf, $limits['c4'])) {
-						$limits['c4'][] = $value->cDf;
+						$limits['c4'][] = $value->print_cDf();
 					}					
 				}
 				if(count($limits['c4'])>=21) {break;}
 			}
 			//c5
-			foreach ($winningCombinations as $key => $value) {
-				if($value->cDf == '2211 ') {
-					$cDf = preg_replace('/(?<!\()[0-9](?!\()/', '', $value->cDf);
-					if(!in_array($cDf, $limits['c5'])) {
-						$limits['c5'][] = $cDf;
+			foreach ($this->wCombs as $key => $value) {
+				if($value->cRf == '2211') {
+					$cDfs = '';
+					foreach ($value->cDf as $k => $vDF) {
+						if($vDF==2){
+							$cDfs .= $k;
+						}
+					}
+					//$cDf = preg_replace('/(?<!\()[0-9](?!\()/', '', $value->cDf);
+					if(!in_array($cDfs, $limits['c5'])) {
+						$limits['c5'][] = $cDfs;
 					}					
 				}
 				if(count($limits['c5'])>=5) {break;}
 			}
 			//c6
-			foreach ($winningCombinations as $key => $value) {
-				if($value->cDd == '3111') {
+			foreach ($this->wCombs as $key => $value) {
+				if($value->cRd == '3111') {
 					if(!in_array($value->cDd, $limits['c6'])) {
-						$limits['c6'][] = $value->cDd;
+						$limits['c6'][] = $value->print_cDd();
 					}					
 				}
 				if(count($limits['c6'])>=6) {break;}
@@ -403,42 +422,55 @@
 			$this->limit_2_1c = $limits;
 		}
 
-		public function rule_2_1c($combination, $list) {
+		public function rule_2_1c($combination) {
 			//c1
-			if($combination->cDf == '21111') {
-				$cDf = preg_replace('/[0-9]\([0-9]\)/', '', $combination->cDf);
-				if(!in_array($cDf, $this->limit_2_1c['c1'])) {
+
+			if($combination->cRf == '21111') {
+				$cDfs = '';
+				foreach ($combination->cDf as $k => $vDF) {
+					if($vDF==1){
+						$cDfs .= $k;
+					}
+				}
+				//print_r('$cDfs='.$cDfs.' ');
+				if(in_array($cDfs, $this->limit_2_1c['c1'])) {
 					return FALSE;
 				}					
 			}
 			//c2
-			if($combination->cDd == '2211') {
-				if(!in_array($combination->cDd, $this->limit_2_1c['c2'])) {
+			if($combination->cRd == '2211') {
+				//print_r($combination->print_cDd());
+				if(in_array($combination->print_cDd(), $this->limit_2_1c['c2'])) {
 					return FALSE;
 				}					
 			}
 			//c3
-			if($combination->cDd == '21111') {
-				if(!in_array($combination->cDd, $this->limit_2_1c['c3'])) {
+			if($combination->cRd == '21111') {
+				if(in_array($combination->print_cDd(), $this->limit_2_1c['c3'])) {
 					return FALSE;
 				}					
 			}
 			//c4
-			if($combination->cDf == '111111') {
-				if(!in_array($combination->cDf, $this->limit_2_1c['c4'])) {
+			if($combination->cRf == '111111') {
+				if(in_array($combination->print_cDf(), $this->limit_2_1c['c4'])) {
 					return FALSE;
 				}					
 			}
 			//c5
-			if($combination->cDf == '2211 ') {
-				$cDf = preg_replace('/(?<!\()[0-9](?!\()/', '', $combination->cDf);
-				if(!in_array($cDf, $this->limit_2_1c['c5'])) {
+			if($combination->cRf == '2211') {
+				$cDfs = '';
+				foreach ($combination->cDf as $k => $vDF) {
+					if($vDF==2){
+						$cDfs .= $k;
+					}
+				}
+				if(in_array($cDfs, $this->limit_2_1c['c5'])) {
 					return FALSE;
 				}					
 			}
 			//c6
-			if($combination->cDd == '3111') {
-				if(!in_array($combination->cDd, $this->limit_2_1c['c6'])) {
+			if($combination->cRd == '3111') {
+				if(in_array($combination->print_cDd(), $this->limit_2_1c['c6'])) {
 					return FALSE;
 				}					
 			}
@@ -470,7 +502,8 @@
 		}
 
 		public function rule_2_2_1a($combination){
-			if((-1 >= $this->rule_2_2_1a_invalid)&&(in_array($combination->cRd_cRf, $this->groups_2_2[$this->rule_2_2_1a_invalid]))){
+			//print_r($this->rule_2_2_1a_invalid);
+			if((-1 != $this->rule_2_2_1a_invalid)&&(in_array($combination->cRd_cRf, $this->groups_2_2[$this->rule_2_2_1a_invalid]))){
 				return FALSE;				
 			}
 			return TRUE;

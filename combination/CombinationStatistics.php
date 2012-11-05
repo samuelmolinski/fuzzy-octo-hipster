@@ -9,12 +9,14 @@
 		public $cDf;
 		public $cRd_cRf;
 		public $foe; //Factor of elimination
+		//public $foe2_1c; //Factor of elimination for 2_1c
 
 		public function CombinationStatistics($d = NULL) {
 			$this->Combination($d);
 			$this->populateStats();
 			$this->cRd_cRf = $this->cRd_cRf();
 			$this->find_foe();
+			//$this->find_f2_1c();
 		}
 
 		public function populateStats(){
@@ -206,4 +208,35 @@
 					break;
 			}
 		}
+/*
+
+		public function find_f2_1c() {
+			if($this->cRf == '21111') {	
+				$cDfs = '';				
+				foreach ($this->cDf as $k => $vDF) {
+					if($vDF==1){
+						$cDfs .= $k;
+					}
+				}
+				$this->foe2_1c = $cDfs;
+			} else if($this->cRf == '2211') {
+				$this->foe2_1c = $this->print_cDd;
+			} else if($this->cRf == '21111') {
+				$this->foe2_1c = $this->print_cDd;
+			} else if($this->cRf == '111111') {
+				$this->foe2_1c = $this->print_cDf;
+			} else if($this->cRf == '2211') {
+				$cDfs = '';
+				foreach ($this->cDf as $k => $vDF) {
+					if($vDF==2){
+						$cDfs .= $k;
+					}
+				}
+				$this->foe2_1c = $cDfs;
+			} else if($this->cRf == '3111') {
+				$this->foe2_1c = $this->print_cDd;
+			} else {
+				$this->foe2_1c = 'DNE';
+			}
+		}*/
 	}
