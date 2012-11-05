@@ -324,7 +324,7 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
     public function testCheck_rule_2_2_1a()
     {   
         print_r($this->combGen->rule_2_2_1a_invalid);
-        $this->assertequals( -1, $this->combGen->rule_2_2_1a_invalid, 'Is the rule 2.2.1c valid (FALSE)');
+        $this->assertequals( -1, $this->combGen->rule_2_2_1a_invalid, 'Is the rule 2.2.1a valid (FALSE)');
     }
 
     /**
@@ -334,7 +334,7 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
     public function testRule_2_2_1a()
     {
         $C1 = new CombinationStatistics('010423254556');
-        $this->assertTrue($this->combGen->rule_2_2_1a($C1), 'pass the rule 2.2.1c valid (true)');
+        $this->assertTrue($this->combGen->rule_2_2_1a($C1), 'pass the rule 2.2.1a valid (true)');
     }
 
     /**
@@ -343,10 +343,12 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_2_2_1b()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $C1 = new CombinationStatistics('010423242556');
+        $C2 = new CombinationStatistics('153137464956');
+        $C3 = new CombinationStatistics('152137464956');
+        $this->assertTrue(!$this->combGen->rule_2_2_1b($C1, true), 'pass the rule 2.2.1b valid (false)');
+        $this->assertTrue(!$this->combGen->rule_2_2_1b($C2, true), 'pass the rule 2.2.1b valid (false)');
+        $this->assertTrue(!$this->combGen->rule_2_2_1b($C3, true), 'pass the rule 2.2.1b valid (true)');
     }
 
     /**
@@ -355,10 +357,12 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_2_2_1c()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $C1 = new CombinationStatistics('010422242856');
+        $C2 = new CombinationStatistics('153137434956');
+        $C3 = new CombinationStatistics('152137464956');
+        $this->assertTrue(!$this->combGen->rule_2_2_1c($C1, true), 'pass the rule 2.2.1c valid (false)');
+        $this->assertTrue(!$this->combGen->rule_2_2_1c($C2, true), 'pass the rule 2.2.1c valid (false)');
+        $this->assertTrue(!$this->combGen->rule_2_2_1c($C3, true), 'pass the rule 2.2.1c valid (true)');
     }
 
     /**
@@ -367,9 +371,12 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_2_2_1d()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $C1 = new CombinationStatistics('010422235556');
+        $C2 = new CombinationStatistics('153137434456');
+        $C3 = new CombinationStatistics('152137464956');
+        $this->assertEquals(2, $this->combGen->rule_2_2_1d($C1, true), 'pass the rule 2.2.1d valid (2)');
+        $this->assertEquals(1, $this->combGen->rule_2_2_1d($C2, true), 'pass the rule 2.2.1d valid (1)');
+        $this->assertEquals(0, $this->combGen->rule_2_2_1c($C3, true), 'pass the rule 2.2.1d valid (0)');
     }
 }
+    
