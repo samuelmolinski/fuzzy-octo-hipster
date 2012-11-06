@@ -594,4 +594,35 @@
 
 			$this->listRule_2_2_1e = $final;
 		}
+		public funciton checkRule_2_2_2() {
+			$list = array();
+			for ($i=0; $i < 2; $i++) { 
+				foreach ($this->groups_2_2 as $key => $group) {
+					if(in_array($this->wCombs[$i]->cRd_cRf, $group)){
+						if(!array_key_exists($N->n, $group)) {
+							if(!$list[$key]){
+								$list[$key] = 0;
+							}
+							$list[$key]++;
+						} 
+					}
+				}				
+			}
+			foreach ($list as $group => $occured) {
+				if(2>= $occured) {
+					$this->rule_2_2_2_invalid = $group;
+				}
+			}
+			$this->rule_2_2_2_invalid = -1;
+		}
+
+		public funciton Rule_2_2_2($C) {
+
+			if(-1 > $this->rule_2_2_2_invalid){
+				if($c->group2_2 == $this->rule_2_2_2_invalid) {
+					return false;
+				}
+			}
+			return true;
+		}
 	}

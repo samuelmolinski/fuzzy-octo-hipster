@@ -9,14 +9,14 @@
 		public $cDf;
 		public $cRd_cRf;
 		public $foe; //Factor of elimination
-		//public $foe2_1c; //Factor of elimination for 2_1c
+		public $group2_2; //Factor of elimination for 2_2
 
 		public function CombinationStatistics($d = NULL) {
 			$this->Combination($d);
 			$this->populateStats();
 			$this->cRd_cRf = $this->cRd_cRf();
 			$this->find_foe();
-			//$this->find_f2_1c();
+			$this->find_group2_2();
 		}
 
 		public function populateStats(){
@@ -208,35 +208,21 @@
 					break;
 			}
 		}
-/*
 
-		public function find_f2_1c() {
-			if($this->cRf == '21111') {	
-				$cDfs = '';				
-				foreach ($this->cDf as $k => $vDF) {
-					if($vDF==1){
-						$cDfs .= $k;
+
+		public function find_group2_2() {
+			$groups_2_2 = array(
+				array('2211-21111'),
+				array('2211-3111','2211-2211','2211-111111'),
+				array('21111-21111','3111-21111'),
+				array('3111-2211','3111-111111','21111-3111','21111-2211','21111-111111'),
+				array('411-21111','321-21111','222-21111','11111-21111','321-2211','321-111111','3111-3111', '2211-321', '21111-321')
+			);
+			foreach ($groups_2_2 as $key => $group) {
+					if(in_array($C->cRd_cRf, $group)){
+						$this->group2_2 = $key;
+						break;
 					}
 				}
-				$this->foe2_1c = $cDfs;
-			} else if($this->cRf == '2211') {
-				$this->foe2_1c = $this->print_cDd;
-			} else if($this->cRf == '21111') {
-				$this->foe2_1c = $this->print_cDd;
-			} else if($this->cRf == '111111') {
-				$this->foe2_1c = $this->print_cDf;
-			} else if($this->cRf == '2211') {
-				$cDfs = '';
-				foreach ($this->cDf as $k => $vDF) {
-					if($vDF==2){
-						$cDfs .= $k;
-					}
-				}
-				$this->foe2_1c = $cDfs;
-			} else if($this->cRf == '3111') {
-				$this->foe2_1c = $this->print_cDd;
-			} else {
-				$this->foe2_1c = 'DNE';
-			}
-		}*/
+		}
 	}

@@ -394,6 +394,8 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array(), $this->combGen->genrateListRule_2_2_1e(), 'pass the rule 2.2.1d valid (2)');
         //$this->assertEquals(1, $this->combGen->rule_2_2_1e($C2, true), 'pass the rule 2.2.1d valid (1)');
         //$this->assertEquals(0, $this->combGen->rule_2_2_1e($C3, true), 'pass the rule 2.2.1d valid (0)');
+    } 
+    public function testRule_2_2(){
+        
     }
 }
-    
