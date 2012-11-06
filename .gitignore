@@ -1,0 +1,16 @@
+
+/combination/simpletest/HELP_MY_TESTS_DONT_WORK_ANYMORE
+/combination/vpu/.htaccess
+/combination/vpu/app/public/.htaccess
+/combination/vpu/app/test/sample_dir
+/combination/vpu/app/test/DateTest.php
+/combination/vpu/app/test/IncompleteTest.php
+/combination/vpu/app/test/PUTest.php
+/combination/vpu/app/test/PUTest2.php
+/combination/vpu/app/test/SkippedTest.php
+/combination/vpu/app/test/sample_dir/IncompleteTest2.php
+/combination/vpu/app/test/sample_dir/PUTest3.php
+/combination/vpu/app/test/sample_dir/PUTest4.php
+/_source/NSinopoli-VisualPHPUnit-v2.1-8-g2b25f0a
+/_source/sebastianbergmann-phpunit-3.7.8-52-g2b71285
+/_source/simpletest_1.1.0
