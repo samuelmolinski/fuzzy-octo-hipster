@@ -13,6 +13,7 @@
 		public $rule_2_2_1b_invalid; // Boolean
 		public $rule_2_2_1c_invalid; // Boolean
 		public $rule_2_2_1d_invalid; // -1 if we do not use it
+		public $listRule_2_2_1e;
 
 		public function CombinationGenerator($winningCombinations = null) {
 			//seed the random mt_rand()
@@ -513,7 +514,7 @@
 			if(!$this->rule_2_2_1b_invalid || $override) {
 				$c = 0;
 				foreach ($combination->d as $k => $v) {
-					if($v <=30) {$c++;}
+					if($v->n <=30) {$c++;}
 				}
 				if(($c==1)||($c==5)) {
 					return FALSE;
@@ -528,7 +529,7 @@
 				$count = count($combination->d); 
 
 				foreach($combination->d as $k=>$N){
-					$total += $N % 2;
+					$total += $N->n % 2;
 				}
 				//if the N are all even the total will be 0; if the N are all odd then the total will be 6
 				if((1 == $total)||($count-1 == $total)){
@@ -543,15 +544,54 @@
 				$count = count($combination->d);
 				$limit = 0;
 				for ($i=0; $i < $count-1; $i++) { 
-					if($combination->d[$i]+1 == $combination->d[$i+1]) { 						
+					print_r($combination->d[$i]->n+1);
+					echo '.';
+					print_r($combination->d[$i+1]->n);
+					echo '|';
+					if($combination->d[$i]->n+1 == $combination->d[$i+1]->n) { 						
 						$limit++;
 						if($limit >= 1) {
-							return $carryOver++;
+							return ++$carryOver;
 						}
 					}
 				}
-			}	
+			}
 			return $carryOver;
 		}
 
+		public function genrateListRule_2_2_1e() {
+			$list = array();
+			$list2 = array();
+			$final =  array();
+			$this->wCombs;
+			foreach ($this->wCombs[0]->d as $k => $N) {	
+				for ($i=1; $i < 4; $i++) { 							
+					if(in_array($N, $this->wCombs[$i]->d)){
+						if(!array_key_exists($N->n, $list)) {
+							$list[$N->n] = 0;
+						} 
+						$list[$N->n]++;
+						if ($list[$N->n] >= 3) {
+							$final[] = $N->n;
+						}
+					}
+				}
+			}
+
+			foreach ($this->wCombs[1]->d as $k => $N) {	
+				for ($i=2; $i < 5; $i++) { 							
+					if(in_array($N, $this->wCombs[$i]->d)){
+						if(!array_key_exists($N->n, $list2)) {
+							$list2[$N->n] = 0;
+						} 
+						$list2[$N->n]++;						
+						if ($list2[$N->n] >= 3) {
+							$final[] = $N->n;
+						}
+					}
+				}
+			}
+
+			$this->listRule_2_2_1e = $final;
+		}
 	}

@@ -348,7 +348,7 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
         $C3 = new CombinationStatistics('152137464956');
         $this->assertTrue(!$this->combGen->rule_2_2_1b($C1, true), 'pass the rule 2.2.1b valid (false)');
         $this->assertTrue(!$this->combGen->rule_2_2_1b($C2, true), 'pass the rule 2.2.1b valid (false)');
-        $this->assertTrue(!$this->combGen->rule_2_2_1b($C3, true), 'pass the rule 2.2.1b valid (true)');
+        $this->assertTrue($this->combGen->rule_2_2_1b($C3, true), 'pass the rule 2.2.1b valid (true)');
     }
 
     /**
@@ -362,7 +362,7 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
         $C3 = new CombinationStatistics('152137464956');
         $this->assertTrue(!$this->combGen->rule_2_2_1c($C1, true), 'pass the rule 2.2.1c valid (false)');
         $this->assertTrue(!$this->combGen->rule_2_2_1c($C2, true), 'pass the rule 2.2.1c valid (false)');
-        $this->assertTrue(!$this->combGen->rule_2_2_1c($C3, true), 'pass the rule 2.2.1c valid (true)');
+        $this->assertTrue($this->combGen->rule_2_2_1c($C3, true), 'pass the rule 2.2.1c valid (true)');
     }
 
     /**
@@ -374,9 +374,26 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
         $C1 = new CombinationStatistics('010422235556');
         $C2 = new CombinationStatistics('153137434456');
         $C3 = new CombinationStatistics('152137464956');
-        $this->assertEquals(2, $this->combGen->rule_2_2_1d($C1, true), 'pass the rule 2.2.1d valid (2)');
+        $this->assertEquals(1, $this->combGen->rule_2_2_1d($C1, true), 'pass the rule 2.2.1d valid (2)');
         $this->assertEquals(1, $this->combGen->rule_2_2_1d($C2, true), 'pass the rule 2.2.1d valid (1)');
-        $this->assertEquals(0, $this->combGen->rule_2_2_1c($C3, true), 'pass the rule 2.2.1d valid (0)');
+        $this->assertEquals(0, $this->combGen->rule_2_2_1d($C3, true), 'pass the rule 2.2.1d valid (0)');
+    }
+
+    /**
+     * @covers CombinationGenerator::rule_2_2_1d
+     * @todo   Implement testRule_2_2_1d().
+     */
+    public function testRule_2_2_1e()
+    {
+        $C1 = new CombinationStatistics('010422235556');
+        $C2 = new CombinationStatistics('153137434456');
+        $C3 = new CombinationStatistics('152137464956');
+
+        print_r($this->combGen->genrateListRule_2_2_1e());
+
+        $this->assertEquals(array(), $this->combGen->genrateListRule_2_2_1e(), 'pass the rule 2.2.1d valid (2)');
+        //$this->assertEquals(1, $this->combGen->rule_2_2_1e($C2, true), 'pass the rule 2.2.1d valid (1)');
+        //$this->assertEquals(0, $this->combGen->rule_2_2_1e($C3, true), 'pass the rule 2.2.1d valid (0)');
     }
 }
     
