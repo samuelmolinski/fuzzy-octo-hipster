@@ -303,7 +303,7 @@
 			@return TRUE if it passes the rule and 
 			False if it fails
 		 */
-		public function rule_matchingNumberThreshold($combination, $list, $threshold = 5) {
+		public function rule_rule1b1($combination, $list, $threshold = 5) {
 			foreach ($list as $j => $value) {
 				if($this->numElementsEqual($combination, $value) >= $threshold) {
 					return FALSE;
@@ -421,6 +421,15 @@
 				if(count($limits['c6'])>=6) {break;}
 			}
 			$this->limit_2_1c = $limits;
+		}
+
+		public function rule_2_1a($combination, $list){
+			return $this->rule_1b1($combination, $list);
+		}
+
+		public function rule_2_1b($combination) {
+			$subList = array_slice($this->wCombs, 3);
+			return $this->rule_1ba($combination, $subList);
 		}
 
 		public function rule_2_1c($combination) {
@@ -610,10 +619,11 @@
 			}
 			foreach ($list as $group => $occured) {
 				if(2>= $occured) {
-					$this->rule_2_2_2_invalid = $group;
+					return $this->rule_2_2_2_invalid = $group;
+
 				}
 			}
-			$this->rule_2_2_2_invalid = -1;
+			return $this->rule_2_2_2_invalid = -1;
 		}
 
 		public funciton Rule_2_2_2($C) {
