@@ -14,6 +14,7 @@
 		public $rule_2_2_1c_invalid; // Boolean
 		public $rule_2_2_1d_invalid; // -1 if we do not use it
 		public $listRule_2_2_1e;
+		public $rule_2_2_2_invalid;
 
 		public function CombinationGenerator($winningCombinations = null) {
 			//seed the random mt_rand()
@@ -43,10 +44,11 @@
 			);
 
 			$this->rule_2_2_1a_invalid = $this->check_rule_2_2_1a();
-			//$this->rule_2_2_1b_invalid = $this->rule_2_2_1b($this->wCombs[0], TRUE);
-			//$this->rule_2_2_1c_invalid = $this->rule_2_2_1c($this->wCombs[0], TRUE);
-			//$this->rule_2_2_1c_invalid = $this->rule_2_2_1d($this->wCombs[1], TRUE, $this->rule_2_2_1d($this->wCombs[0], TRUE));
+			$this->rule_2_2_1b_invalid = $this->rule_2_2_1b($this->wCombs[0], TRUE);
+			$this->rule_2_2_1c_invalid = $this->rule_2_2_1c($this->wCombs[0], TRUE);
+			$this->rule_2_2_1d_invalid = $this->rule_2_2_1d($this->wCombs[1], TRUE, $this->rule_2_2_1d($this->wCombs[0], TRUE));
 			$this->genrateListRule_2_2_1e();
+			$this->checkRule_2_2_2();
 		}
 
 		/*	Com todos os DF consecutivos (ex: 01-11-22-33-44-54)
@@ -147,20 +149,21 @@
 		public function rule_1a3($C) {
 
 			$tens = array();
-			foreach ($C->d as $k => $n) {
-				if(!in_array($n->D, $tens)) {
-					$tens[] = $n->D;
+			foreach ($C->d as $k => $N) {
+				if(!in_array($N->D, $tens)) {
+					$tens[] = $N->D;
 				}
 			}
 			if(3 == count($tens)) {
 				sort($tens);
+				//d($tens);
 				if(($tens[1]==$tens[0]+1)&&($tens[2]==$tens[0]+2)) {
 					return FALSE;
 				} else {
 					return TRUE;
 				}
 			} else {
-				return FALSE;
+				return TRUE;
 			}
 		}
 
@@ -548,9 +551,11 @@
 			}	
 			return TRUE;
 		}
-
+		/*
+			2N consecutivos, caso eles tenham ocorrido nos 2 últimos testes; 13% 19 milh
+		*/
 		public function rule_2_2_1d($combination, $override = False, $carryOver = 0) {
-			if(!(-1 == $this->rule_2_2_1d_invalid) || $override) {
+			if(!(-1 === $this->rule_2_2_1d_invalid) || $override) {
 				$count = count($combination->d);
 				$limit = 0;
 				for ($i=0; $i < $count-1; $i++) { 
@@ -619,17 +624,16 @@
 			for ($i=0; $i < 2; $i++) { 
 				foreach ($this->groups_2_2 as $key => $group) {
 					if(in_array($this->wCombs[$i]->cRd_cRf, $group)){
-						if(!array_key_exists($N->n, $group)) {
-							if(!$list[$key]){
-								$list[$key] = 0;
-							}
-							$list[$key]++;
-						} 
+						if(!@$list[$key]){
+							$list[$key] = 0;
+						}
+						$list[$key]++;
 					}
 				}				
 			}
+			d($list);
 			foreach ($list as $group => $occured) {
-				if(2>= $occured) {
+				if(2 > $occured) {
 					return $this->rule_2_2_2_invalid = $group;
 
 				}
@@ -640,7 +644,7 @@
 		public function Rule_2_2_2($C) {
 
 			if(-1 > $this->rule_2_2_2_invalid){
-				if($c->group2_2 == $this->rule_2_2_2_invalid) {
+				if($C->group2_2 == $this->rule_2_2_2_invalid) {
 					return false;
 				}
 			}

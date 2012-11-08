@@ -81,10 +81,12 @@ for($j =0; $j < $numOfCombinations; $j++){
 }
 $p->end_timer("True Random Cominations");
 echo "<h2>Results for $numOfCombinations combinations</h2>";
-echo "<ol>";
+echo "<p>rule_2_2_1d_invalid ".$cg->rule_2_2_1d_invalid. "</p>";
+echo "<ul>";
 foreach ($tests as $j => $test) {
 	$currentFunction = $test[0];
 	$pass = 0;
+	$fail = array();
 	$list = array();
 	$count = count($test);
 	//echo "<li>$count requires \$list</li>";
@@ -96,7 +98,9 @@ foreach ($tests as $j => $test) {
 			if($r) {
 				$pass++;
 				$list[] = $c;
-			} 
+			}  else {
+				$fail[] = $c;
+			}
 		}
 		$p->end_timer($test[0]);
 	} else {
@@ -106,21 +110,30 @@ foreach ($tests as $j => $test) {
 			if($r) {
 				$pass++;
 				$list[] = $c;
-			} 
+			}  else {
+				$fail[] = $c;
+			}
 		}
 		$p->end_timer($test[0]);
 	}	
 	$av = $p->timers[$test[0]]['total']/$numOfCombinations;
-	echo "<li>".$test[0]." - (total time:".$p->timers[$test[0]]['total']." | average time: $av ) passed: $pass </li>";
+	echo "<li>".$test[0]." - (total time:".$p->timers[$test[0]]['total']." | average time: $av ) passed: $pass";
+	sort($fail);
+	echo "<ol>";
+	foreach ($fail as $k => $c) {
+		echo "<li>".$c->print_id()."</li>";
+	}
+	echo "</ol>";
+	echo "</li>";
 	//echo($test[0]);
 	//d($p->timers[$test[0]]['total']);
 }
 
-echo "</ol>";
+echo "</ul>";
 
-sort($rCombinations);
-//echo "<ol>";
+/*sort($rCombinations);
+echo "<ol>";
 foreach ($rCombinations as $k => $c) {
 	echo "<li>".$c->print_id()."</li>";
 }
-//echo "</ol>";
+echo "</ol>";*/

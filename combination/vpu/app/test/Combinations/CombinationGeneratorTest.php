@@ -241,12 +241,12 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      * @covers CombinationGenerator::rule_matchingNumberThreshold
      * @todo   Implement testRule_matchingNumberThreshold().
      */
-    public function testRule_matchingNumberThreshold()
+    public function testRule_1b1()
     {
         $C1 = new CombinationStatistics('010421234347');
         $C2 = new CombinationStatistics('171928454856');
-        $this->assertTrue($this->combGen->rule_matchingNumberThreshold($C1, $this->combGen->wCombs));
-        $this->assertTrue(!$this->combGen->rule_matchingNumberThreshold($C2, $this->combGen->wCombs));
+        $this->assertTrue($this->combGen->rule_1b1($C1, $this->combGen->wCombs));
+        $this->assertTrue(!$this->combGen->rule_1b1($C2, $this->combGen->wCombs));
     }
 
     /**
