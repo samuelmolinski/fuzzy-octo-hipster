@@ -5,6 +5,8 @@
 
 	class CombinationGenerator {
 
+
+		public $currentBettingNumbers;
 		public $rule_1a1_ranges;
 		public $limit_2_1c;
 		public $groups_2_2;
@@ -17,6 +19,7 @@
 		public $rule_2_2_2_invalid;
 
 		public function CombinationGenerator($winningCombinations = null) {
+			$this->$currentBettingNumbers = array();
 			//seed the random mt_rand()
 			mt_srand($this->make_seed());
 			$this->rule_1a1_ranges = array(
@@ -554,24 +557,41 @@
 		/*
 			2N consecutivos, caso eles tenham ocorrido nos 2 últimos testes; 13% 19 milh
 		*/
-		public function rule_2_2_1d($combination, $override = False, $carryOver = 0) {
-			if(!(-1 === $this->rule_2_2_1d_invalid) || $override) {
-				$count = count($combination->d);
+		public function rule_2_2_1d($C, $override = False, $carryOver = 0) {
+
+			if((1 > $this->rule_2_2_1d_invalid) || $override) {
+
+				print_r($C->print_id());
+				echo '.';
+				print_r('$override: '.$override);
+				echo '.';
+				print_r('$carryOver: '.$carryOver);
+				echo '.';
+				$count = count($C->d);
 				$limit = 0;
 				for ($i=0; $i < $count-1; $i++) { 
-					//print_r($combination->d[$i]->n+1);
-					//echo '.';
-					//print_r($combination->d[$i+1]->n);
-					//echo '|';
-					if($combination->d[$i]->n+1 == $combination->d[$i+1]->n) { 						
+					print_r($C->d[$i]->n+1);
+					echo '.';
+					print_r($C->d[$i+1]->n);
+					echo '|';
+					if($C->d[$i]->n+1 == $C->d[$i+1]->n) { 						
 						$limit++;
 						if($limit >= 1) {
-							return ++$carryOver;
+							if (!$override) {
+								return false;
+							} else {
+								return ++$carryOver;
+							}							
 						}
 					}
 				}
 			}
-			return $carryOver;
+
+			if (!$override) {
+				return true;
+			} else {
+				return $carryOver;
+			}	
 		}
 
 		public function genrateListRule_2_2_1e() {
@@ -631,7 +651,7 @@
 					}
 				}				
 			}
-			d($list);
+			//d($list);
 			foreach ($list as $group => $occured) {
 				if(2 > $occured) {
 					return $this->rule_2_2_2_invalid = $group;
