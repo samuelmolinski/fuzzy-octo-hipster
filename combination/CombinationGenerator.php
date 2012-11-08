@@ -46,6 +46,7 @@
 			//$this->rule_2_2_1b_invalid = $this->rule_2_2_1b($this->wCombs[0], TRUE);
 			//$this->rule_2_2_1c_invalid = $this->rule_2_2_1c($this->wCombs[0], TRUE);
 			//$this->rule_2_2_1c_invalid = $this->rule_2_2_1d($this->wCombs[1], TRUE, $this->rule_2_2_1d($this->wCombs[0], TRUE));
+			$this->genrateListRule_2_2_1e();
 		}
 
 		/*	Com todos os DF consecutivos (ex: 01-11-22-33-44-54)
@@ -103,10 +104,10 @@
 		}
 
 		public function genUniqueRand($comb, $min, $max) {
-			
+
 			$N = new Number(mt_rand($min, $max));
 
-			while (in_array($N, $comb)) {
+			while (in_array($N->n, $comb)) {
 				unset($N);
 				$N = new Number(mt_rand($min, $max));
 			}
@@ -180,7 +181,7 @@
 			$last = count($finalDigits)-1;
 			if($finalDigits[$last]<=$finalDigits[0]+5){
 				for ($i=0; $i < $last; $i++) {
-				print_r($finalDigits[$i].'-'.$finalDigits[$i+1].'|');
+				//print_r($finalDigits[$i].'-'.$finalDigits[$i+1].'|');
 				//print_r($finalDigits[$i+1]);
 					if(($finalDigits[$i+1]!=$finalDigits[$i]+1)&&($finalDigits[$i+1]!=$finalDigits[$i])){
 						return TRUE;
@@ -303,7 +304,7 @@
 			@return TRUE if it passes the rule and 
 			False if it fails
 		 */
-		public function rule_rule1b1($combination, $list, $threshold = 5) {
+		public function rule_1b1($combination, $list, $threshold = 5) {
 			foreach ($list as $j => $value) {
 				if($this->numElementsEqual($combination, $value) >= $threshold) {
 					return FALSE;
@@ -429,7 +430,7 @@
 
 		public function rule_2_1b($combination) {
 			$subList = array_slice($this->wCombs, 3);
-			return $this->rule_1ba($combination, $subList);
+			return $this->rule_2_1a($combination, $subList);
 		}
 
 		public function rule_2_1c($combination) {
@@ -553,10 +554,10 @@
 				$count = count($combination->d);
 				$limit = 0;
 				for ($i=0; $i < $count-1; $i++) { 
-					print_r($combination->d[$i]->n+1);
-					echo '.';
-					print_r($combination->d[$i+1]->n);
-					echo '|';
+					//print_r($combination->d[$i]->n+1);
+					//echo '.';
+					//print_r($combination->d[$i+1]->n);
+					//echo '|';
 					if($combination->d[$i]->n+1 == $combination->d[$i+1]->n) { 						
 						$limit++;
 						if($limit >= 1) {
@@ -603,7 +604,17 @@
 
 			$this->listRule_2_2_1e = $final;
 		}
-		public funciton checkRule_2_2_2() {
+
+		public function rule_2_2_1e($C) {
+			foreach ($C->d as $k => $N) {
+				if(in_array($N->n, $this->listRule_2_2_1e)){
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public function checkRule_2_2_2() {
 			$list = array();
 			for ($i=0; $i < 2; $i++) { 
 				foreach ($this->groups_2_2 as $key => $group) {
@@ -626,7 +637,7 @@
 			return $this->rule_2_2_2_invalid = -1;
 		}
 
-		public funciton Rule_2_2_2($C) {
+		public function Rule_2_2_2($C) {
 
 			if(-1 > $this->rule_2_2_2_invalid){
 				if($c->group2_2 == $this->rule_2_2_2_invalid) {

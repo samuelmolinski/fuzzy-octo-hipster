@@ -219,7 +219,7 @@
 				array('411-21111','321-21111','222-21111','11111-21111','321-2211','321-111111','3111-3111', '2211-321', '21111-321')
 			);
 			foreach ($groups_2_2 as $key => $group) {
-					if(in_array($C->cRd_cRf, $group)){
+					if(in_array($this->cRd_cRf, $group)){
 						$this->group2_2 = $key;
 						break;
 					}

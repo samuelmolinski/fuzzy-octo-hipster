@@ -30,8 +30,20 @@
     }
     //make our combinationGenerator
 	$cg = new CombinationGenerator($winningNumbers);
+	// init our performance timer
+	$p = new Performance();
 	// $c is the current combination
 	// $list is the current list of excepted playable combinations
+
+	$tests_1a = array(array('rule_1a1', 'c'),
+				   array('rule_1a2', 'c'),
+				   array('rule_1a3', 'c'),
+				   array('rule_1a4', 'c'),
+				   array('rule_1a5', 'c'),
+				   array('rule_1a6', 'c'),
+				   array('rule_1a7', 'c'),
+				   array('rule_1a8', 'c'),
+				);
 
 	$tests = array(array('rule_1a1', 'c'),
 				   array('rule_1a2', 'c'),
@@ -55,8 +67,60 @@
 				   array('rule_2_2_2', 'c'),
 				);
 
-//lets start with 1000 generated combinations to test against each
-
-for($i =0; $i < 1000; $i++){
-	'c'ombinations[] = $cg->rule_1a1(array(), True)
+//lets start with true random 1000 generated combinations to test against each
+$numOfCombinations = 100;
+$p->start_timer('True Random Cominations');
+for($j =0; $j < $numOfCombinations; $j++){	
+	$list = array();
+	for ($i=0; $i < 6; $i++) { 
+		$comb[$i] = $cg->genUniqueRand($list, 1, 60);
+		$list[] = $comb[$i]->n;
+	}
+	//must return a CombinationStatistics
+	$rCombinations[] = new CombinationStatistics($comb);
 }
+$p->end_timer("True Random Cominations");
+echo "<h2>Results for $numOfCombinations combinations</h2>";
+echo "<ol>";
+foreach ($tests as $j => $test) {
+	$currentFunction = $test[0];
+	$pass = 0;
+	$list = array();
+	$count = count($test);
+	//echo "<li>$count requires \$list</li>";
+	if(2 < $count) {
+		//echo "<li>requires \$list</li>";
+		$p->start_timer($test[0]);
+		foreach ($rCombinations as $k => $c) {
+			$r = $cg->$currentFunction($c, $list);
+			if($r) {
+				$pass++;
+				$list[] = $c;
+			} 
+		}
+		$p->end_timer($test[0]);
+	} else {
+		$p->start_timer($test[0]);
+		foreach ($rCombinations as $k => $c) {
+			$r = $cg->$currentFunction($c);
+			if($r) {
+				$pass++;
+				$list[] = $c;
+			} 
+		}
+		$p->end_timer($test[0]);
+	}	
+	$av = $p->timers[$test[0]]['total']/$numOfCombinations;
+	echo "<li>".$test[0]." - (total time:".$p->timers[$test[0]]['total']." | average time: $av ) passed: $pass </li>";
+	//echo($test[0]);
+	//d($p->timers[$test[0]]['total']);
+}
+
+echo "</ol>";
+
+sort($rCombinations);
+//echo "<ol>";
+foreach ($rCombinations as $k => $c) {
+	echo "<li>".$c->print_id()."</li>";
+}
+//echo "</ol>";
