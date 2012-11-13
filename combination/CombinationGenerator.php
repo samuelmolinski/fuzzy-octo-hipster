@@ -6,7 +6,7 @@
 	class CombinationGenerator {
 
 
-		public $currentBettingNumbers;
+		public $currentBettingCombinations;
 		public $rule_1a1_ranges;
 		public $limit_2_1c;
 		public $groups_2_2;
@@ -17,9 +17,10 @@
 		public $rule_2_2_1d_invalid; // -1 if we do not use it
 		public $listRule_2_2_1e;
 		public $rule_2_2_2_invalid;
+		public $rule_2_1b_subList;
 
 		public function CombinationGenerator($winningCombinations = null) {
-			$this->$currentBettingNumbers = array();
+			$this->currentBettingCombinations = array();
 			//seed the random mt_rand()
 			mt_srand($this->make_seed());
 			$this->rule_1a1_ranges = array(
@@ -30,13 +31,6 @@
 					array('min'=>18,'max'=>59),
 					array('min'=>31,'max'=>60)
 				);
-			if($winningCombinations != null) {
-				// this assumes chronological order (most recent drawings are last)
-				// need the more recent drawings first so use "array_reverse"
-				$this->wCombs = array_reverse($winningCombinations);
-			}
-
-			$this->generate2_1cLimit();
 
 			$this->groups_2_2 = array(
 				array('2211-21111'),
@@ -46,12 +40,24 @@
 				array('411-21111','321-21111','222-21111','11111-21111','321-2211','321-111111','3111-3111', '2211-321', '21111-321')
 			);
 
-			$this->rule_2_2_1a_invalid = $this->check_rule_2_2_1a();
-			$this->rule_2_2_1b_invalid = $this->rule_2_2_1b($this->wCombs[0], TRUE);
-			$this->rule_2_2_1c_invalid = $this->rule_2_2_1c($this->wCombs[0], TRUE);
-			$this->rule_2_2_1d_invalid = $this->rule_2_2_1d($this->wCombs[1], TRUE, $this->rule_2_2_1d($this->wCombs[0], TRUE));
-			$this->genrateListRule_2_2_1e();
-			$this->checkRule_2_2_2();
+			if($winningCombinations != null) {
+				// this assumes chronological order (most recent drawings are last)
+				// need the more recent drawings first so use "array_reverse"
+				$this->wCombs = array_reverse($winningCombinations);
+				$this->rule_2_1b_subList = array_slice($this->wCombs, 0, 3, FALSE);
+				$this->generate2_1cLimit();
+				$this->rule_2_2_1a_invalid = $this->check_rule_2_2_1a();
+				$this->rule_2_2_1b_invalid = $this->rule_2_2_1b($this->wCombs[0], TRUE);
+				$this->rule_2_2_1c_invalid = $this->rule_2_2_1c($this->wCombs[0], TRUE);
+				$this->rule_2_2_1d_invalid = $this->rule_2_2_1d($this->wCombs[1], TRUE, $this->rule_2_2_1d($this->wCombs[0], TRUE));
+				$this->genrateListRule_2_2_1e();
+				$this->checkRule_2_2_2();
+			}
+
+
+			
+
+			
 		}
 
 		/*	Com todos os DF consecutivos (ex: 01-11-22-33-44-54)
@@ -108,7 +114,7 @@
 			return true;
 		}
 
-		public function genUniqueRand($comb, $min, $max) {
+		public function genUniqueRand($comb, $min = 1, $max = 60) {
 
 			$N = new Number(mt_rand($min, $max));
 
@@ -328,11 +334,6 @@
 		public function rule_1b2($combination, $list, $threshold = 4) {
 			
 			foreach ($list as $j => $value) {
-				//$return = $this->numElementsEqual($combination, $value);
-					//print_r($value->print_id());
-					//print_r(':'.$value->cRd_cRf);
-					//print_r(':'.$combination->cRd_cRf);
-					//print_r(':'.$this->numElementsEqual($combination, $value)."||");
 				if(($this->numElementsEqual($combination, $value) >= $threshold)&&($value->cRd_cRf == $combination->cRd_cRf)) {
 					return FALSE;
 				}
@@ -431,12 +432,13 @@
 		}
 
 		public function rule_2_1a($combination, $list){
-			return $this->rule_1b1($combination, $list);
+			//d(count($list));
+			return $this->rule_1b1($combination, $this->currentBettingCombinations);
 		}
 
 		public function rule_2_1b($combination) {
-			$subList = array_slice($this->wCombs, 3);
-			return $this->rule_2_1a($combination, $subList);
+			//d(count($this->rule_2_1b_subList));
+			return $this->rule_1b1($combination, $this->rule_2_1b_subList);
 		}
 
 		public function rule_2_1c($combination) {
@@ -561,19 +563,9 @@
 
 			if((1 > $this->rule_2_2_1d_invalid) || $override) {
 
-				print_r($C->print_id());
-				echo '.';
-				print_r('$override: '.$override);
-				echo '.';
-				print_r('$carryOver: '.$carryOver);
-				echo '.';
 				$count = count($C->d);
 				$limit = 0;
 				for ($i=0; $i < $count-1; $i++) { 
-					print_r($C->d[$i]->n+1);
-					echo '.';
-					print_r($C->d[$i+1]->n);
-					echo '|';
 					if($C->d[$i]->n+1 == $C->d[$i+1]->n) { 						
 						$limit++;
 						if($limit >= 1) {
@@ -598,7 +590,6 @@
 			$list = array();
 			$list2 = array();
 			$final =  array();
-			$this->wCombs;
 			foreach ($this->wCombs[0]->d as $k => $N) {	
 				for ($i=1; $i < 4; $i++) { 							
 					if(in_array($N, $this->wCombs[$i]->d)){

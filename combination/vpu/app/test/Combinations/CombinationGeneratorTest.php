@@ -27,16 +27,6 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
 
         $winningNumbers = array();
         foreach($megaSc as $k=>$combination) {
-            /*$d = array();
-            //d($combination);
-            //d($c);
-            //$c->date = (string)$combination->td[1];
-            $d[] = new Number((string)$combination->td[2]);
-            $d[] = new Number((string)$combination->td[3]);
-            $d[] = new Number((string)$combination->td[4]);
-            $d[] = new Number((string)$combination->td[5]);
-            $d[] = new Number((string)$combination->td[6]);
-            $d[] = new Number((string)$combination->td[7]);*/
             $d = (string)$combination->td[2].(string)$combination->td[3].(string)$combination->td[4].(string)$combination->td[5].(string)$combination->td[6].(string)$combination->td[7];
             //print_r($d.'.');
             $c = new CombinationStatistics($d);
@@ -147,7 +137,7 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
         $C2 = new CombinationStatistics('113741434559');
         // Remove the following lines when you implement this test.
         $this->assertTrue(!$this->combGen->rule_1a3($C1), 'Does it prevent 6N from being in 3 tens groups (false)');
-        $this->assertTrue(!$this->combGen->rule_1a3($C2), 'Does it prevent 6N from being in 3 tens groups (true)');
+        $this->assertTrue($this->combGen->rule_1a3($C2), 'Does it prevent 6N from being in 3 tens groups (true)');
     }
 
     /**
@@ -389,9 +379,10 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
         $C2 = new CombinationStatistics('153137434456');
         $C3 = new CombinationStatistics('152137464956');
 
+        //print_r($this->combGen->wCombs);
         print_r($this->combGen->genrateListRule_2_2_1e());
 
-        $this->assertEquals(array(), $this->combGen->genrateListRule_2_2_1e(), 'pass the rule 2.2.1d valid (2)');
+        $this->assertEquals(array(), $this->combGen->listRule_2_2_1e, 'pass the rule 2.2.1d valid (2)');
         //$this->assertEquals(1, $this->combGen->rule_2_2_1e($C2, true), 'pass the rule 2.2.1d valid (1)');
         //$this->assertEquals(0, $this->combGen->rule_2_2_1e($C3, true), 'pass the rule 2.2.1d valid (0)');
     } 

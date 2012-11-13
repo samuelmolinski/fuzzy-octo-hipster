@@ -1,7 +1,6 @@
 <h1>Stress Test</h1><?php
 	
 	set_time_limit(0);
-	error_reporting(E_ALL);
 
 	if (!defined('ABSPATH')) {
 		define('ABSPATH', dirname(__FILE__) . '/');
@@ -21,7 +20,6 @@
     $megaSc = $megaSc->body->table->xpath('tr');
     array_shift($megaSc);
 
-	$p = new Performance();
     $winningNumbers = array();
     foreach($megaSc as $k=>$combination) {
         $d = (string)$combination->td[2].(string)$combination->td[3].(string)$combination->td[4].(string)$combination->td[5].(string)$combination->td[6].(string)$combination->td[7];
@@ -30,9 +28,10 @@
         $winningNumbers[] = $c;
         unset($c);
     }
+    //make our combinationGenerator
+	$cg = new CombinationGenerator($winningNumbers);
 	// init our performance timer
-
-	//$p->sortByTotalTime();
+	$p = new Performance();
 	// $c is the current combination
 	// $list is the current list of excepted playable combinations
 
@@ -69,96 +68,59 @@
 				);
 
 //lets start with true random 1000 generated combinations to test against each
-$stats = array();
-$tStats = array();
+$numOfCombinations = 10000;
+echo "<h2>Results for $numOfCombinations combinations</h2>";
+echo "<ul>";
 $p->start_timer("Over All");
-$numOfCombinations = 1000;
-$numberOfWinningCombinatinos = 1500;
-for ($itr=0; $itr < 1; $itr++) { 
-
-	$p->start_timer('Inner');
-	$p->start_timer('Random Winning Cominations');
-	$cg = new CombinationGenerator();
-	for($j =0; $j < $numberOfWinningCombinatinos; $j++){	
-		$winningNumbers[] = $cg->rule_1a1(array(),TRUE);
-	}
-	$p->plus_end_timer('Random Winning Cominations');
-
-	//make our combinationGenerator
-	$rCombinations = array();
-	$cg = new CombinationGenerator($winningNumbers);
-
-	$stats['limit_2_1c'] = $cg->limit_2_1c;
-	$stats['rule_2_2_1a_invalid'] = $cg->rule_2_2_1a_invalid;
-	$stats['rule_2_2_1b_invalid'] = $cg->rule_2_2_1b_invalid;
-	$stats['rule_2_2_1c_invalid'] = $cg->rule_2_2_1c_invalid;
-	$stats['listRule_2_2_1e'] = $cg->listRule_2_2_1e;
-	$stats['rule_2_2_2_invalid'] = $cg->rule_2_2_2_invalid;
-	$tStats[] = $stats;
-	$p->start_timer('True Random Cominations');
-	for($j =0; $j < $numOfCombinations; $j++){	
+$fail = 0;
+$count = 0;
+$comb = array();
+$genTmp = 0;
+do {
+	//create Combination 
+	do {
+		$genTmp++;
 		$list = array();
 		for ($i=0; $i < 6; $i++) { 
-			$comb[$i] = $cg->genUniqueRand($list, 1, 60);
+			$comb[$i] = $cg->genUniqueRand($list);
 			$list[] = $comb[$i]->n;
 		}
-		//must return a CombinationStatistics
-		$rCombinations[] = new CombinationStatistics($comb);
-	}
-	$p->plus_end_timer("True Random Cominations");
-	echo "<h2>Results for $numOfCombinations combinations</h2>";
-	echo "<p>rule_2_2_1d_invalid ".$cg->rule_2_2_1d_invalid. "</p>";
-	echo "<ul>";
+		$c = new CombinationStatistics($comb);
+	} while (in_array($c, $cg->currentBettingNumbers));
+	$count++;
 	foreach ($tests as $j => $test) {
 		$currentFunction = $test[0];
-		$pass = 0;
-		$fail = array();
-		$list = array();
-		$count = count($test);
-		//echo "<li>$count requires \$list</li>";
-		if(2 < $count) {
+		if(2 < count($test)) {
 			//echo "<li>requires \$list</li>";
-			$p->start_timer($test[0]);
-			foreach ($rCombinations as $k => $c) {
-				$r = $cg->$currentFunction($c, $cg->wCombs);
-				if($r) {
-					$pass++;
-					$list[] = $c;
-				}  else {
-					$fail[] = $c;
-				}
+			$r = $cg->$currentFunction($c, $cg->wCombs);
+			if(!$r) {
+				$fail++;
+				continue 2;
 			}
-			$p->plus_end_timer($test[0]);
 		} else {
-			$p->start_timer($test[0]);
-			foreach ($rCombinations as $k => $c) {
-				$r = $cg->$currentFunction($c);
-				if($r) {
-					$pass++;
-					$list[] = $c;
-				}  else {
-					$fail[] = $c;
-				}
+			$r = $cg->$currentFunction($c);
+			
+			if(!$r) {
+				$fail++;
+				continue 2;
 			}
-			$p->plus_end_timer($test[0]);
-		}	
-		$av = $p->timers[$test[0]]['total']/$numOfCombinations;
-		echo "<li>".$test[0]." - (total time:".$p->timers[$test[0]]['total']." | average time: $av ) passed: $pass";
-		sort($fail);
-		echo "</li>";
+		}
 	}
-	echo "</ul>";
-	d($stats);
-	$p->plus_end_timer('Inner');
-}
+	// if all is well we add it 
+	$cg->currentBettingNumbers[] = $c;
+	//if($genTmp > $numOfCombinations) break;
+} while ($numOfCombinations > count($cg->currentBettingNumbers));
 $p->end_timer("Over All");
-$p->sortByTotalTime();
-d($p);
-d($tStats);
+echo "</ul>";
 
-/*sort($rCombinations);
+$p->sortByTotalTime();
+//d($cg->currentBettingNumbers);
+d($count);
+d($p);
+
+sort($cg->currentBettingNumbers);
 echo "<ol>";
-foreach ($rCombinations as $k => $c) {
+foreach ($cg->currentBettingNumbers as $k => $c) {
 	echo "<li>".$c->print_id()."</li>";
 }
-echo "</ol>";*/
+echo "</ol>";
