@@ -359,7 +359,7 @@
 		// part 2
  
 		public function generate2_1cLimit(){
-			$limits = array('c1'=>array(),'c2'=>array(),'c3'=>array(),'c4'=>array(),'c5'=>array(),'c6'=>array());
+			$limits = array('c1'=>array(),'c2'=>array(),'c3'=>array(),'c4'=>array(),'c5'=>array(),'c6'=>array(), 'c7'=>array());
 			//c1
 			foreach ($this->wCombs as $key => $value) {
 
@@ -427,6 +427,15 @@
 					}					
 				}
 				if(count($limits['c6'])>=6) {break;}
+			}
+			//c7
+			foreach ($this->wCombs as $key => $value) {
+				if($value->cRd == '321') {
+					if(!in_array($value->cDd, $limits['c7'])) {
+						$limits['c7'][] = $value->print_cDd();
+					}					
+				}
+				if(count($limits['c7'])>=12) {break;}
 			}
 			$this->limit_2_1c = $limits;
 		}

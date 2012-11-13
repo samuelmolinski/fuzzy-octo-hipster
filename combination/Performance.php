@@ -92,7 +92,7 @@
 
 		public function sortByTotalTime() {
 			uasort($this->timers, function ($a, $b) {
-				return ($a['total']>=$b['total']) ? 1 : -1;
+				return ($a['total']<=$b['total']) ? 1 : -1;
 			});
 		}
 	}

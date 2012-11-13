@@ -67,8 +67,8 @@
 				   array('rule_2_2_2', 'c'),
 				);
 
-//lets start with true random 1000 generated combinations to test against each
-$numOfCombinations = 10000;
+//lets start with true random 1200 generated combinations to test against each
+$numOfCombinations = 1200;
 echo "<h2>Results for $numOfCombinations combinations</h2>";
 echo "<ul>";
 $p->start_timer("Over All");
@@ -86,7 +86,7 @@ do {
 			$list[] = $comb[$i]->n;
 		}
 		$c = new CombinationStatistics($comb);
-	} while (in_array($c, $cg->currentBettingNumbers));
+	} while (in_array($c, $cg->currentBettingCombinations));
 	$count++;
 	foreach ($tests as $j => $test) {
 		$currentFunction = $test[0];
@@ -107,20 +107,20 @@ do {
 		}
 	}
 	// if all is well we add it 
-	$cg->currentBettingNumbers[] = $c;
+	$cg->currentBettingCombinations[] = $c;
 	//if($genTmp > $numOfCombinations) break;
-} while ($numOfCombinations > count($cg->currentBettingNumbers));
+} while ($numOfCombinations > count($cg->currentBettingCombinations));
 $p->end_timer("Over All");
 echo "</ul>";
 
 $p->sortByTotalTime();
-//d($cg->currentBettingNumbers);
+//d($cg->currentBettingCombinations);
 d($count);
 d($p);
 
-sort($cg->currentBettingNumbers);
+sort($cg->currentBettingCombinations);
 echo "<ol>";
-foreach ($cg->currentBettingNumbers as $k => $c) {
+foreach ($cg->currentBettingCombinations as $k => $c) {
 	echo "<li>".$c->print_id()."</li>";
 }
 echo "</ol>";

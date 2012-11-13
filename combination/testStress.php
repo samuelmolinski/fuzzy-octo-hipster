@@ -17,19 +17,19 @@
 	require_once ('CombinationGenerator.php');
 
 	//got to get those old winning numbers
-	$megaSc = mLoadXml( 'd_megasc100.htm');
-    $megaSc = $megaSc->body->table->xpath('tr');
+	//$megaSc = mLoadXml( 'd_megasc100.htm');
+    //$megaSc = $megaSc->body->table->xpath('tr');
     array_shift($megaSc);
 
 	$p = new Performance();
     $winningNumbers = array();
-    foreach($megaSc as $k=>$combination) {
+    /*foreach($megaSc as $k=>$combination) {
         $d = (string)$combination->td[2].(string)$combination->td[3].(string)$combination->td[4].(string)$combination->td[5].(string)$combination->td[6].(string)$combination->td[7];
         //print_r($d.'.');
         $c = new CombinationStatistics($d);
         $winningNumbers[] = $c;
         unset($c);
-    }
+    }*/
 	// init our performance timer
 
 	//$p->sortByTotalTime();
@@ -72,7 +72,7 @@
 $stats = array();
 $tStats = array();
 $p->start_timer("Over All");
-$numOfCombinations = 1000;
+$numOfCombinations = 100;
 $numberOfWinningCombinatinos = 1500;
 for ($itr=0; $itr < 1; $itr++) { 
 
