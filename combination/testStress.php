@@ -19,7 +19,7 @@
 	//got to get those old winning numbers
 	//$megaSc = mLoadXml( 'd_megasc100.htm');
     //$megaSc = $megaSc->body->table->xpath('tr');
-    array_shift($megaSc);
+    //array_shift($megaSc);
 
 	$p = new Performance();
     $winningNumbers = array();
@@ -30,9 +30,10 @@
         $winningNumbers[] = $c;
         unset($c);
     }*/
+
 	// init our performance timer
 
-	//$p->sortByTotalTime();
+	$p->sortByTotalTime();
 	// $c is the current combination
 	// $list is the current list of excepted playable combinations
 
@@ -72,7 +73,7 @@
 $stats = array();
 $tStats = array();
 $p->start_timer("Over All");
-$numOfCombinations = 100;
+$numOfCombinations = 1000;
 $numberOfWinningCombinatinos = 1500;
 for ($itr=0; $itr < 1; $itr++) { 
 
@@ -125,7 +126,8 @@ for ($itr=0; $itr < 1; $itr++) {
 					$pass++;
 					$list[] = $c;
 				}  else {
-					$fail[] = $c;
+					if(!@$fail[$test[0]]) {$fail[$test[0]] =0;}
+					$fail[$test[0]]++;
 				}
 			}
 			$p->plus_end_timer($test[0]);
@@ -137,7 +139,8 @@ for ($itr=0; $itr < 1; $itr++) {
 					$pass++;
 					$list[] = $c;
 				}  else {
-					$fail[] = $c;
+					if(!@$fail[$test[0]]) {$fail[$test[0]] =0;}
+					$fail[$test[0]]++;
 				}
 			}
 			$p->plus_end_timer($test[0]);
@@ -154,6 +157,7 @@ for ($itr=0; $itr < 1; $itr++) {
 $p->end_timer("Over All");
 $p->sortByTotalTime();
 d($p);
+d($fail);
 d($tStats);
 
 /*sort($rCombinations);

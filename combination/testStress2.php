@@ -16,18 +16,23 @@
 	require_once ('CombinationGenerator.php');
 
 	//got to get those old winning numbers
-	$megaSc = mLoadXml( 'd_megasc100.htm');
-    $megaSc = $megaSc->body->table->xpath('tr');
-    array_shift($megaSc);
-
+	//$megaSc = mLoadXml( 'd_megasc100.htm');
+    //$megaSc = $megaSc->body->table->xpath('tr');
+    //array_shift($megaSc);
+$numOfCombinations = 120;
+$numberOfWinningCombinatinos = 1500;
     $winningNumbers = array();
-    foreach($megaSc as $k=>$combination) {
+    /*foreach($megaSc as $k=>$combination) {
         $d = (string)$combination->td[2].(string)$combination->td[3].(string)$combination->td[4].(string)$combination->td[5].(string)$combination->td[6].(string)$combination->td[7];
         //print_r($d.'.');
         $c = new CombinationStatistics($d);
         $winningNumbers[] = $c;
         unset($c);
-    }
+    }*/
+    $cg = new CombinationGenerator();
+    for($j =0; $j < $numberOfWinningCombinatinos; $j++){	
+		$winningNumbers[] = $cg->rule_1a1(array(),TRUE);
+	}
     //make our combinationGenerator
 	$cg = new CombinationGenerator($winningNumbers);
 	// init our performance timer
@@ -35,17 +40,7 @@
 	// $c is the current combination
 	// $list is the current list of excepted playable combinations
 
-	$tests_1a = array(array('rule_1a1', 'c'),
-				   array('rule_1a2', 'c'),
-				   array('rule_1a3', 'c'),
-				   array('rule_1a4', 'c'),
-				   array('rule_1a5', 'c'),
-				   array('rule_1a6', 'c'),
-				   array('rule_1a7', 'c'),
-				   array('rule_1a8', 'c'),
-				);
-
-	$tests = array(array('rule_1a1', 'c'),
+	$tests_pre = array(array('rule_1a1', 'c'),
 				   array('rule_1a2', 'c'),
 				   array('rule_1a3', 'c'),
 				   array('rule_1a4', 'c'),
@@ -67,8 +62,76 @@
 				   array('rule_2_2_2', 'c'),
 				);
 
+	$tests = array(
+				   array('rule_2_2_1b', 'c'),
+				   array('rule_2_2_1c', 'c'),
+				   array('rule_1a4', 'c'),
+				   array('rule_1a2', 'c'),
+				   array('rule_1a3', 'c'),
+				   array('rule_1a1', 'c'),
+				   array('rule_1a8', 'c'),
+				   array('rule_2_2_2', 'c'),
+				   array('rule_2_1a', 'c', 'list'),
+				   array('rule_2_2_1a', 'c'),
+				   array('rule_2_2_1d', 'c'),
+				   array('rule_1a6', 'c'),
+				   array('rule_2_2_1e', 'c'),
+				   array('rule_2_1c', 'c'),
+				   array('rule_2_1b', 'c'),
+				   array('rule_1a5', 'c'),
+				   array('rule_1a7', 'c'),
+				   array('rule_1b2', 'c', 'list'),
+				   array('rule_1b3', 'c', 'list'),
+				   array('rule_1b1', 'c', 'list'),
+				);
+
+	$tests2 = array(
+				   array('rule_2_2_2', 'c'),
+				   array('rule_2_2_1a', 'c'),
+				   array('rule_1a1', 'c'),
+				   array('rule_2_2_1b', 'c'),
+				   array('rule_2_1a', 'c', 'list'),
+				   array('rule_1a2', 'c'),
+				   array('rule_1a8', 'c'),
+				   array('rule_1a6', 'c'),
+				   array('rule_1a5', 'c'),
+				   array('rule_2_2_1d', 'c'),
+				   array('rule_2_2_1c', 'c'),
+				   array('rule_1a7', 'c'),
+				   array('rule_2_1c', 'c'),
+				   array('rule_2_2_1e', 'c'),
+				   array('rule_1a3', 'c'),
+				   array('rule_1a4', 'c'),
+				   array('rule_2_1b', 'c'),
+				   array('rule_1b3', 'c', 'list'),
+				   array('rule_1b2', 'c', 'list'),
+				   array('rule_1b1', 'c', 'list'),
+				);
+	$tests3 = array(
+				   array('rule_2_2_2', 'c'),
+				   array('rule_2_2_1b', 'c'),
+				   array('rule_2_2_1a', 'c'),
+				   array('rule_2_2_1c', 'c'),
+				   array('rule_1a1', 'c'),
+				   array('rule_2_1a', 'c', 'list'),
+				   array('rule_1a2', 'c'),
+				   array('rule_1a8', 'c'),
+				   array('rule_1a6', 'c'),
+				   array('rule_1a5', 'c'),
+				   array('rule_2_2_1d', 'c'),
+				   array('rule_1a7', 'c'),
+				   array('rule_2_1c', 'c'),
+				   array('rule_2_2_1e', 'c'),
+				   array('rule_1a3', 'c'),
+				   array('rule_1a4', 'c'),
+				   array('rule_1b3', 'c', 'list'),
+				   array('rule_2_1b', 'c'),
+				   array('rule_1b2', 'c', 'list'),	// *
+				   array('rule_1b1', 'c', 'list'),	// *
+				);
+
 //lets start with true random 1200 generated combinations to test against each
-$numOfCombinations = 1200;
+
 echo "<h2>Results for $numOfCombinations combinations</h2>";
 echo "<ul>";
 $p->start_timer("Over All");
@@ -88,7 +151,7 @@ do {
 		$c = new CombinationStatistics($comb);
 	} while (in_array($c, $cg->currentBettingCombinations));
 	$count++;
-	foreach ($tests as $j => $test) {
+	foreach ($tests3 as $j => $test) {
 		$currentFunction = $test[0];
 		if(2 < count($test)) {
 			//echo "<li>requires \$list</li>";
@@ -117,6 +180,7 @@ $p->sortByTotalTime();
 //d($cg->currentBettingCombinations);
 d($count);
 d($p);
+d($tests3);
 
 sort($cg->currentBettingCombinations);
 echo "<ol>";
