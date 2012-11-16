@@ -88,6 +88,7 @@
 			if($t['s']) {
 				$str .= $t['s']. ' s';
 			}
+			return $str;
 		}
 
 		public function sortByTotalTime() {

@@ -31,9 +31,6 @@
         unset($c);
     }*/
 
-	// init our performance timer
-
-	$p->sortByTotalTime();
 	// $c is the current combination
 	// $list is the current list of excepted playable combinations
 

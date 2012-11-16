@@ -16,30 +16,44 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
+		//'application.modules.user.models.*',
+        //'application.modules.user.components.*',
+		//'application.modules.rights.*',
+		//'application.modules.rights.components.*',
 	),
 
 	'modules'=>array(
 		// uncomment the following to enable the Gii tool
-		/* */
+		/* 
+		'user'=>array(
+                'tableUsers' => 'ni_users',
+                'tableProfiles' => 'ni_profiles',
+                'tableProfileFields' => 'ni_profiles_fields',
+        ),*/
 		'gii'=>array(
 			'class'=>'system.gii.GiiModule',
 			'password'=>'sjm120182',
 			// If removed, Gii defaults to localhost only. Edit carefully to taste.
 			'ipFilters'=>array('127.0.0.1','::1', '198.58.102.255'),
 		),
-		
+		/*'rights'=>array(
+			'install'=>true,
+		),*/
 	),
 
 	// application components
 	'components'=>array(
 		'user'=>array(
+            //'class'=>'RWebUser',
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
+            //'loginUrl'=>array('/user/login'),
 		),
 		// uncomment the following to enable URLs in path-format
 		'authManager'=>array(
 				'class'=>'CDbAuthManager',
 				'connectionID'=>'db',
+				'defaultRoles'=>array('authenticated', 'guest'),
 			    //'itemTable'=>'ni_AuthItem',
 			    //'itemChildTable'=>'ni_AuthItemChild',
 			    //'assignmentTable'=>'ni_AuthAssignment',
@@ -92,5 +106,6 @@ return array(
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@example.com',
+		'root'=> 'http://localhost/fuzzy-octo-hipster/',
 	),
 );

@@ -1,13 +1,14 @@
 <?php 
 	
 	require_once("CombinationStatistics.php");
-	require_once("Number.php");
+	//require_once("Number.php");
 
 	class CombinationGenerator {
 
 
 		public $currentBettingCombinations;
 		public $rule_1a1_ranges;
+		public $permited_1a8;
 		public $limit_2_1c;
 		public $groups_2_2;
 		public $wCombs; // inteneded tobo an array of all previous winning combinations
@@ -19,45 +20,59 @@
 		public $rule_2_2_2_invalid;
 		public $rule_2_1b_subList;
 
-		public function CombinationGenerator($winningCombinations = null) {
+		public function CombinationGenerator($args = null) {
 			$this->currentBettingCombinations = array();
-			//seed the random mt_rand()
 			mt_srand($this->make_seed());
-			$this->rule_1a1_ranges = array(
-					array('min'=>1,'max'=>30),
-					array('min'=>2,'max'=>40),
-					array('min'=>4,'max'=>49),
-					array('min'=>11,'max'=>55),
-					array('min'=>18,'max'=>59),
-					array('min'=>31,'max'=>60)
+
+			if(null == $args){
+				// default settings
+				$this->rule_1a1_ranges = array(
+						array('min'=>1,'max'=>30),
+						array('min'=>2,'max'=>40),
+						array('min'=>4,'max'=>49),
+						array('min'=>11,'max'=>55),
+						array('min'=>18,'max'=>59),
+						array('min'=>31,'max'=>60)
+					);
+				$this->permited_1a8 = array('2211-2211',	'21111-2211',
+											'3111-2211',	'321-2211',
+											'3111-21111',	'321-21111',
+											'2211-3111',	'21111-3111',
+											'111111-21111',	'222-21111',
+											'411-21111',	'3111-3111',
+											'2211-21111',	'2211-111111',
+											'21111-21111',	'21111-111111',
+											'321-111111',	'3111-111111',
+											'2211-321',		'21111-321',
+											);
+				$this->groups_2_2 = array(
+					array('2211-21111'),
+					array('2211-3111','2211-2211','2211-111111'),
+					array('21111-21111','3111-21111'),
+					array('3111-2211','3111-111111','21111-3111','21111-2211','21111-111111'),
+					array('411-21111','321-21111','222-21111','11111-21111','321-2211','321-111111','3111-3111', '2211-321', '21111-321')
 				);
+			} else {
 
-			$this->groups_2_2 = array(
-				array('2211-21111'),
-				array('2211-3111','2211-2211','2211-111111'),
-				array('21111-21111','3111-21111'),
-				array('3111-2211','3111-111111','21111-3111','21111-2211','21111-111111'),
-				array('411-21111','321-21111','222-21111','11111-21111','321-2211','321-111111','3111-3111', '2211-321', '21111-321')
-			);
-
-			if($winningCombinations != null) {
-				// this assumes chronological order (most recent drawings are last)
-				// need the more recent drawings first so use "array_reverse"
-				$this->wCombs = array_reverse($winningCombinations);
-				$this->rule_2_1b_subList = array_slice($this->wCombs, 0, 3, FALSE);
-				$this->generate2_1cLimit();
-				$this->rule_2_2_1a_invalid = $this->check_rule_2_2_1a();
-				$this->rule_2_2_1b_invalid = $this->rule_2_2_1b($this->wCombs[0], TRUE);
-				$this->rule_2_2_1c_invalid = $this->rule_2_2_1c($this->wCombs[0], TRUE);
-				$this->rule_2_2_1d_invalid = $this->rule_2_2_1d($this->wCombs[1], TRUE, $this->rule_2_2_1d($this->wCombs[0], TRUE));
-				$this->genrateListRule_2_2_1e();
-				$this->checkRule_2_2_2();
-			}
+				$this->rule_1a1_ranges = $args['ranges1a1'];
+				$this->permited_1a8 = $args['permitted1a8'];
+				$this->groups_2_2 = $args['group2_2'];
 
 
-			
-
-			
+				if($args['winningCombinations'] != null) {
+					// this assumes chronological order (most recent drawings are last)
+					// need the more recent drawings first so use "array_reverse"
+					$this->wCombs = array_reverse($args['winningCombinations']);
+					$this->rule_2_1b_subList = array_slice($this->wCombs, 0, 3, FALSE);
+					$this->generate2_1cLimit();
+					$this->rule_2_2_1a_invalid = $this->check_rule_2_2_1a();
+					$this->rule_2_2_1b_invalid = $this->rule_2_2_1b($this->wCombs[0], TRUE);
+					$this->rule_2_2_1c_invalid = $this->rule_2_2_1c($this->wCombs[0], TRUE);
+					$this->rule_2_2_1d_invalid = $this->rule_2_2_1d($this->wCombs[1], TRUE, $this->rule_2_2_1d($this->wCombs[0], TRUE));
+					$this->genrateListRule_2_2_1e();
+					$this->checkRule_2_2_2();
+				}
+			}			
 		}
 
 		/*	Com todos os DF consecutivos (ex: 01-11-22-33-44-54)
@@ -270,18 +285,7 @@
 			False if it fails
 		 */
 		public function rule_1a8($C){
-			$permited = array(	'2211-2211',	'21111-2211',
-								'3111-2211',	'321-2211',
-								'3111-21111',	'321-21111',
-								'2211-3111',	'21111-3111',
-								'111111-21111',	'222-21111',
-								'411-21111',	'3111-3111',
-								'2211-21111',	'2211-111111',
-								'21111-21111',	'21111-111111',
-								'321-111111',	'3111-111111',
-								'2211-321',		'21111-321',
-								);
-			if(in_array($C->cRd_cRf, $permited)) {
+			if(in_array($C->cRd_cRf, $this->permited_1a8)) {
 				return TRUE;
 			}
 			return FALSE;
