@@ -1,6 +1,7 @@
 <?php
+require_once('m_toolbox/m_toolbox.php');
 
-if(isset($_SERVER["REQUEST_URI"])&&(FALSE === stripos($_SERVER["REQUEST_URI"], 'nissen'))) {
+if((FALSE === stripos(hostURI(), 'nissen'))) {
 	//use on local host
 	// change the following paths if necessary
 	$yii=dirname(__FILE__).'/../yii/framework/yii.php';

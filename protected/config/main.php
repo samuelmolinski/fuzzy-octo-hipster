@@ -37,7 +37,10 @@ return array(
 			'allowAutoLogin'=>true,
 		),
 		// uncomment the following to enable URLs in path-format
-		
+		'authManager'=>array(
+				'class'=>'CDbAuthManager',
+				'connectionID'=>'db',
+			),
 		'urlManager'=>array(
 			'urlFormat'=>'path',
 			'rules'=>array(
@@ -53,9 +56,9 @@ return array(
 		// uncomment the following to use a MySQL database
 		
 		'db'=>array(
-			'connectionString' => 'mysql:host=http://nissenidea.com;dbname=nissenidea.com',
-			'emulatePrepare' => true,
-			'username' => 'root',
+			'connectionString' => 'mysql:host=localhost;dbname=nissenidea.com',
+			//'emulatePrepare' => true,
+			'username' => 'admin',
 			'password' => '123!!@qwe',
 			'charset' => 'utf8',
 		),
@@ -72,11 +75,11 @@ return array(
 					'levels'=>'error, warning',
 				),
 				// uncomment the following to show log messages on web pages
-				/*
+				/**/
 				array(
 					'class'=>'CWebLogRoute',
 				),
-				*/
+				
 			),
 		),
 	),
