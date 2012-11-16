@@ -40,6 +40,9 @@ return array(
 		'authManager'=>array(
 				'class'=>'CDbAuthManager',
 				'connectionID'=>'db',
+			    //'itemTable'=>'ni_AuthItem',
+			    //'itemChildTable'=>'ni_AuthItemChild',
+			    //'assignmentTable'=>'ni_AuthAssignment',
 			),
 		'urlManager'=>array(
 			'urlFormat'=>'path',

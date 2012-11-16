@@ -14,7 +14,7 @@
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('username')); ?>:</b>
 	<?php echo CHtml::encode($data->username); ?>
-	<br />S
+	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('last_login')); ?>:</b>
 	<?php echo CHtml::encode($data->last_login); ?>
