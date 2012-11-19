@@ -55,6 +55,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'ranges1a1',
 		'group2_2',
 		'permitted1a8',
+		'rule_2_2_2_limit',
 		*/
 		array(
 			'class'=>'CButtonColumn',

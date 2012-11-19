@@ -9,14 +9,35 @@
 	echo "<h3>Total time: $time</h3>";
 
 
-	d(json_encode($cg->rule_1a1_ranges));
-	d(json_encode($cg->groups_2_2));
-	d(json_encode($tests));
-	d(json_encode($cg->permited_1a8));
-
-	echo "<ol>";
+	d(serialize($cg->rule_1a1_ranges));
+	d(serialize($cg->groups_2_2));
+	d(serialize($tests));
+	d(serialize($cg->permited_1a8));
+	/*echo "<ol>";
 	foreach ($cg->currentBettingCombinations as $k => $c) {
 		echo "<li>".$c->print_id()."</li>";
 	}
-	echo "</ol>";
+	echo "</ol>";*/
 
+	$count = 0;
+?>
+<div class="portlet-content">
+    
+	<table class="table table-striped">
+		<caption><strong>Betting Combinations</strong></caption>
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Combinations</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php 
+				foreach ($cg->currentBettingCombinations as $k => $c) {
+					$count++;
+					echo "<tr><td>$count</td><td>".$c->print_id()."</td></tr>";
+				}
+			?>
+		</tbody>
+	</table>
+</div>

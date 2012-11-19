@@ -42,6 +42,10 @@
 	<?php echo CHtml::encode($data->permitted1a8); ?>
 	<br />
 
+	<b><?php echo CHtml::encode($data->getAttributeLabel('rule_2_2_2_limit')); ?>:</b>
+	<?php echo CHtml::encode($data->rule_2_2_2_limit); ?>
+	<br />
+
 	*/ ?>
 
 </div>

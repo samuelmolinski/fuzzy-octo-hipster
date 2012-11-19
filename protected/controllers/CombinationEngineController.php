@@ -56,7 +56,7 @@ class CombinationEngineController extends Controller
     	$winningNumbers = array();
 
     	// The order of the test to be used
-		$tests = json_decode($engineSettings->ruleOrder);
+		$tests = unserialize($engineSettings->ruleOrder);
 		$numOfCombinations = $engineSettings->numOfCombs;
 
 		// Get current winning numbers
@@ -73,10 +73,9 @@ class CombinationEngineController extends Controller
 	        $winningNumbers[] = $c;
 	        unset($c);
 	    }
-    	$cgSettings = array('winningCombinations'=>$winningNumbers, 'ranges1a1'=> json_decode($engineSettings->ranges1a1), 'permitted1a8'=> json_decode($engineSettings->permitted1a8), 'group2_2'=> json_decode($engineSettings->group2_2));
-    	//d(json_encode($cgSettings));
-		$cg = new CombinationGenerator($cgSettings);
-		//d($cg);
+    	$cgSettings = array('winningCombinations'=>$winningNumbers, 'ranges1a1'=> unserialize($engineSettings->ranges1a1), 'permitted1a8'=> unserialize($engineSettings->permitted1a8), 'group2_2'=> unserialize($engineSettings->group2_2), 'rule_2_2_2_limit'=>$engineSettings->rule_2_2_2_limit);
+    	
+    	$cg = new CombinationGenerator($cgSettings);
 		$numberOfWinningCombinations = count($cg->wCombs);
 
 		//starting the process

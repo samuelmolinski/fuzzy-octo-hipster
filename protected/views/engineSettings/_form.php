@@ -63,6 +63,12 @@
 		<?php echo $form->error($model,'permitted1a8'); ?>
 	</div>
 
+	<div class="row">
+		<?php echo $form->labelEx($model,'rule_2_2_2_limit'); ?>
+		<?php echo $form->textField($model,'rule_2_2_2_limit'); ?>
+		<?php echo $form->error($model,'rule_2_2_2_limit'); ?>
+	</div>
+
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
 	</div>

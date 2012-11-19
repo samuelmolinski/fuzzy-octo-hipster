@@ -18,9 +18,12 @@
 		public $rule_2_2_1d_invalid; // -1 if we do not use it
 		public $listRule_2_2_1e;
 		public $rule_2_2_2_invalid;
+		public $rule_2_2_2_limit;
+		public $rule_2_2_2_total;
 		public $rule_2_1b_subList;
 
 		public function CombinationGenerator($args = null) {
+			$this->rule_2_2_2_total = 0;
 			$this->currentBettingCombinations = array();
 			mt_srand($this->make_seed());
 
@@ -52,11 +55,14 @@
 					array('3111-2211','3111-111111','21111-3111','21111-2211','21111-111111'),
 					array('411-21111','321-21111','222-21111','11111-21111','321-2211','321-111111','3111-3111', '2211-321', '21111-321')
 				);
+				$this->rule_2_2_2_limit = .05;
+
 			} else {
 
 				$this->rule_1a1_ranges = $args['ranges1a1'];
 				$this->permited_1a8 = $args['permitted1a8'];
 				$this->groups_2_2 = $args['group2_2'];
+				$this->rule_2_2_2_limit = $args['rule_2_2_2_limit'];
 
 
 				if($args['winningCombinations'] != null) {
@@ -73,6 +79,13 @@
 					$this->checkRule_2_2_2();
 				}
 			}			
+		}
+
+		public function addBettingCombination($C) {
+			if(($this->rule_2_2_2_invalid)||(0 == count($this->currentBettingCombinations))||((!$this->rule_2_2_2_invalid)&&($this->rule_2_2_2_limit >($this->rule_2_2_2_total/count($this->currentBettingCombinations))))) {
+				$this->currentBettingCombinations[] = $C;
+				$this->rule_2_2_2_limit++;
+			}
 		}
 
 		/*	Com todos os DF consecutivos (ex: 01-11-22-33-44-54)

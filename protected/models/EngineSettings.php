@@ -13,6 +13,7 @@
  * @property string $ranges1a1
  * @property string $group2_2
  * @property string $permitted1a8
+ * @property double $rule_2_2_2_limit
  */
 class EngineSettings extends CActiveRecord
 {
@@ -42,11 +43,12 @@ class EngineSettings extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, users, numOfCombs, amountPerGroup, ruleOrder, ranges1a1, group2_2, permitted1a8', 'required'),
+			array('name, users, numOfCombs, amountPerGroup, ruleOrder, ranges1a1, group2_2, permitted1a8, rule_2_2_2_limit', 'required'),
 			array('numOfCombs, amountPerGroup', 'numerical', 'integerOnly'=>true),
+			array('rule_2_2_2_limit', 'numerical'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, name, users, numOfCombs, amountPerGroup, ruleOrder, ranges1a1, group2_2, permitted1a8', 'safe', 'on'=>'search'),
+			array('id, name, users, numOfCombs, amountPerGroup, ruleOrder, ranges1a1, group2_2, permitted1a8, rule_2_2_2_limit', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -76,6 +78,7 @@ class EngineSettings extends CActiveRecord
 			'ranges1a1' => 'Ranges1a1',
 			'group2_2' => 'Group2 2',
 			'permitted1a8' => 'Permitted1a8',
+			'rule_2_2_2_limit' => 'Rule 2 2 2 Limit',
 		);
 	}
 
@@ -99,6 +102,7 @@ class EngineSettings extends CActiveRecord
 		$criteria->compare('ranges1a1',$this->ranges1a1,true);
 		$criteria->compare('group2_2',$this->group2_2,true);
 		$criteria->compare('permitted1a8',$this->permitted1a8,true);
+		$criteria->compare('rule_2_2_2_limit',$this->rule_2_2_2_limit);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

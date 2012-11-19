@@ -56,6 +56,11 @@
 		<?php echo $form->textArea($model,'permitted1a8',array('rows'=>6, 'cols'=>50)); ?>
 	</div>
 
+	<div class="row">
+		<?php echo $form->label($model,'rule_2_2_2_limit'); ?>
+		<?php echo $form->textField($model,'rule_2_2_2_limit'); ?>
+	</div>
+
 	<div class="row buttons">
 		<?php echo CHtml::submitButton('Search'); ?>
 	</div>

@@ -29,7 +29,7 @@
                         /*array('label'=>'Gii generated', 'url'=>array('customer/index')),*/
                         array('label'=>'Settings <span class="caret"></span>', 'url'=>'#','itemOptions'=>array('class'=>'dropdown','tabindex'=>"-1"),'linkOptions'=>array('class'=>'dropdown-toggle','data-toggle'=>"dropdown"), 
                         'items'=>array(
-                            array('label'=>'System', 'url'=>array('/site/systemSettings')),
+                            array('label'=>'System', 'url'=>array('/systemOptions/index')),
 							array('label'=>'Engine', 'url'=>array('/engineSettings/index')),
                         )),
                         array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
