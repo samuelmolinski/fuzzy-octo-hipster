@@ -19,13 +19,12 @@
                     'items'=>array(
                         array('label'=>'Dashboard', 'url'=>array('/site/index')),
                         array('label'=>'Users', 'url'=>array('/user/index')),
-                        array('label'=>'Engine', 'url'=>array('/combinationEngine/index')),
-                        array('label'=>'System', 'url'=>array('/combinationEngine/index')),
-                        array('label'=>'Graphs & Charts', 'url'=>array('/site/page', 'view'=>'graphs')),
+                        array('label'=>'Engine', 'url'=>array('/combinationEngine/run')),
+                        /*array('label'=>'Graphs & Charts', 'url'=>array('/site/page', 'view'=>'graphs')),
                         array('label'=>'Forms', 'url'=>array('/site/page', 'view'=>'forms')),
                         array('label'=>'Tables', 'url'=>array('/site/page', 'view'=>'tables')),
 						array('label'=>'Interface', 'url'=>array('/site/page', 'view'=>'interface')),
-                        array('label'=>'Typography', 'url'=>array('/site/page', 'view'=>'typography')),
+                        array('label'=>'Typography', 'url'=>array('/site/page', 'view'=>'typography')),*/
                         /*array('label'=>'Gii generated', 'url'=>array('customer/index')),*/
                         array('label'=>'Settings <span class="caret"></span>', 'url'=>'#','itemOptions'=>array('class'=>'dropdown','tabindex'=>"-1"),'linkOptions'=>array('class'=>'dropdown-toggle','data-toggle'=>"dropdown"), 
                         'items'=>array(
