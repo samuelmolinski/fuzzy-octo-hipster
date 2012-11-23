@@ -8,7 +8,7 @@
           </a>
      
           <!-- Be sure to leave the brand out there if you want it shown -->
-          <a class="brand" href="#">abound <small>admin theme</small></a>
+          <a class="brand" href="#">Nissen Idea</a>
           
           <div class="nav-collapse">
 			<?php $this->widget('zii.widgets.CMenu',array(

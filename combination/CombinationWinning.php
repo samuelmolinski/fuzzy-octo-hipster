@@ -1,8 +1,8 @@
 <?php 
 
-require_once('Combination.php');
+require_once('CombinationStatistics.php');
 
-class CombinationWinning extends Combination {
+class CombinationWinning extends CombinationStatistics {
 	public $date;
 
 	function CombinationWinning() {}
