@@ -61,8 +61,11 @@ class CombinationEngineController extends Controller
 
 		// Get current winning numbers
 		$path = yii::app()->params['root'].'/combination/d_megasc100.htm';
+		//d($path);
 		$megaSc = mLoadXml($path);
+		//d($megaSc);
 	    $megaSc = $megaSc->body->table->xpath('tr');
+		//d($megaSc);
 	    array_shift($megaSc);
 
 	    $winningNumbers = array();

@@ -26,6 +26,7 @@
 			$this->rule_2_2_2_total = 0;
 			$this->currentBettingCombinations = array();
 			mt_srand($this->make_seed());
+			//d($args);
 
 			if(null == $args){
 				// default settings
@@ -547,7 +548,7 @@
 		}
 
 		public function rule_2_2_1a($combination){
-			//print_r($this->rule_2_2_1a_invalid);
+			//d($this->rule_2_2_1a_invalid);
 			if((-1 != $this->rule_2_2_1a_invalid)&&(in_array($combination->cRd_cRf, $this->groups_2_2[$this->rule_2_2_1a_invalid]))){
 				return FALSE;				
 			}
