@@ -6,7 +6,7 @@ $config = array(
     /* Required */
 
     // The directory where PEAR is located
-    'pear_path'      => 'C:\wamp\bin\php\php5.4.3',
+    'pear_path'      => 'C:\wamp\bin\php\php5.4.3\pear',
 
     // The directory where the tests reside
     'test_directory' => "{$root}/app/test",

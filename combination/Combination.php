@@ -23,8 +23,7 @@ class Combination {
         }
     }
 
-	public function __set($name, $value)
-    {
+	public function __set($name, $value) {
     	switch($name){
     		case 'id':
     			$this->gen_id();
@@ -32,8 +31,7 @@ class Combination {
     	}
     } 
 
-    public function __get($name)
-    {
+    public function __get($name) {
         switch($name){
             case 'id':
                 return $this->id;
