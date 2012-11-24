@@ -2,9 +2,12 @@
 
 	require_once('Combination.php');
 
+	/*
+		intented to be used for saving lists of combinations
+	*/
 	class CombinationList {
 		public $list = array();
-
+		public $date = '';
 		// Init
 		public function CombinationList($list = NULL) {
 			if(NULL != $list) {
