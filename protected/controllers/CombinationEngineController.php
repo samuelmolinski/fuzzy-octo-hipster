@@ -38,9 +38,23 @@ class CombinationEngineController extends Controller
 	}
 
 	public function actionIndex()
-	{
+	{	//get current setting
+		$engineSettingId = SystemOptions::model()->findByAttributes(array('name'=>'engineSettingId'));
+		//need to get the setting options
+		$settings = new EngineSettings;
+		$settings = EngineSettings::model()->findAll();
 
-		$this->render('index');
+		$premade = array();
+		foreach ($settings as $k => $a) {
+			$premade[$a->id] = $a->name;
+		}
+
+		$this->render('index', array('settings'=>$settings, 'engineSettingId'=>$engineSettingId, 'premade'=>$premade));
+	}
+
+	public function actionCheck($id)
+	{			
+		$this->render(array('combinationSet/view', $id));
 	}
 
 	/**
@@ -49,6 +63,9 @@ class CombinationEngineController extends Controller
 	 */
 	public function actionRun()
 	{	
+		d($_POST);
+		if(isset($_POST)&&!empty($_POST['combinationCheck'])){
+		}
 		$engineSettingId = SystemOptions::model()->findByAttributes(array('name'=>'engineSettingId'));
 		$engineSettings = EngineSettings::model()->findByAttributes(array('id'=>$engineSettingId->value));
 		set_time_limit(0);
@@ -128,13 +145,31 @@ class CombinationEngineController extends Controller
 				$this->redirect(array('view','id'=>$model->id));
 		}*/
 
-		$this->render('run',array(
-			"numOfCombinations"=>$numOfCombinations,
-			"numberOfWinningCombinations"=>$numberOfWinningCombinations,
-			"cg"=>$cg,
-			"totalTested"=>$count,
-			"performance"=>$p,
-			"tests"=>$tests
-		));
+		$list = new CombinationList($cg->currentBettingCombinations);		
+		$model = new CombinationSet;
+		$model->combinations = serialize($list);
+		if($model->save()) {
+			$render =array(
+				"numOfCombinations"=>$numOfCombinations,
+				"numberOfWinningCombinations"=>$numberOfWinningCombinations,
+				"cg"=>$cg,
+				"totalTested"=>$count,
+				"performance"=>$p,
+				"tests"=>$tests,
+				'saved'=>true
+			);
+		} else {
+			$render =array(
+				"numOfCombinations"=>$numOfCombinations,
+				"numberOfWinningCombinations"=>$numberOfWinningCombinations,
+				"cg"=>$cg,
+				"totalTested"=>$count,
+				"performance"=>$p,
+				"tests"=>$tests,
+				'saved'=>false
+			);
+		}
+
+		$this->render('run',$render);
 	}
 }

@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This is the model class for table "ni_combinationSet".
+ * This is the model class for table "ni_combinationset".
  *
- * The followings are the available columns in table 'ni_combinationSet':
+ * The followings are the available columns in table 'ni_combinationset':
  * @property integer $id
  * @property string $create_time
  * @property string $combinations
@@ -12,6 +12,7 @@ class CombinationSet extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
+	 * @param string $className active record class name.
 	 * @return CombinationSet the static model class
 	 */
 	public static function model($className=__CLASS__)
@@ -24,7 +25,7 @@ class CombinationSet extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'ni_combinationSet';
+		return 'ni_combinationset';
 	}
 
 	/**
@@ -35,7 +36,7 @@ class CombinationSet extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('create_time, combinations', 'required'),
+			array('combinations', 'required'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, create_time, combinations', 'safe', 'on'=>'search'),

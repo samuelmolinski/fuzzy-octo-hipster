@@ -23,8 +23,14 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'date'); ?>
-		<?php echo $form->textField($model,'date'); ?>
+		<?php echo $form->textField($model,'date',array('size'=>10,'maxlength'=>10)); ?>
 		<?php echo $form->error($model,'date'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'group'); ?>
+		<?php echo $form->textField($model,'group'); ?>
+		<?php echo $form->error($model,'group'); ?>
 	</div>
 
 	<div class="row buttons">

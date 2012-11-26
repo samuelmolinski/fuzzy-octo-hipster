@@ -27,6 +27,7 @@
 	  $cs->registerCssFile($baseUrl.'/css/bootstrap-responsive.min.css');
 	  $cs->registerCssFile($baseUrl.'/css/abound.css');
 	  $cs->registerCssFile($baseUrl.'/css/style-blue.css');
+	  $cs->registerCssFile($baseUrl.'/css/nissenidea.css');
 	  
 	  $cs->registerScriptFile($baseUrl.'/js/bootstrap.min.js');
 	  $cs->registerScriptFile($baseUrl.'/js/plugins/jquery.sparkline.js');

@@ -1,6 +1,6 @@
 <?php
-/* @var $this CombinationDrawnController */
-/* @var $model CombinationDrawn */
+/* @var $this CombinationSetController */
+/* @var $model CombinationSet */
 /* @var $form CActiveForm */
 ?>
 
@@ -17,18 +17,13 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'combination'); ?>
-		<?php echo $form->textField($model,'combination',array('size'=>12,'maxlength'=>12)); ?>
+		<?php echo $form->label($model,'create_time'); ?>
+		<?php echo $form->textField($model,'create_time'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'date'); ?>
-		<?php echo $form->textField($model,'date',array('size'=>8,'maxlength'=>8)); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'group'); ?>
-		<?php echo $form->textField($model,'group'); ?>
+		<?php echo $form->label($model,'combinations'); ?>
+		<?php echo $form->textArea($model,'combinations',array('rows'=>6, 'cols'=>50)); ?>
 	</div>
 
 	<div class="row buttons">

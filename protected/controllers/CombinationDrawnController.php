@@ -28,7 +28,7 @@ class CombinationDrawnController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view', 'seed'),
+				'actions'=>array('index','view','seed'),
 				'roles'=>array('admin','authenticated'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -47,9 +47,59 @@ class CombinationDrawnController extends Controller
 
 	public function actionSeed()
 	{
-		
+		set_time_limit(0);
+		$path = yii::app()->params['root'].'winningCombinations/d_megasc.htm';
 
-		$this->render('seed',array(
+		$megaSc = mLoadXml($path);
+		$megaSc = $megaSc->body->table->xpath('tr');
+		array_shift($megaSc);
+
+		$winningNumbers = array();
+		foreach($megaSc as $k=>$combination) {
+			$d = array();
+			$date = (string)$combination->td[1];
+			$s = (string)$combination->td[2];
+			$s .= (string)$combination->td[3];
+			$s .= (string)$combination->td[4];
+			$s .= (string)$combination->td[5];
+			$s .= (string)$combination->td[6];
+			$s .= (string)$combination->td[7];
+			//$c = new CombinationStatistics($d);
+			//d($date);
+			//$winningNumbers[] = array( 'date'=>strtotime(str_replace('/', '-', $date)), 'combination'=>$s);
+			$winningNumbers[] = array( 'date'=>$date, 'combination'=>$s, 'group'=>1);
+		}
+
+		$modeltemp = new CombinationDrawn;
+		foreach ($winningNumbers as $k => $wc) {
+			$model = new CombinationDrawn;
+			$model->attributes = $wc;
+			d($wc);
+			//$modeltemp::model()->findAllByAttributes(array(), 'combination = :combination AND date = :date', array(':combination'=>$wc['combination'],':date'=>$wc['date']));
+			$criteria=new CDbCriteria;
+			$criteria->select='*';  // only select the 'title' column
+			$criteria->condition='combination=:combination AND date=:date';
+			$criteria->params=array(':combination'=>$wc['combination'], ':date'=>$wc['date']);
+			//$criteria->params=array(':combination'=>'123456789012', ':date'=>'412342314123');
+			$modeltemp=CombinationDrawn::model()->find($criteria); // $params is not needed
+
+			d($modeltemp);
+			//save only unique values
+			if(null == $modeltemp) {
+				d('Saving');
+				$model->save();
+				if($model->save()){
+					d('Saved');
+				} else {
+					d($model->getErrors());
+				}
+				
+			}
+			
+			d($model->attributes);
+		}
+
+		$this->render('seed',array('totalCombinations'=>count($winningNumbers),
 		));
 	}
 

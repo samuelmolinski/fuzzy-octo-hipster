@@ -17,5 +17,9 @@
 	<?php echo CHtml::encode($data->date); ?>
 	<br />
 
+	<b><?php echo CHtml::encode($data->getAttributeLabel('group')); ?>:</b>
+	<?php echo CHtml::encode($data->group); ?>
+	<br />
+
 
 </div>

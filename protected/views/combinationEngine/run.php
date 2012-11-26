@@ -7,6 +7,12 @@
 	echo "<h3>$numberOfWinningCombinations previons winning combinations</h3>";
 	echo "<h3>Total tested numbers: $totalTested</h3>";
 	echo "<h3>Total time: $time</h3>";
+	if($saved){
+		echo "<h3>Saved</h3>";
+	} else {
+		echo "<h3>Not Saved</h3>";
+	}
+	
 
 
 	d(serialize($cg->rule_1a1_ranges));

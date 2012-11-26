@@ -1,11 +1,13 @@
 <?php 
 	
 	require_once("CombinationStatistics.php");
+	require_once("CombinationList.php");
 	//require_once("Number.php");
 
 	class CombinationGenerator {
 
 
+		public $CL;
 		public $currentBettingCombinations;
 		public $rule_1a1_ranges;
 		public $permited_1a8;
@@ -23,13 +25,15 @@
 		public $rule_2_1b_subList;
 
 		public function CombinationGenerator($args = null) {
+			$this->CL = new CombinationList;
 			$this->rule_2_2_2_total = 0;
 			$this->currentBettingCombinations = array();
 			mt_srand($this->make_seed());
 			//d($args);
 
-			if(null == $args){
-				// default settings
+			if(isset($args['ranges1a1'])){
+				$this->rule_1a1_ranges = $args['ranges1a1'];
+			} else {
 				$this->rule_1a1_ranges = array(
 						array('min'=>1,'max'=>30),
 						array('min'=>2,'max'=>40),
@@ -38,6 +42,11 @@
 						array('min'=>18,'max'=>59),
 						array('min'=>31,'max'=>60)
 					);
+			}
+
+			if(isset($args['permitted1a8'])){
+				$this->permited_1a8 = $args['permitted1a8'];
+			} else {
 				$this->permited_1a8 = array('2211-2211',	'21111-2211',
 											'3111-2211',	'321-2211',
 											'3111-21111',	'321-21111',
@@ -49,6 +58,11 @@
 											'321-111111',	'3111-111111',
 											'2211-321',		'21111-321',
 											);
+			}
+
+			if(isset($args['group2_2'])){
+				$this->groups_2_2 = $args['group2_2'];
+			} else {
 				$this->groups_2_2 = array(
 					array('2211-21111'),
 					array('2211-3111','2211-2211','2211-111111'),
@@ -56,30 +70,32 @@
 					array('3111-2211','3111-111111','21111-3111','21111-2211','21111-111111'),
 					array('411-21111','321-21111','222-21111','11111-21111','321-2211','321-111111','3111-3111', '2211-321', '21111-321')
 				);
-				$this->rule_2_2_2_limit = .05;
+			}
 
-			} else {
-
-				$this->rule_1a1_ranges = $args['ranges1a1'];
-				$this->permited_1a8 = $args['permitted1a8'];
-				$this->groups_2_2 = $args['group2_2'];
+			if(isset($args['rule_2_2_2_limit'])){
 				$this->rule_2_2_2_limit = $args['rule_2_2_2_limit'];
+			} else {
+				$this->rule_2_2_2_limit = .05;
+			}
 
+			if(isset($args['winningCombinations'])){
+				$this->setWinningCombinations($args['winningCombinations']);
+			}		
+		}
 
-				if($args['winningCombinations'] != null) {
-					// this assumes chronological order (most recent drawings are last)
-					// need the more recent drawings first so use "array_reverse"
-					$this->wCombs = array_reverse($args['winningCombinations']);
-					$this->rule_2_1b_subList = array_slice($this->wCombs, 0, 3, FALSE);
-					$this->generate2_1cLimit();
-					$this->rule_2_2_1a_invalid = $this->check_rule_2_2_1a();
-					$this->rule_2_2_1b_invalid = $this->rule_2_2_1b($this->wCombs[0], TRUE);
-					$this->rule_2_2_1c_invalid = $this->rule_2_2_1c($this->wCombs[0], TRUE);
-					$this->rule_2_2_1d_invalid = $this->rule_2_2_1d($this->wCombs[1], TRUE, $this->rule_2_2_1d($this->wCombs[0], TRUE));
-					$this->genrateListRule_2_2_1e();
-					$this->checkRule_2_2_2();
-				}
-			}			
+		public function setWinningCombinations($wCombs){
+			// this assumes chronological order (most recent drawings are last)
+			// need the more recent drawings first so use "array_reverse"
+			$this->CL->add($wCombs);
+			$this->wCombs = array_reverse($this->CL->toCombinations());
+			$this->rule_2_1b_subList = array_slice($this->wCombs, 0, 3, FALSE);
+			$this->generate2_1cLimit();
+			$this->rule_2_2_1a_invalid = $this->check_rule_2_2_1a();
+			$this->rule_2_2_1b_invalid = $this->rule_2_2_1b($this->wCombs[0], TRUE);
+			$this->rule_2_2_1c_invalid = $this->rule_2_2_1c($this->wCombs[0], TRUE);
+			$this->rule_2_2_1d_invalid = $this->rule_2_2_1d($this->wCombs[1], TRUE, $this->rule_2_2_1d($this->wCombs[0], TRUE));
+			$this->genrateListRule_2_2_1e();
+			$this->checkRule_2_2_2();
 		}
 
 		public function addBettingCombination($C) {
@@ -123,7 +139,7 @@
 			} elseif ($generating) {
 
 				//if its for generation initial value
-				for ($i=0; $i < 6; $i++) { 
+				for ($i=0; $i < 6; $i++) {
 					$comb[$i] = $this->genUniqueRand($list, 1, 60);
 					$list[] = $comb[$i]->n;
 				}
@@ -335,8 +351,12 @@
 			False if it fails
 		 */
 		public function rule_1b1($combination, $list, $threshold = 5) {
+			//print_r($list);
 			foreach ($list as $j => $value) {
 				if($this->numElementsEqual($combination, $value) >= $threshold) {
+					//print_r($combination);
+					//print_r($value);
+					//print_r($this->numElementsEqual($combination, $value));
 					return FALSE;
 				}
 			}
@@ -350,7 +370,7 @@
 			False if it fails
 		 */
 		public function rule_1b2($combination, $list, $threshold = 4) {
-			
+			//print_r($list);
 			foreach ($list as $j => $value) {
 				if(($this->numElementsEqual($combination, $value) >= $threshold)&&($value->cRd_cRf == $combination->cRd_cRf)) {
 					return FALSE;

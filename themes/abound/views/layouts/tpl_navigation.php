@@ -19,7 +19,8 @@
                     'items'=>array(
                         array('label'=>'Dashboard', 'url'=>array('/site/index')),
                         array('label'=>'Users', 'url'=>array('/user/index')),
-                        array('label'=>'Engine', 'url'=>array('/combinationEngine/run')),
+                        array('label'=>'Engine', 'url'=>array('/combinationEngine/index')),
+                        array('label'=>'Combinations', 'url'=>array('/combinationSet/index')),
                         /*array('label'=>'Graphs & Charts', 'url'=>array('/site/page', 'view'=>'graphs')),
                         array('label'=>'Forms', 'url'=>array('/site/page', 'view'=>'forms')),
                         array('label'=>'Tables', 'url'=>array('/site/page', 'view'=>'tables')),

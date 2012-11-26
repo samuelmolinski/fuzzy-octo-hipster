@@ -15,14 +15,15 @@ $this->menu=array(
 <h1>Combination Drawns</h1>
 
 <?php 	
-		set_time_limit(0);
+		/*set_time_limit(0);
 		$cache = null;
 
-		$MegaSenaDownloadURL = SystemOptions::model()->findByAttributes(array('name'=>'lotteryDownloadURL'));
-		$MegaSenaURL = SystemOptions::model()->findByAttributes(array('name'=>'lotteryResult'));
+		//$MegaSenaDownloadURL = SystemOptions::model()->findByAttributes(array('name'=>'lotteryDownloadURL'));
+		//$MegaSenaURL = SystemOptions::model()->findByAttributes(array('name'=>'lotteryResult'));
 		//d($MegaSenaURL);
-		$url = $MegaSenaURL->value;
+		//$url = $MegaSenaURL->value;
 		$path = dirname(__FILE__).'/../../../winningCombinations/d_megasc.htm';
+		$path = yii::app()->params['root'].'winningCombinations/d_megasc.htm';
 		d($path);
 
 		$megaSc = mLoadXml($path);
@@ -41,12 +42,14 @@ $this->menu=array(
 			$s .= (string)$combination->td[7];
 			//$c = new CombinationStatistics($d);
 			//d($date);
-			$winningNumbers[] = array($date, $s);
-		}
+			$winningNumbers[] = array( strtotime(str_replace('/', '-', $date)), $s);
+
+		}*/
 		//d($winningNumbers);
 
-		d($url);
-		$new_ms = mLoadXml($url);
+		//d($url);
+		//$new_ms = mLoadXml($url);
 		//$new_ms = $megaSc->body->table->xpath('tr');
-		d($new_ms);
+		//d($new_ms);
  ?>
+ <h3><?php echo $totalCombinations ?> total Combinations added</h3>

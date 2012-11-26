@@ -7,6 +7,7 @@
  * @property integer $id
  * @property string $combination
  * @property string $date
+ * @property integer $group
  */
 class CombinationDrawn extends CActiveRecord
 {
@@ -36,11 +37,13 @@ class CombinationDrawn extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('combination, date', 'required'),
+			array('combination, date, group', 'required'),
+			array('group', 'numerical', 'integerOnly'=>true),
 			array('combination', 'length', 'max'=>12),
+			array('date', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, combination, date', 'safe', 'on'=>'search'),
+			array('id, combination, date, group', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -64,6 +67,7 @@ class CombinationDrawn extends CActiveRecord
 			'id' => 'ID',
 			'combination' => 'Combination',
 			'date' => 'Date',
+			'group' => 'Group',
 		);
 	}
 
@@ -81,6 +85,7 @@ class CombinationDrawn extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('combination',$this->combination,true);
 		$criteria->compare('date',$this->date,true);
+		$criteria->compare('group',$this->group);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -1,15 +1,15 @@
 <?php
-/* @var $this CombinationDrawnController */
-/* @var $model CombinationDrawn */
+/* @var $this CombinationSetController */
+/* @var $model CombinationSet */
 
 $this->breadcrumbs=array(
-	'Combination Drawns'=>array('index'),
+	'Combination Sets'=>array('index'),
 	'Manage',
 );
 
 $this->menu=array(
-	array('label'=>'List CombinationDrawn', 'url'=>array('index')),
-	array('label'=>'Create CombinationDrawn', 'url'=>array('create')),
+	array('label'=>'List CombinationSet', 'url'=>array('index')),
+	array('label'=>'Create CombinationSet', 'url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -18,7 +18,7 @@ $('.search-button').click(function(){
 	return false;
 });
 $('.search-form form').submit(function(){
-	$.fn.yiiGridView.update('combination-drawn-grid', {
+	$.fn.yiiGridView.update('combination-set-grid', {
 		data: $(this).serialize()
 	});
 	return false;
@@ -26,7 +26,7 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Manage Combination Drawns</h1>
+<h1>Manage Combination Sets</h1>
 
 <p>
 You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
@@ -41,14 +41,13 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 </div><!-- search-form -->
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'combination-drawn-grid',
+	'id'=>'combination-set-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
 		'id',
-		'combination',
-		'date',
-		'group',
+		'create_time',
+		//'combinations',
 		array(
 			'class'=>'CButtonColumn',
 		),
