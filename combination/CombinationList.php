@@ -93,4 +93,59 @@
 	    public function onlyUnique(){
 	        return $this->list = array_unique($this->list);
 	    }
+
+	    public function printListTable($CombinationToCheck=NULL, $perGroup = 30){
+	    	
+			$combs = $this->toCombinations();
+			$results =  array();
+			$totalCombs = count($combs);
+			$count = 0;
+			$tables = '<table class="table table-striped CombinationsSet"><tbody>';
+
+	    	if(NULL != $CombinationToCheck){
+	    		$results =  array(array(),array(),array(),array(),array(),array(),array());
+				foreach ($combs as $k => $c) {
+					$count++;
+					if((0 == ($count-1)%$perGroup)&&(0 != $count-1)){
+						$tables .= '</tbody></table><table class="table table-striped CombinationsSet"><tbody>';					
+					}
+					$matching = 0;
+					foreach ($c->d as $key => $N) {
+						if(0 != $key){
+							if(in_array($N, $CombinationToCheck->d)) {
+								$matching++;
+								$str .= '-<span class="match">'.$N->n.'</span>';
+							} else {
+								$str .= '-'.$N->n;
+							}
+						} else {
+							if(in_array($N, $CombinationToCheck->d)) {
+								$matching++;
+								$str = '<span class="match">'.$N->n.'</span>';
+							} else {
+								$str = $N->n;
+							}
+						}
+					}
+					if($matching){
+						$results[$matching][] = $str;
+						$matched = "<td class='matching$matching'>$str</td>";
+					} else {
+						$results[0][] = $str;
+						$matched = "<td>$str</td>";
+					}
+					$tables .= "<tr><td>$count</td>$matched</tr>";
+				}
+			} else {
+				foreach ($combs as $k => $c) {
+					$count++;					
+					if((0 == ($count-1)%$perGroup)&&(0 != $count-1)){
+						$tables .= '</tbody></table><table class="table table-striped CombinationsSet"><tbody>';					
+					}
+					$tables .= "<tr><td>$count</td><td>".$c->print_id()."</td></tr>";
+				}
+			}
+			$tables .= '</tbody></table>';
+			return array('table'=>$tables,'results'=>$results);
+	    }
 	}

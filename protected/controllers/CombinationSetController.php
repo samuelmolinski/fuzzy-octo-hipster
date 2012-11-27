@@ -71,98 +71,28 @@ class CombinationSetController extends Controller
 		$engineSettings = EngineSettings::model()->findByAttributes(array('id'=>$engineSettingId->value));
 		$combinationSet = CombinationSet::model()->findByAttributes(array('id'=>$id));
 		//$perGroup = $engineSettings->amountPerGroup;
-		$perGroup = 30;
-		//d($engineSettings);
+
+		$combs = unserialize($model->combinations);
+		$CL = new CombinationList($combs);
+		$testedCombination = '';
 
 		if(isset($_POST)&&!empty($_POST['combinationCheck'])){
 			$cc = $_POST['combinationCheck'];
-			$criteria = new CDbCriteria(array(
+			/*$criteria = new CDbCriteria(array(
 				'condition' => 'id = :id',
 				'params' => array(':id'=>$cc['settingId']),
-		        'order' => 'id DESC',
-		        'limit' => 1,
-		    ));
-			$wcc = CombinationDrawn::model()->findAll($criteria);
-			$wcc = new CombinationStatistics($wc[0]->combination);
-
-			//d($model->combinations);
-			$combs = unserialize($model->combinations);
-			//d($combs);
-			$CL = new CombinationList($combs);
-			$combs = $CL->toCombinations();
-			$totalCombs = count($combs);
-			//d($combs);
-			$count = 0;
-			//echo '<table class="table table-striped"><tbody>';
-
-			foreach ($combs as $k => $c) {
-				$count++;
-				if(0 == ($count-1)%$perGroup){
-					//heading			
-					if($totalCombs != $count) {
-						$tables .= '<table class="table table-striped CombinationsSet"><tbody>';
-					}
-					
-				}
-				$matching = 0;
-				foreach ($c->d as $key => $N) {
-					if(0 != $key){
-						if(in_array($N, $wcc->d)) {
-							$matching++;
-							$str .= '-<span class="match">'.$N->n.'</span>';
-						} else {
-							$str .= '-'.$N->n;
-						}
-					} else {
-						if(in_array($N, $wcc->d)) {
-							$matching++;
-							$str = '<span class="match">'.$N->n.'</span>';
-						} else {
-							$str = $N->n;
-						}
-					}
-				}
-				if($matching){
-					$matched = "<td class='matching$matching'>$str</td>";
-				} else {
-					$matched = "<td>$str</td>";
-				}
-				$tables .= "<tr><td>$count</td>$matched</tr>";
-
-				if(0 == ($count)%$perGroup){
-					//close previous
-					if(0 != $count-1) {
-						$tables .= '</tbody></table>';
-					}					
-				}
-			}
-		} else {			
-			$combs = unserialize($model->combinations);
-			$CL = new CombinationList($combs);
-			$combs = $CL->toCombinations();
-			$totalCombs = count($combs);
-			$count = 0;
-
-			foreach ($combs as $k => $c) {
-				$count++;
-				if(0 == ($count-1)%$perGroup){
-					//heading			
-					if($totalCombs != $count) {
-						$tables .= '<table class="table table-striped CombinationsSet"><tbody>';
-					}
-				}
-				$tables .= "<tr><td>$count</td><td>".$c->print_id()."</td></tr>";
-
-				if(0 == ($count)%$perGroup){
-					//close previous
-					if(0 != $count-1) {
-						$tables .= '</tbody></table>';
-					}
-				}
-			}
+		        //'order' => 'id DESC',
+		        //'limit' => 1,
+		    ));*/
+			$wcc = CombinationDrawn::model()->findByPk($cc['settingId']);
+			$testedCombination = $cc['settingId'];
+			$wcc = new CombinationStatistics($wcc->combination);
+			$tables = $CL->printListTable($wcc);
+		} else {
+			$tables = $CL->printListTable();
 		}
 		
-		$this->render('view', array('model'=>$this->loadModel($id),'engineSettings'=>$engineSettings, 'engineSettingId'=>$engineSettingId, 'wc'=>$wc, 'premade'=>$premade, 'tables'=>$tables));
+		$this->render('view', array('model'=>$this->loadModel($id),'engineSettings'=>$engineSettings, 'engineSettingId'=>$engineSettingId, 'wc'=>$wc, 'premade'=>$premade, 'tables'=>$tables['table'], 'results'=>$tables['results'], 'testedCombination'=>$testedCombination));
 	}
 
 	/**

@@ -23,7 +23,7 @@ $this->menu=array(
 )); ?>
 
 <div class="row" style="margin-left:0;">
-    <?php echo CHtml::dropDownList('combinationCheck[settingId]', $engineSettingId, $premade, array ( )); ?>
+    <?php echo CHtml::dropDownList('combinationCheck[settingId]', $testedCombination, $premade, array ( )); ?>
 </div>
 <div class="row" style="margin-left:0;">
 	<?php echo CHtml::submitButton('Check', array('name'=>'combinationCheck[submit]', 'id'=>'combinationCheck_submit')); ?>
@@ -31,6 +31,66 @@ $this->menu=array(
 
 <?php echo CHtml::endForm(); ?>
 
+<?php 
+	if($results[6]){ ?>
+		<div class="row" style="margin-left:0;">
+			<h3>Winning Tickets (matching 6N)</h3>
+			<?php echo "<p>".count($results[6])." Combinations with 6N</p>"; ?>
+			<?php foreach ($results[6] as $k => $str) {
+				echo $str.' ';
+			} ?>
+		</div>
+	<?php }
+	if($results[5]){ ?>
+		<div class="row" style="margin-left:0;">
+			<h3>Matching 5N</h3>
+			<?php echo "<p>".count($results[5])." Combinations with 5N</p>"; ?>
+			<?php foreach ($results[5] as $k => $str) {
+				echo $str.' ';
+			} ?>
+		</div>
+	<?php }
+	if($results[4]){ ?>
+		<div class="row" style="margin-left:0;">
+			<h3>Matching 4N</h3>
+			<?php echo "<p>".count($results[4])." Combinations with 4N</p>"; ?>
+			<?php foreach ($results[4] as $k => $str) {
+				echo $str.' ';
+			} ?>
+		</div>
+	<?php }
+	if($results[3]){ ?>
+		<div class="row" style="margin-left:0;">
+			<h3>Matching 3N</h3>
+			<?php echo "<p>".count($results[3])." Combinations with 3N</p>"; ?>
+			<?php foreach ($results[3] as $k => $str) {
+				echo $str.' ';
+			} ?>
+		</div>
+	<?php }
+	if($results[2]){ ?>
+		<div class="row" style="margin-left:0;">
+			<h3>Matching 2N</h3>
+			<?php echo "<p>".count($results[2])." Combinations with 2N</p>"; ?>
+			<?php foreach ($results[2] as $k => $str) {
+				echo $str.' ';
+			} ?>
+		</div>
+	<?php }
+	if($results[1]){ ?>
+		<div class="row" style="margin-left:0;">
+			<h3>Matching 1N</h3>
+			<?php echo "<p>".count($results[1])." Combinations with 1N</p>"; ?>
+		</div>
+	<?php }
+	if($results[0]){ ?>
+		<div class="row" style="margin-left:0;">
+			<h3>Matching 0N</h3>
+			<?php echo "<p>".count($results[0])." Combinations with 0N</p>"; ?>
+		</div>
+	<?php }
+?>
+<br />
 <?php 
 	echo $tables;
 ?>

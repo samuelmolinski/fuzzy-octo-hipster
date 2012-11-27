@@ -64,17 +64,52 @@ class CombinationEngineController extends Controller
 	public function actionRun()
 	{	
 		d($_POST);
-		if(isset($_POST)&&!empty($_POST['combinationCheck'])){
-		}
 		$engineSettingId = SystemOptions::model()->findByAttributes(array('name'=>'engineSettingId'));
-		$engineSettings = EngineSettings::model()->findByAttributes(array('id'=>$engineSettingId->value));
+		if(isset($_POST)&&!empty($_POST['engineRun'])){
+			$engineRun = $_POST['engineRun'];
+			d($engineRun);
+			// do a save if desired
+			if(@$engineRun['save']){
+
+			}
+			if(@$engineRun['settingId']){
+				$engineSettings = EngineSettings::model()->findByAttributes(array('id'=>$engineRun['settingId']));
+			} else {
+				$engineSettings = EngineSettings::model()->findByAttributes(array('id'=>$engineSettingId->value));
+			}
+			if(@$engineRun['numOfCombs']){
+				$numOfCombinations = $engineRun['numOfCombs'];
+			} else {
+				$numOfCombinations = $engineSettings->numOfCombs;
+			}
+			if(@$engineRun['amountPerGroup']){
+
+			} else {
+				
+			}
+			if(@$engineRun['ruleOrder']){
+				$tests = unserialize($engineSettings->ruleOrder);
+			} else {
+				$tests = unserialize($engineSettings->ruleOrder);
+			}
+		} else {			
+			$engineSettings = EngineSettings::model()->findByAttributes(array('id'=>$engineSettingId->value));
+
+	    	// The order of the test to be used
+			$numOfCombinations = $engineSettings->numOfCombs;
+			$tests = unserialize($engineSettings->ruleOrder);
+		}
+		
 		set_time_limit(0);
 		$p = new Performance();
     	$winningNumbers = array();
 
-    	// The order of the test to be used
-		$tests = unserialize($engineSettings->ruleOrder);
-		$numOfCombinations = $engineSettings->numOfCombs;
+    	/*$dc = CombinationDrawn::model()->findAll();
+    	$CL = new CombinationList;
+    	foreach ($dc as $k => $c) {
+    		$CL->addString($c->combination);
+    	}*/
+    	//d($CL);
 
 		// Get current winning numbers
 		$path = yii::app()->params['root'].'/combination/d_megasc100.htm';
@@ -85,7 +120,6 @@ class CombinationEngineController extends Controller
 		//d($megaSc);
 	    array_shift($megaSc);
 
-	    $winningNumbers = array();
 	    foreach($megaSc as $k=>$combination) {
 	        $d = (string)$combination->td[2].(string)$combination->td[3].(string)$combination->td[4].(string)$combination->td[5].(string)$combination->td[6].(string)$combination->td[7];
 	        //print_r($d.'.');
@@ -93,6 +127,8 @@ class CombinationEngineController extends Controller
 	        $winningNumbers[] = $c;
 	        unset($c);
 	    }
+
+	    //$winningNumbers = array();
     	$cgSettings = array('winningCombinations'=>$winningNumbers, 'ranges1a1'=> unserialize($engineSettings->ranges1a1), 'permitted1a8'=> unserialize($engineSettings->permitted1a8), 'group2_2'=> unserialize($engineSettings->group2_2), 'rule_2_2_2_limit'=>$engineSettings->rule_2_2_2_limit);
     	
     	$cg = new CombinationGenerator($cgSettings);

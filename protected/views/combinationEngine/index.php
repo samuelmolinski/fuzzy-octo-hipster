@@ -17,8 +17,20 @@ $this->breadcrumbs=array(
 <?php //echo $form->errorSummary($model); ?>
 
 <div class="row" style="margin-left:0;">
-    <?php echo CHtml::dropDownList('settingId', $engineSettingId, $premade, array ( )); ?>
+    <?php echo CHtml::label('Perfered setting', 'engineRun[settingId]', array()); ?>
+    <?php echo CHtml::dropDownList('engineRun[settingId]', $engineSettingId, $premade, array ( )); ?>
 </div>
+
+<div class="row" style="margin-left:0;">
+    <?php echo CHtml::label('Number of Combinations Override', 'engineRun[numOfCombs]', array()); ?>
+    <?php echo CHtml::textField('engineRun[numOfCombs]', '', array ()); ?>
+</div>
+
+<div class="row" style="margin-left:0;">
+    <?php echo CHtml::label('Number of combinations per group Override', 'engineRun[amountPerGroup]', array()); ?>
+    <?php echo CHtml::textField('engineRun[amountPerGroup]', '', array ()); ?>
+</div>
+
 <div class="row" style="margin-left:0;">
 	<?php echo CHtml::submitButton('Save', array('id'=>'savesettings')); ?>
 	<?php echo CHtml::submitButton('Run', array()); ?>
