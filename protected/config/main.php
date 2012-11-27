@@ -29,13 +29,13 @@ return array(
                 'tableUsers' => 'ni_users',
                 'tableProfiles' => 'ni_profiles',
                 'tableProfileFields' => 'ni_profiles_fields',
-        ),*/
+        ),
 		'gii'=>array(
 			'class'=>'system.gii.GiiModule',
 			'password'=>'sjm120182',
 			// If removed, Gii defaults to localhost only. Edit carefully to taste.
 			'ipFilters'=>array('127.0.0.1','::1', '198.58.102.255'),
-		),
+		),*/
 		/*'rights'=>array(
 			'install'=>true,
 		),*/
@@ -106,7 +106,7 @@ return array(
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@example.com',
-		'root'=> 'http://localhost/fuzzy-octo-hipster/',
-		//'root'=> 'http://nissenidea.com/',
+		//'root'=> 'http://localhost/fuzzy-octo-hipster/',
+		'root'=> 'http://nissenidea.com/',
 	),
 );
