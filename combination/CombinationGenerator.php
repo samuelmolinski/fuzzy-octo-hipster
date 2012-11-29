@@ -276,7 +276,7 @@
 		public function rule_1a6($C){
 			$count = count($C->d);
 			$limit = 0;
-			for ($i=0; $i < $count-2; $i++) { 
+			for ($i=0; $i < $count-1; $i++) { 
 				if($C->d[$i]->n+1 == $C->d[$i+1]->n) { 
 					$limit++;
 					if($limit >= 2) {
@@ -284,6 +284,7 @@
 					}
 				}
 			}
+			//print_r($limit."\n");
 			return TRUE;
 		}		
 
@@ -568,7 +569,6 @@
 		}
 
 		public function rule_2_2_1a($combination){
-			//d($this->rule_2_2_1a_invalid);
 			if((-1 != $this->rule_2_2_1a_invalid)&&(in_array($combination->cRd_cRf, $this->groups_2_2[$this->rule_2_2_1a_invalid]))){
 				return FALSE;				
 			}
@@ -644,12 +644,13 @@
 							$list[$N->n] = 0;
 						} 
 						$list[$N->n]++;
-						if ($list[$N->n] >= 3) {
+						if ($list[$N->n] == 3) {
 							$final[] = $N->n;
 						}
 					}
 				}
 			}
+			//print_r($list);
 
 			foreach ($this->wCombs[1]->d as $k => $N) {	
 				for ($i=2; $i < 5; $i++) { 							
@@ -658,12 +659,13 @@
 							$list2[$N->n] = 0;
 						} 
 						$list2[$N->n]++;						
-						if ($list2[$N->n] >= 3) {
+						if ($list2[$N->n] == 3) {
 							$final[] = $N->n;
 						}
 					}
 				}
 			}
+			//print_r($list2);
 
 			$this->listRule_2_2_1e = $final;
 		}

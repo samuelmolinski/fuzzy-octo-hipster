@@ -133,6 +133,8 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_1a1_checking()
     {        
+        print_r("test: 123742434448\n");
+        print_r("test: 010203374348\n");
         $C = new CombinationStatistics('123742434448');
         $ranges = $this->rule_1a1_ranges;
         $r = $this->combGen->rule_1a1($C);
@@ -150,6 +152,8 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_1a2()
     {
+        print_r("test: 123642464448\n");
+        print_r("test: 113741434559\n");
         $C1 = new CombinationStatistics('123642464448');
         $C2 = new CombinationStatistics('113741434559');
         // Remove the following lines when you implement this test.
@@ -163,6 +167,8 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_1a3()
     {
+        print_r("test: 273642464448\n");
+        print_r("test: 113741434559\n");
         $C1 = new CombinationStatistics('273642464448');
         $C2 = new CombinationStatistics('113741434559');
         // Remove the following lines when you implement this test.
@@ -176,6 +182,8 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_1a4()
     {
+        print_r("test: 011122334454\n");
+        print_r("test: 113741434559\n");
         $C1 = new CombinationStatistics('011122334454');
         $C2 = new CombinationStatistics('113741434559');
         // Remove the following lines when you implement this test.
@@ -189,6 +197,9 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_1a5()
     {
+        print_r("test: 011122334352\n");
+        print_r("test: 193746474859\n");
+        print_r("test: 113741434559\n");
         $C1 = new CombinationStatistics('011122334352');
         $C2 = new CombinationStatistics('193746474859');
         $C3 = new CombinationStatistics('113741434559');
@@ -204,11 +215,16 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_1a6()
     {
-        $C1 = new CombinationStatistics('010222234454');
-        $C2 = new CombinationStatistics('010223234454');
+        print_r("test: 07-17-18-33-41-42\n");
+        print_r("test: 010223244454\n");
+        print_r("test(true): 040612192339\n");
+        $C1 = new CombinationStatistics('071718334142');
+        $C2 = new CombinationStatistics('040506192339');
+        $C3 = new CombinationStatistics('040612192339');
         // Remove the following lines when you implement this test.
         $this->assertTrue(!$this->combGen->rule_1a6($C1), 'Does it prevent 2 pairs consecutive from occuring (false)');
-        $this->assertTrue($this->combGen->rule_1a6($C2), 'Does it prevent 2 pairs consecutive from occuring (true)');
+        $this->assertTrue(!$this->combGen->rule_1a6($C2), 'Does it prevent 2 pairs consecutive from occuring (false)');
+        $this->assertTrue($this->combGen->rule_1a6($C3), 'Does it prevent 2 pairs consecutive from occuring (true)');
     }
 
     /**
@@ -217,6 +233,8 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_1a7()
     {
+        print_r("test: 010407234447\n");
+        print_r("test(true): 010223234454\n");
         $C1 = new CombinationStatistics('010407234447');
         $C2 = new CombinationStatistics('010223234454');
         // Remove the following lines when you implement this test.
@@ -230,6 +248,8 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_1a8()
     {        
+        print_r("test: 010421234347\n");
+        print_r("test(true): 010223234454\n");
         $C1 = new CombinationStatistics('010421234347');
         $C2 = new CombinationStatistics('010223234454');
         //print_r($C1);
@@ -245,6 +265,9 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testNumElementsEqual()
     {        
+        print_r("test: 010421234347\n");
+        print_r("test: 010421234347\n");
+        print_r("test: 010522234347\n");
         $C1 = new CombinationStatistics('010421234347');
         $C2 = new CombinationStatistics('010421234347');
         $C3 = new CombinationStatistics('010522234347');
@@ -263,7 +286,8 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_1b1()
     {
-        //print_r($this->combGen);
+        print_r("test(true): 010421234347\n");
+        print_r("test: 171928454856\n");
         $C1 = new CombinationStatistics('010421234347');
         $C2 = new CombinationStatistics('171928454856');
         //print_r($this->combGen);
@@ -277,6 +301,9 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_1b2()
     {
+        print_r("test(true): 010421234347\n");
+        print_r("test(true): 171928454755\n");
+        print_r("test: 040530334257\n");
         $C1 = new CombinationStatistics('010421234347');
         $C2 = new CombinationStatistics('171928454755');
         $C3 = new CombinationStatistics('040530334257'); //040530334152
@@ -293,9 +320,12 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_1b3()
     {
+        print_r("test: 010421234347\n");
+        print_r("test(true): 171928454755\n");
+        //print_r("test: 040530334257\n");
         $C1 = new CombinationStatistics('010421234347');
         $C2 = new CombinationStatistics('171928454755');
-        $C3 = new CombinationStatistics('040530334257');
+        //$C3 = new CombinationStatistics('040530334257');
         //print_r($C1);
         //print_r($C2);
         //print_r($C3);
@@ -327,6 +357,9 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_2_1c()
     {
+        print_r("test: 010423254556\n");
+        print_r("test: 171928355557\n");
+        print_r("test(true): 040530334257\n");
         $C1 = new CombinationStatistics('010423254556');
         $C2 = new CombinationStatistics('171928355557');
         $C3 = new CombinationStatistics('040530334257');
@@ -334,6 +367,7 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
         //$this->combGen->rule_2_1c($C2, $this->combGen->limit_2_1c);
         $this->assertTrue(!$this->combGen->rule_2_1c($C1), 'Does it match one of the last forms forbidden by 2.1c (FALSE)');
         $this->assertTrue(!$this->combGen->rule_2_1c($C2), 'Does it match one of the last forms forbidden by 2.1c (FAIL)');
+        $this->assertTrue($this->combGen->rule_2_1c($C3), 'Does it match one of the last forms forbidden by 2.1c (pass)');
     }
 
     /**
@@ -352,8 +386,25 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_2_2_1a()
     {
+        print_r("test: 010423254556\n");
+        print_r("test: 131535464956\n");
         $C1 = new CombinationStatistics('010423254556');
-        $this->assertTrue($this->combGen->rule_2_2_1a($C1), 'pass the rule 2.2.1a valid (true)');
+        $C2 = new CombinationStatistics('131535464956');
+
+        print_r("\ntest: ");
+        print_r($C1);
+        print_r("\ntest: ");
+        print_r($C2);
+        print_r("\rule_2_2_1a_invalid: ");
+        print_r($this->combGen->rule_2_2_1a_invalid);
+
+        //$this->assertTrue($this->combGen->rule_2_2_1a($C1), 'pass the rule 2.2.1a valid (true)');
+        $this->combGen->rule_2_2_1a_invalid = 1;
+        print_r("\nrule_2_2_1a_invalid: ");
+        print_r($this->combGen->rule_2_2_1a_invalid);
+        print_r("\nrule_2_2_1a_invalid group: ");
+        print_r($this->combGen->groups_2_2[$this->combGen->rule_2_2_1a_invalid]);
+        $this->assertTrue(!$this->combGen->rule_2_2_1a($C2), 'pass the rule 2.2.1a valid (false)');
     }
 
     /**
@@ -362,6 +413,9 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_2_2_1b()
     {
+        print_r("test: 010423242556\n");
+        print_r("test: 153137464956\n");
+        print_r("test(true): 152137464956\n");
         $C1 = new CombinationStatistics('010423242556');
         $C2 = new CombinationStatistics('153137464956');
         $C3 = new CombinationStatistics('152137464956');
@@ -376,6 +430,9 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_2_2_1c()
     {
+        print_r("test: 010423242556\n");
+        print_r("test: 153137464956\n");
+        print_r("test(true): 152137464956\n");
         $C1 = new CombinationStatistics('010422242856');
         $C2 = new CombinationStatistics('153137434956');
         $C3 = new CombinationStatistics('152137464956');
@@ -390,6 +447,9 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_2_2_1d()
     {
+        print_r("test(true): 010423242556\n");
+        print_r("test(true): 153137464956\n");
+        print_r("test: 152137464956\n");
         $C1 = new CombinationStatistics('010422235556');
         $C2 = new CombinationStatistics('153137434456');
         $C3 = new CombinationStatistics('152137464956');
@@ -404,16 +464,22 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_2_2_1e()
     {
-        $C1 = new CombinationStatistics('010422235556');
-        $C2 = new CombinationStatistics('153137434456');
-        $C3 = new CombinationStatistics('152137464956');
+        $listRule_2_2_1e = array('05', '45');
+        print_r("test(true): 010423242556\n");
+        print_r("test: 153137454956\n");
+        $C1 = new CombinationStatistics('010423242556');
+        $C2 = new CombinationStatistics('153137454956');
 
-        //print_r($this->combGen->wCombs);
-        print_r($this->combGen->genrateListRule_2_2_1e());
+
+        print_r($this->combGen->listRule_2_2_1e);
 
         $this->assertEquals(array(), $this->combGen->listRule_2_2_1e, 'pass the rule 2.2.1d valid (2)');
-        //$this->assertEquals(1, $this->combGen->rule_2_2_1e($C2, true), 'pass the rule 2.2.1d valid (1)');
-        //$this->assertEquals(0, $this->combGen->rule_2_2_1e($C3, true), 'pass the rule 2.2.1d valid (0)');
+        $this->combGen->listRule_2_2_1e = $listRule_2_2_1e;
+        print_r("\nlistRule_2_2_1e: ");
+        print_r($this->combGen->listRule_2_2_1e);
+
+        $this->assertEquals(true, $this->combGen->rule_2_2_1e($C1), 'pass the rule 2.2.1d valid (1)');
+        $this->assertEquals(false, $this->combGen->rule_2_2_1e($C2), 'pass the rule 2.2.1d valid (0)');
     } 
     public function testRule_2_2(){
         

@@ -86,9 +86,11 @@ class CombinationDrawn extends CActiveRecord
 		$criteria->compare('combination',$this->combination,true);
 		$criteria->compare('date',$this->date,true);
 		$criteria->compare('group',$this->group);
+		$criteria->order = 'id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			'pagination'=>array('pageSize'=>10)
 		));
 	}
 }

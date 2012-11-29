@@ -63,7 +63,7 @@ class CombinationEngineController extends Controller
 	 */
 	public function actionRun()
 	{	
-		d($_POST);
+		//d($_POST);
 		$engineSettingId = SystemOptions::model()->findByAttributes(array('name'=>'engineSettingId'));
 		if(isset($_POST)&&!empty($_POST['engineRun'])){
 			$engineRun = $_POST['engineRun'];
@@ -104,32 +104,12 @@ class CombinationEngineController extends Controller
 		$p = new Performance();
     	$winningNumbers = array();
 
-    	/*$dc = CombinationDrawn::model()->findAll();
+    	$dc = CombinationDrawn::model()->findAll();
     	$CL = new CombinationList;
     	foreach ($dc as $k => $c) {
     		$CL->addString($c->combination);
-    	}*/
-    	//d($CL);
-
-		// Get current winning numbers
-		$path = yii::app()->params['root'].'/combination/d_megasc100.htm';
-		//d($path);
-		$megaSc = mLoadXml($path);
-		//d($megaSc);
-	    $megaSc = $megaSc->body->table->xpath('tr');
-		//d($megaSc);
-	    array_shift($megaSc);
-
-	    foreach($megaSc as $k=>$combination) {
-	        $d = (string)$combination->td[2].(string)$combination->td[3].(string)$combination->td[4].(string)$combination->td[5].(string)$combination->td[6].(string)$combination->td[7];
-	        //print_r($d.'.');
-	        $c = new CombinationStatistics($d);
-	        $winningNumbers[] = $c;
-	        unset($c);
-	    }
-
-	    //$winningNumbers = array();
-    	$cgSettings = array('winningCombinations'=>$winningNumbers, 'ranges1a1'=> unserialize($engineSettings->ranges1a1), 'permitted1a8'=> unserialize($engineSettings->permitted1a8), 'group2_2'=> unserialize($engineSettings->group2_2), 'rule_2_2_2_limit'=>$engineSettings->rule_2_2_2_limit);
+    	}
+    	$cgSettings = array('winningCombinations'=>$CL, 'ranges1a1'=> unserialize($engineSettings->ranges1a1), 'permitted1a8'=> unserialize($engineSettings->permitted1a8), 'group2_2'=> unserialize($engineSettings->group2_2), 'rule_2_2_2_limit'=>$engineSettings->rule_2_2_2_limit);
     	
     	$cg = new CombinationGenerator($cgSettings);
 		$numberOfWinningCombinations = count($cg->wCombs);
@@ -173,13 +153,6 @@ class CombinationEngineController extends Controller
 		$p->end_timer("Over All");
 		$p->sortByTotalTime();
 		sort($cg->currentBettingCombinations);
-
-		/*if(isset($_POST['User']))
-		{
-			$model->attributes=$_POST['User'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
-		}*/
 
 		$list = new CombinationList($cg->currentBettingCombinations);		
 		$model = new CombinationSet;

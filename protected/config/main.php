@@ -40,6 +40,7 @@ return array(
 			'install'=>true,
 		),*/
 	),
+	'homeUrl' => 'http://example.com',
 
 	// application components
 	'components'=>array(
@@ -61,6 +62,7 @@ return array(
 		'urlManager'=>array(
 			'urlFormat'=>'path',
 			'rules'=>array(
+				''=>'site/login',
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
@@ -106,7 +108,7 @@ return array(
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@example.com',
-		//'root'=> 'http://localhost/fuzzy-octo-hipster/',
-		'root'=> 'http://nissenidea.com/',
+		'root'=> 'http://localhost/fuzzy-octo-hipster/',
+		//'root'=> 'http://nissenidea.com/',
 	),
 );

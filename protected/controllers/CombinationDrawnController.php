@@ -74,7 +74,7 @@ class CombinationDrawnController extends Controller
 		foreach ($winningNumbers as $k => $wc) {
 			$model = new CombinationDrawn;
 			$model->attributes = $wc;
-			d($wc);
+			//d($wc);
 			//$modeltemp::model()->findAllByAttributes(array(), 'combination = :combination AND date = :date', array(':combination'=>$wc['combination'],':date'=>$wc['date']));
 			$criteria=new CDbCriteria;
 			$criteria->select='*';  // only select the 'title' column
@@ -83,7 +83,7 @@ class CombinationDrawnController extends Controller
 			//$criteria->params=array(':combination'=>'123456789012', ':date'=>'412342314123');
 			$modeltemp=CombinationDrawn::model()->find($criteria); // $params is not needed
 
-			d($modeltemp);
+			//d($modeltemp);
 			//save only unique values
 			if(null == $modeltemp) {
 				d('Saving');
@@ -96,7 +96,7 @@ class CombinationDrawnController extends Controller
 				
 			}
 			
-			d($model->attributes);
+			//d($model->attributes);
 		}
 
 		$this->render('seed',array('totalCombinations'=>count($winningNumbers),
