@@ -359,11 +359,11 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
     {
         print_r("test: 010423254556\n");
         print_r("test: 171928355557\n");
-        print_r("test(true): 040530334257\n");
+        print_r("test(true): 040518344558\n");
         $C1 = new CombinationStatistics('010423254556');
         $C2 = new CombinationStatistics('171928355557');
-        $C3 = new CombinationStatistics('040530334257');
-        //print_r($C2);
+        $C3 = new CombinationStatistics('040518344558');
+        print_r($this->combGen->limit_2_1c);
         //$this->combGen->rule_2_1c($C2, $this->combGen->limit_2_1c);
         $this->assertTrue(!$this->combGen->rule_2_1c($C1), 'Does it match one of the last forms forbidden by 2.1c (FALSE)');
         $this->assertTrue(!$this->combGen->rule_2_1c($C2), 'Does it match one of the last forms forbidden by 2.1c (FAIL)');
