@@ -133,7 +133,7 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_1a1_checking()
     {        
-        print_r("test: 123742434448\n");
+        print_r("test(true): 123742434448\n");
         print_r("test: 010203374348\n");
         $C = new CombinationStatistics('123742434448');
         $ranges = $this->rule_1a1_ranges;
@@ -168,7 +168,7 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
     public function testRule_1a3()
     {
         print_r("test: 273642464448\n");
-        print_r("test: 113741434559\n");
+        print_r("test(true): 113741434559\n");
         $C1 = new CombinationStatistics('273642464448');
         $C2 = new CombinationStatistics('113741434559');
         // Remove the following lines when you implement this test.
@@ -183,7 +183,7 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
     public function testRule_1a4()
     {
         print_r("test: 011122334454\n");
-        print_r("test: 113741434559\n");
+        print_r("test(true): 113741434559\n");
         $C1 = new CombinationStatistics('011122334454');
         $C2 = new CombinationStatistics('113741434559');
         // Remove the following lines when you implement this test.
@@ -199,7 +199,7 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
     {
         print_r("test: 011122334352\n");
         print_r("test: 193746474859\n");
-        print_r("test: 113741434559\n");
+        print_r("test(true): 113741434559\n");
         $C1 = new CombinationStatistics('011122334352');
         $C2 = new CombinationStatistics('193746474859');
         $C3 = new CombinationStatistics('113741434559');

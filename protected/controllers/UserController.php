@@ -127,15 +127,6 @@ class UserController extends Controller
 	 */
 	public function actionIndex()
 	{
-		if(Yii::app()->user->checkAccess('updateProfile'))
-	    {
-	        echo "checkAccess:yes";
-	    }
-	    else
-	    {
-	        echo "checkAccess:missing something";
-	    }
-
 		$dataProvider=new CActiveDataProvider('User');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
