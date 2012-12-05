@@ -47,3 +47,5 @@
 		</tbody>
 	</table>
 </div>
+
+<?php d($cg); ?>

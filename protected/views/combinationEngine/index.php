@@ -32,6 +32,11 @@ $this->breadcrumbs=array(
 </div>
 
 <div class="row" style="margin-left:0;">
+    <?php echo CHtml::label('Test Number', 'engineRun[testNumber]', array()); ?>
+    <?php echo CHtml::textField('engineRun[testNumber]', '', array ()); ?>
+</div>
+
+<div class="row" style="margin-left:0;">
 	<?php echo CHtml::submitButton('Save', array('id'=>'savesettings')); ?>
 	<?php echo CHtml::submitButton('Run', array()); ?>
 </div>
@@ -39,7 +44,7 @@ $this->breadcrumbs=array(
 <?php echo CHtml::endForm(); ?>
 
 <p>
-	<?php //d($settings); 
+	<?php  //d($settings); 
 		/*[id] => 1
         [name] => default
         [users] => admin

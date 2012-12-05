@@ -63,8 +63,10 @@ class CombinationEngineController extends Controller
 	 */
 	public function actionRun()
 	{	
-		//d($_POST);
+		d($_POST);
 		$engineSettingId = SystemOptions::model()->findByAttributes(array('name'=>'engineSettingId'));
+		    	$dc = CombinationDrawn::model()->findAll();
+		    	$CL = new CombinationList;
 		if(isset($_POST)&&!empty($_POST['engineRun'])){
 			$engineRun = $_POST['engineRun'];
 			d($engineRun);
@@ -87,6 +89,18 @@ class CombinationEngineController extends Controller
 			} else {
 				
 			}
+			if(@$engineRun['testNumber']){
+		    	foreach ($dc as $k => $c) {
+		    		if($engineRun['testNumber'] >= $c->id){
+		    			d($c->id);
+		    			$CL->addString($c->combination);
+		    		}		    		
+		    	}
+			} else {
+		    	foreach ($dc as $k => $c) {
+		    		$CL->addString($c->combination);
+		    	}
+			}
 			if(@$engineRun['ruleOrder']){
 				$tests = unserialize($engineSettings->ruleOrder);
 			} else {
@@ -103,12 +117,6 @@ class CombinationEngineController extends Controller
 		set_time_limit(0);
 		$p = new Performance();
     	$winningNumbers = array();
-
-    	$dc = CombinationDrawn::model()->findAll();
-    	$CL = new CombinationList;
-    	foreach ($dc as $k => $c) {
-    		$CL->addString($c->combination);
-    	}
     	$cgSettings = array('winningCombinations'=>$CL, 'ranges1a1'=> unserialize($engineSettings->ranges1a1), 'permitted1a8'=> unserialize($engineSettings->permitted1a8), 'group2_2'=> unserialize($engineSettings->group2_2), 'rule_2_2_2_limit'=>$engineSettings->rule_2_2_2_limit);
     	
     	$cg = new CombinationGenerator($cgSettings);

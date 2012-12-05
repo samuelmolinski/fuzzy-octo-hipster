@@ -422,7 +422,7 @@
 						$limits['c2'][] = $value->print_cDd();
 					}					
 				}
-				if(count($limits['c2'])>=9) {break;}
+				if(count($limits['c2'])>=6) {break;}
 			}
 			//c3
 			foreach ($this->wCombs as $key => $value) {
@@ -541,11 +541,24 @@
 					return FALSE;
 				}					
 			}
+			//c7
+			if(('321' == $this->wCombs[0]->cRd)&&('321' == $combination->cRd)){
+				return false;
+			}
+			//c8
+			$arr = array('411','222','111111');
+			if((in_array($this->wCombs[0]->cRd, $arr)&&(in_array($combination->cRd, $arr)))){
+				return false;
+			}
+			//c9
+			$arr = array('3111','321');
+			if((in_array($this->wCombs[0]->cRf, $arr)&&(in_array($combination->cRf, $arr)))) {
+				return false;
+			}
 			return TRUE;
 		}
 
 		public function check_rule_2_2_1a(){
-			$forbidden = -1;
 			foreach ($this->groups_2_2 as $k => $gp) {
 				$fiveGroupsPairs = 0;
 				if(in_array($this->wCombs[0], $gp)){
@@ -554,16 +567,9 @@
 				if(in_array($this->wCombs[1], $gp)){
 					$fiveGroupsPairs++;
 				}
-				if(in_array($this->wCombs[2], $gp)){
-					$fiveGroupsPairs++;
-				}
 				if($fiveGroupsPairs > 1) {
-					$forbidden = $k;
-					break;
+					return $k;
 				}
-			}
-			if(3 != count($fiveGroupsPairs)){
-				return $forbidden;
 			}
 			return -1;
 		}
@@ -644,9 +650,6 @@
 							$list[$N->n] = 0;
 						} 
 						$list[$N->n]++;
-						if ($list[$N->n] == 3) {
-							$final[] = $N->n;
-						}
 					}
 				}
 			}
@@ -658,39 +661,58 @@
 						if(!array_key_exists($N->n, $list2)) {
 							$list2[$N->n] = 0;
 						} 
-						$list2[$N->n]++;						
-						if ($list2[$N->n] == 3) {
-							$final[] = $N->n;
-						}
+						$list2[$N->n]++;	
 					}
 				}
 			}
 			//print_r($list2);
-
+			$count = count($list);
+			$count2 = count($list2);
+			if($count == $count2) {
+				$this->listRule_2_2_1e = $count;
+			} elseif((($count==0)||($count==3))&&(3 == $count+$count2)) {
+				$this->listRule_2_2_1e = 3;
+			} else {
+				$this->listRule_2_2_1e = 0;
+			}
 			$this->listRule_2_2_1e = $final;
 		}
 
-		public function rule_2_2_1e($C) {
-			foreach ($C->d as $k => $N) {
-				if(in_array($N->n, $this->listRule_2_2_1e)){
-					return false;
+		public function rule_2_2_1e($C, $override = False) {
+			if($this->listRule_2_2_1e){
+				foreach ($C->d as $k => $N) {	
+					for ($i=0; $i < 3; $i++) { 							
+						if(in_array($N, $this->wCombs[$i]->d)){
+							if(!array_key_exists($N->n, $list)) {
+								$list[$N->n] = 0;
+							} 
+							$list[$N->n]++;
+						}
+					}
 				}
-			}
+				$count = count($list);
+				if($count == 0) {
+					$count == 3;
+				}
+				if($count == $this->listRule_2_2_1e){
+					return FALSE;
+				}
+				
+			} 
 			return true;
 		}
 
 		public function checkRule_2_2_2() {
 			$list = array();
-			for ($i=0; $i < 2; $i++) { 
-				foreach ($this->groups_2_2 as $key => $group) {
-					if(in_array($this->wCombs[$i]->cRd_cRf, $group)){
-						if(!@$list[$key]){
-							$list[$key] = 0;
-						}
-						$list[$key]++;
+			foreach ($this->groups_2_2 as $key => $group) {
+				if(in_array($this->wCombs[0]->cRd_cRf, $group)){
+					if(!@$list[$key]){
+						$list[$key] = 0;
 					}
-				}				
-			}
+					$list[$key]++;
+				}
+			}				
+			
 			//d($list);
 			foreach ($list as $group => $occured) {
 				if(2 > $occured) {
@@ -702,12 +724,11 @@
 		}
 
 		public function Rule_2_2_2($C) {
-
-			if(-1 > $this->rule_2_2_2_invalid){
-				if($C->group2_2 == $this->rule_2_2_2_invalid) {
-					return false;
-				}
+			$count = count($this->currentBettingCombinations);
+			if($count&&($this->rule_2_2_2_limit <($this->rule_2_2_2_total/$count))) {
+				return false;
 			}
+
 			return true;
 		}
 	}
