@@ -491,7 +491,10 @@
 
 		public function rule_2_1c($combination) {
 			//c1
-
+			print_r("\ncombination->cRf : ");
+			print_r($combination->cRf);
+			print_r("\ncombination->cRd : ");
+			print_r($combination->cRd);
 			if($combination->cRf == '21111') {
 				$cDfs = '';
 				foreach ($combination->cDf as $k => $vDF) {
@@ -499,14 +502,15 @@
 						$cDfs .= $k;
 					}
 				}
-				//print_r('$cDfs='.$cDfs.' ');
+				print_r("\ncDfs = ".$cDfs.' ');
 				if(in_array($cDfs, $this->limit_2_1c['c1'])) {
 					return FALSE;
 				}					
 			}
 			//c2
 			if($combination->cRd == '2211') {
-				//print_r($combination->print_cDd());
+			print_r("\ncombination->print_cDd() : ");
+				print_r($combination->print_cDd());
 				if(in_array($combination->print_cDd(), $this->limit_2_1c['c2'])) {
 					return FALSE;
 				}					
@@ -639,7 +643,7 @@
 			}	
 		}
 
-		public function genrateListRule_2_2_1e() {
+		/*public function genrateListRule_2_2_1e() {
 			$list = array();
 			$list2 = array();
 			$final =  array();
@@ -676,9 +680,45 @@
 				$this->listRule_2_2_1e = 0;
 			}
 			$this->listRule_2_2_1e = $final;
+		}*/
+		public function genrateListRule_2_2_1e() {
+			$list = array();
+			$list2 = array();
+			$final =  array();
+			foreach ($this->wCombs[0]->d as $k => $N) {	
+				for ($i=1; $i < 4; $i++) { 							
+					if(in_array($N, $this->wCombs[$i]->d)){
+						if(!array_key_exists($N->n, $list)) {
+							$list[$N->n] = 0;
+						} 
+						$list[$N->n]++;
+						if ($list[$N->n] == 3) {
+							$final[] = $N->n;
+						}
+					}
+				}
+			}
+			//print_r($list);
+
+			foreach ($this->wCombs[1]->d as $k => $N) {	
+				for ($i=2; $i < 5; $i++) { 							
+					if(in_array($N, $this->wCombs[$i]->d)){
+						if(!array_key_exists($N->n, $list2)) {
+							$list2[$N->n] = 0;
+						} 
+						$list2[$N->n]++;						
+						if ($list2[$N->n] == 3) {
+							$final[] = $N->n;
+						}
+					}
+				}
+			}
+			//print_r($list2);
+
+			$this->listRule_2_2_1e = $final;
 		}
 
-		public function rule_2_2_1e($C, $override = False) {
+		/*public function rule_2_2_1e($C, $override = False) {
 			if($this->listRule_2_2_1e){
 				foreach ($C->d as $k => $N) {	
 					for ($i=0; $i < 3; $i++) { 							
@@ -699,6 +739,14 @@
 				}
 				
 			} 
+			return true;
+		}*/
+		public function rule_2_2_1e($C) {
+			foreach ($C->d as $k => $N) {
+				if(in_array($N->n, $this->listRule_2_2_1e)){
+					return false;
+				}
+			}
 			return true;
 		}
 
