@@ -12,6 +12,7 @@
 		public $rule_1a1_ranges;
 		public $permited_1a8;
 		public $limit_2_1c;
+		public $groups_2_1_2;
 		public $groups_2_2;
 		public $wCombs; // inteneded tobo an array of all previous winning combinations
 		public $rule_2_2_1a_invalid; // -1 if we do not use it, 0-4 to indicate which group to exclude
@@ -90,6 +91,7 @@
 			$this->wCombs = array_reverse($this->CL->toCombinations());
 			$this->rule_2_1b_subList = array_slice($this->wCombs, 0, 3, FALSE);
 			$this->generate2_1cLimit();
+			$this->generateRule_2_1_2();
 			$this->rule_2_2_1a_invalid = $this->check_rule_2_2_1a();
 			$this->rule_2_2_1b_invalid = $this->rule_2_2_1b($this->wCombs[0], TRUE);
 			$this->rule_2_2_1c_invalid = $this->rule_2_2_1c($this->wCombs[0], TRUE);
@@ -561,6 +563,44 @@
 			}
 			return TRUE;
 		}
+		public function generateRule_2_1_2() {
+			$groups = array('1_5'=>array(), '6_10'=>array(), 'gt_10'=>array());
+			for ($i=0; $i < 5; $i++) { 
+				foreach ($this->wCombs[$i]->d as $key => $value) {
+					if(!array_key_exists($vaule, $groups['1_5'])){
+						$groups['1_5'][$value] = 0;
+					}
+					$groups['1_5'][$value]++;
+				}				
+			}
+			for ($i=5; $i < 9; $i++) { 
+				foreach ($this->wCombs[$i]->d as $key => $value) {
+					if(1<=@$groups['6_10'][$value]) {
+						if(!array_key_exists($vaule, $groups['6_10'])) {
+							$groups['6_10'][$value] = 0;
+						}
+						$groups['6_10'][$value]++;
+					}
+				}				
+			}
+			$this->groups_2_1_2 = $groups;
+		}
+
+		public function rule_2_1_2a() {
+
+		}
+
+		public function rule_2_1_2b() {
+
+		}
+
+		public function rule_2_1_2c() {
+
+		}
+
+		public function rule_2_1_2d() {
+
+		}
 
 		public function check_rule_2_2_1a(){
 			foreach ($this->groups_2_2 as $k => $gp) {
@@ -773,7 +813,7 @@
 
 		public function Rule_2_2_2($C) {
 			$count = count($this->currentBettingCombinations);
-			if($count&&($this->rule_2_2_2_limit <($this->rule_2_2_2_total/$count))) {
+			if((-1 != $this->rule_2_2_1a_invalid)&&$count&&($this->rule_2_2_2_limit <($this->rule_2_2_2_total/$count))) {
 				return false;
 			}
 
