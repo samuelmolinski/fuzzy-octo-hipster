@@ -564,10 +564,10 @@
 			return TRUE;
 		}
 		public function generateRule_2_1_2() {
-			$groups = array('1_5'=>array(), '6_10'=>array(), 'gt_10'=>array());
+			$groups = array('1_5'=>array(), '6_10'=>array(), 'terms'=>array());
 			for ($i=0; $i < 5; $i++) { 
 				foreach ($this->wCombs[$i]->d as $key => $value) {
-					if(!array_key_exists($vaule, $groups['1_5'])){
+					if(!array_key_exists($value, $groups['1_5'])){
 						$groups['1_5'][$value] = 0;
 					}
 					$groups['1_5'][$value]++;
@@ -576,18 +576,37 @@
 			for ($i=5; $i < 9; $i++) { 
 				foreach ($this->wCombs[$i]->d as $key => $value) {
 					if(1<=@$groups['6_10'][$value]) {
-						if(!array_key_exists($vaule, $groups['6_10'])) {
+						if(!array_key_exists($value, $groups['6_10'])) {
 							$groups['6_10'][$value] = 0;
 						}
 						$groups['6_10'][$value]++;
 					}
 				}				
 			}
-			$this->groups_2_1_2 = $groups;
+			// check the number of matching N's in previous tests
+			for ($i=0; $i < 2; $i++) {
+				foreach ($this->wCombs[$i]->d as $key => $value) {
+					if(!array_key_exists($value, $groups['1_5'])){
+						$groups['1_5'][$value] = 0;
+					}
+					$groups['1_5'][$value]++;
+				}
+				$this->groups_2_1_2 = $groups;
+			}
 		}
 
-		public function rule_2_1_2a() {
-
+		public function rule_2_1_2a($C) {
+			$numMatched = 0;
+			foreach ($C->d as $k => $N) {
+				if(in_array($N->n,$this->groups_2_1_2['1-5'])||in_array($N->n,$this->groups_2_1_2['6_10'])){
+					$numMatched++;
+				}
+			}
+			if(4 >= $numMatched){
+				return false;
+			} else {
+				return true;
+			}
 		}
 
 		public function rule_2_1_2b() {
