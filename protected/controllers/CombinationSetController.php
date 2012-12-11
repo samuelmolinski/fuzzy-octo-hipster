@@ -28,7 +28,7 @@ class CombinationSetController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view', 'check'),
+				'actions'=>array('index','view', 'check', 'export'),
 				//'users'=>array('*'),
 				'roles'=>array('admin','authenticated'),
 			),
@@ -96,6 +96,34 @@ class CombinationSetController extends Controller
 		}
 		
 		$this->render('view', array('model'=>$this->loadModel($id),'engineSettings'=>$engineSettings, 'engineSettingId'=>$engineSettingId, 'wc'=>$wc, 'premade'=>$premade, 'tables'=>$tables['table'], 'results'=>$tables['results'], 'testedCombination'=>$testedCombination));
+	}
+	/**
+	 * Export a new model.
+	 * If creation is successful, the browser will be redirected to the 'view' page.
+	 */
+	public function actionExport($id)
+	{
+		$model=$this->loadModel($id);
+		$d = date("Y-m-d-Hi");
+		//d($model);
+		$CL = unserialize($model->combinations);
+		//d($CL);
+
+		header('Content-Type: text/plain');
+		header("Content-Disposition: attachment;filename='Megasena_Combinations_$d.txt'");
+		header('Cache-Control: max-age=0');
+		foreach ($CL->list as $k => $c) {
+			$C = new Combination($c);
+			for ($i=0; $i < 6; $i++) { 
+				echo $C->d[$i]->n;
+				if(5 == $i){
+					echo "\r\n";
+				} else {
+					echo "\t";
+				}
+			}
+		}
+		Yii::app()->end();
 	}
 
 	/**

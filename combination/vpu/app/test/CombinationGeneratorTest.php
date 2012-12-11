@@ -25,6 +25,7 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
     {
         set_time_limit(0);
         
+        // n. 1446
         $this->winningNumbers = unserialize('a:100:{i:0;s:12:"091945465456";i:1;s:12:"071238394556";i:2;s:12:"091920505160";i:3;s:12:"030429364555";i:4;s:12:"133336415056";i:5;s:12:"091824353659";i:6;s:12:"031113273247";i:7;s:12:"020838424849";i:8;s:12:"111724394649";i:9;s:12:"061321223146";i:10;s:12:"011924265255";i:11;s:12:"031516353747";i:12;s:12:"061012172853";i:13;s:12:"021617255054";i:14;s:12:"232730373844";i:15;s:12:"021219223658";i:16;s:12:"253542455257";i:17;s:12:"101320404453";i:18;s:12:"022426323550";i:19;s:12:"122737445459";i:20;s:12:"020713293843";i:21;s:12:"102126293238";i:22;s:12:"051624323846";i:23;s:12:"020405274959";i:24;s:12:"030408114749";i:25;s:12:"033640465860";i:26;s:12:"072739525557";i:27;s:12:"062128313343";i:28;s:12:"142528455358";i:29;s:12:"091121495354";i:30;s:12:"020512132535";i:31;s:12:"020517185459";i:32;s:12:"051236455058";i:33;s:12:"031452555760";i:34;s:12:"112730404457";i:35;s:12:"051316172755";i:36;s:12:"070923444655";i:37;s:12:"021830314556";i:38;s:12:"273536374259";i:39;s:12:"122838395156";i:40;s:12:"182732435052";i:41;s:12:"222931435054";i:42;s:12:"011628394457";i:43;s:12:"041927282931";i:44;s:12:"071219344053";i:45;s:12:"020812283343";i:46;s:12:"041824283944";i:47;s:12:"111624354650";i:48;s:12:"051117194448";i:49;s:12:"294852545558";i:50;s:12:"030407152756";i:51;s:12:"143233404251";i:52;s:12:"343943565760";i:53;s:12:"092634435354";i:54;s:12:"111225334854";i:55;s:12:"020910212738";i:56;s:12:"131620263942";i:57;s:12:"070827313251";i:58;s:12:"031417323739";i:59;s:12:"071017243857";i:60;s:12:"182931424353";i:61;s:12:"041920243943";i:62;s:12:"061926475058";i:63;s:12:"182940425054";i:64;s:12:"081232444648";i:65;s:12:"060824374145";i:66;s:12:"131533455455";i:67;s:12:"213744464957";i:68;s:12:"263640464951";i:69;s:12:"031922243549";i:70;s:12:"051245525659";i:71;s:12:"070810122756";i:72;s:12:"172130485258";i:73;s:12:"021116183645";i:74;s:12:"193139445359";i:75;s:12:"020513173944";i:76;s:12:"030821252743";i:77;s:12:"030715293860";i:78;s:12:"071629363850";i:79;s:12:"061518243044";i:80;s:12:"083944475356";i:81;s:12:"071519343755";i:82;s:12:"091222394860";i:83;s:12:"021922304652";i:84;s:12:"050913334054";i:85;s:12:"162425424559";i:86;s:12:"041314404652";i:87;s:12:"031822345558";i:88;s:12:"041545475052";i:89;s:12:"011323243057";i:90;s:12:"222326373848";i:91;s:12:"071431333649";i:92;s:12:"023435424355";i:93;s:12:"020628365156";i:94;s:12:"172936385356";i:95;s:12:"121320303449";i:96;s:12:"122032485254";i:97;s:12:"020527284855";i:98;s:12:"051932414958";i:99;s:12:"061324324051";}');
 
         $this->combGen = new CombinationGenerator(array('winningCombinations'=>$this->winningNumbers));
@@ -79,7 +80,7 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
         $combGen = new CombinationGenerator(); 
         $combGen2 = new CombinationGenerator(array('winningCombinations'=>$this->winningNumbers));        
         $combGen->setWinningCombinations($this->winningNumbers);
-        //print_r($this->combGen->wCombs);
+        print_r($this->combGen->wCombs[0]);
         $this->assertNotNull($combGen->wCombs, 'Init the wCombs');
         $this->assertEquals($this->combGen->wCombs, $combGen->wCombs, 'does it match the already init CG');
         $this->assertEquals($combGen2->wCombs, $combGen->wCombs, 'does it match the already init CG');
@@ -434,7 +435,17 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      * @covers CombinationGenerator::check_rule_2_2_1a
      * @todo   Implement testCheck_rule_2_2_1a().
      */
-    public function testCheck_rule_2_2_1a()
+    public function testCheck_rule_2_1_2a()
+    {   
+        print_r($this->combGen->groups_2_1_2);
+        //$this->assertequals( null, $this->combGen->rule_2_1_2d(), 'Is the rule 2.2.1a valid (FALSE)');
+    }
+
+    /**
+     * @covers CombinationGenerator::check_rule_2_2_1a
+     * @todo   Implement testCheck_rule_2_2_1a().
+     */
+    public function testCheck_rule_2_2_1d()
     {   
         print_r($this->combGen->rule_2_2_1a_invalid);
         $this->assertequals( -1, $this->combGen->rule_2_2_1a_invalid, 'Is the rule 2.2.1a valid (FALSE)');

@@ -31,6 +31,10 @@ $this->menu=array(
 
 <?php echo CHtml::endForm(); ?>
 
+<div class="row" style="margin-left:0;">
+	<?php echo CHtml::link('Export', array('CombinationSet/Export', 'id'=>$model->id)); ?>
+</div>
+
 <?php 
 	if(@$results[6]){ ?>
 		<div class="row" style="margin-left:0;">

@@ -600,27 +600,67 @@
 		}*/
 
 		public function generateRule_2_1_2() {
-			$groups = array(array(), array());
+			$class1 = array();
+			$class2 = array();
+			$class3 = array();
 			for ($i=0; $i < 5; $i++) {
 				foreach ($this->wCombs[$i]->d as $key => $N) {
-					if(!array_key_exists($N->n, $groups[0])){
-						$groups[0][] = $N->n;
+					if(!in_array($N->n,$class1)){
+						$class1[] = $N->n;
 					}
 				}
 			}
 			for ($i=5; $i < 9; $i++) {
 				foreach ($this->wCombs[$i]->d as $key => $N) {
-					if(!array_key_exists($N->n, $groups[0])&&!array_key_exists($N->n, $groups[1])) {
-						$groups[1][] = $N->n;
+					if(!in_array($N->n, $class1)&&!in_array($N->n, $class2)) {
+						$class2[] = $N->n;
 					}
 				}				
 			}
 			for ($i=1; $i < 61; $i++) {
-				if(!array_key_exists($i, $groups[0])&&!array_key_exists($i, $groups[1])) {
-					$groups[2][] = $i;
+				if(!in_array($i, $class1)&&!in_array($i, $class2)) {
+					$class3[] = $i;
 				}		
 			}
-			$this->groups_2_1_2 = $groups;
+			sort($class1);
+			sort($class2);
+			sort($class3);
+			$g = array($class1,$class2,$class3);
+			$cD = array(array(),array(),array());
+			$dF = array(array(),array(),array());
+
+			for ($j=0; $j < 3; $j++) { 
+				foreach ($g[$j] as $k => $n) {
+					// sort by tens
+					$N = new Number($n);
+					switch($N->n) {
+						case ((1 <= $N->n)&&($N->n <=10)):
+							$cD[$j][0][] = $N->n;
+							break;
+						case ((11 <= $N->n)&&($N->n <=20)):
+							$cD[$j][1][] = $N->n;
+							break;
+						case ((21 <= $N->n)&&($N->n <=30)):
+							$cD[$j][2][] = $N->n;
+							break;
+						case ((31 <= $N->n)&&($N->n <=40)):
+							$cD[$j][3][] = $N->n;
+							break;
+						case ((41 <= $N->n)&&($N->n <=50)):
+							$cD[$j][4][] = $N->n;
+							break;
+						case ((51 <= $N->n)&&($N->n <=60)):
+							$cD[$j][5][] = $N->n;
+							break;
+					}
+					$dF[$j][$N->DF][] = $N->n;
+					unset($N);
+				}
+			}
+			ksort($dF[0]);
+			ksort($dF[1]);
+			ksort($dF[2]);
+			$this->groups_2_1_2 = array($g, $cD, $dF);
 		}
 
 		public function combinationConfiguration($C, $offset = 0) {
@@ -651,6 +691,7 @@
 			$config[] = $count;
 			$config[] = 6 - $tCount;
 			$config['N'] = $temp;
+
 			return $config;
 		}
 
@@ -660,13 +701,17 @@
 			for ($i=0; $i < 2; $i++) { 
 				$this->configuration_2_1_2[] = $this->combinationConfiguration($this->wCombs[$i], $i);
 			}
+			foreach ($this->configuration_2_1_2 as $key => $value) {
+				$this->configuration_2_1_2[$key] = sort($value);
+				print_r($value);
+			}
 		}
 
 		//a-it cannot have more than 4N in any of the 3(2) classes; (obs:6,4 million combinations don't fit)
 		public function rule_2_1_2a($C) {
 			$numMatched = 0;
 			foreach ($C->d as $k => $N) {
-				if(in_array($N->n,$this->groups_2_1_2['1-5'])) {
+				if(in_array($N->n,$this->groups_2_1_2[0]['1-5'])) {
 					$numMatched++;
 				}
 			}
@@ -674,7 +719,7 @@
 				return false;
 			}
 			foreach ($C->d as $k => $N) {
-				if(in_array($N->n,$this->groups_2_1_2['6_10'])) {
+				if(in_array($N->n,$this->groups_2_1_2[0]['6_10'])) {
 					$numMatched++;
 				}
 			}
@@ -682,7 +727,7 @@
 				return false;
 			} 
 			foreach ($C->d as $k => $N) {
-				if(!in_array($N->n,$this->groups_2_1_2['1-5'])&&!in_array($N->n,$this->groups_2_1_2['6_10'])) {
+				if(!in_array($N->n,$this->groups_2_1_2[0]['1-5'])&&!in_array($N->n,$this->groups_2_1_2[0]['6_10'])) {
 					$numMatched++;
 				}
 			}
@@ -718,7 +763,7 @@
 							$count = 0;
 							foreach ($C->d as $N) {
 								// check only N inside the range and if is matches we count.
-								if(($N->d = $tens)&&(in_array($N->n,$this->groups_2_1_2[$i]))){
+								if(($N->d = $tens)&&(in_array($N->n,$this->groups_2_1_2[0][$i]))){
 									$count++;
 								}
 								if($count > 2) {
@@ -743,7 +788,7 @@
 							$count = 0;
 							foreach ($C->d as $N) {
 								// check only N inside the range and if is matches we count.
-								if(($N->df = $df)&&(in_array($N->n,$this->groups_2_1_2[$i]))){
+								if(($N->df = $df)&&(in_array($N->n,$this->groups_2_1_2[0][$i]))){
 									$count++;
 								}
 								if($count > 2) {
@@ -762,7 +807,26 @@
 
 		//d-it cannot have 2 pairs of N of two tens or of two DF in a single class.
 		public function rule_2_1_2d($C) {
-
+			//does it match any 4 numbers in the group?
+			print_r($this->groups_2_1_2);
+			for ($i=1; $i < 3; $i++) { 
+				$count = 0;
+				foreach ($this->groups_2_1_2[$i] as $k => $class) {
+					$curCount = 0;			
+					for($j=0; $j < 5; $j++) {
+						if((in_array($C->d[$j]->n)) {
+							$curCount++;
+						}
+					}
+					if($curCount>=2){
+						$count++;
+					}
+				}
+				if($count>=2){
+					return false;
+				}
+			}
+			return true;
 		}
 
 		public function check_rule_2_2_1a(){
