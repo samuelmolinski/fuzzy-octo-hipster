@@ -441,6 +441,19 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
         //$this->assertequals( null, $this->combGen->rule_2_1_2d(), 'Is the rule 2.2.1a valid (FALSE)');
     }
 
+    public function testcheck_rule_2_2_1a() {
+        //:84;s:12:"050913334054";i:85;s:12:"162425424559";i:86;s:12:"041314404652";i:87;s:12:"031822345558";i:
+        // 88;s:12:"041545475052";i:89;s:12:"011323243057";i:90;s:12:"222326373848";i:91;s:12:"071431333649";i
+        //:92;s:12:"023435424355";i:93;s:12:"020628365156";i:94;s:12:"172936385356";i:95;s:12:"121320303449";i
+        //:96;s:12:"122032485254";i:97;s:12:"020527284855";i:98;s:12:"3";i:99;s:12:"061324324051";}');
+        $cl  = new CombinationList(array('041545475052','011323243057')); // 1435,1436,1437
+        $cl2  = new CombinationList(array('051932414958','061324324051')); // 1445,1446
+        $cg = new CombinationGenerator(array('winningCombinations'=>$cl));
+        $cg2 = new CombinationGenerator(array('winningCombinations'=>$cl2));
+        print_r($cg);
+        print_r($cg2);
+    }
+
     /**
      * @covers CombinationGenerator::check_rule_2_2_1a
      * @todo   Implement testCheck_rule_2_2_1a().
@@ -486,7 +499,6 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
     {
         print_r("test: 010423242556\n");
         print_r("test: 153137464956\n");
-        print_r("test(true): 152137464956\n");
         $C1 = new CombinationStatistics('010423242556');
         $C2 = new CombinationStatistics('153137464956');
         $C3 = new CombinationStatistics('152137464956');
@@ -513,7 +525,7 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers CombinationGenerator::rule_2_2_1d
+     * @covers CombinationGenerator::ruleb_2_2_1d
      * @todo   Implement testRule_2_2_1d().
      */
     public function testRule_2_2_1d()

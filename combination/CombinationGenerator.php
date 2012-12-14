@@ -600,67 +600,69 @@
 		}*/
 
 		public function generateRule_2_1_2() {
-			$class1 = array();
-			$class2 = array();
-			$class3 = array();
-			for ($i=0; $i < 5; $i++) {
-				foreach ($this->wCombs[$i]->d as $key => $N) {
-					if(!in_array($N->n,$class1)){
-						$class1[] = $N->n;
+			if(10<=count($this->wCombs)){
+				$class1 = array();
+				$class2 = array();
+				$class3 = array();
+				for ($i=0; $i < 5; $i++) {
+					foreach ($this->wCombs[$i]->d as $key => $N) {
+						if(!in_array($N->n,$class1)){
+							$class1[] = $N->n;
+						}
 					}
 				}
-			}
-			for ($i=5; $i < 9; $i++) {
-				foreach ($this->wCombs[$i]->d as $key => $N) {
-					if(!in_array($N->n, $class1)&&!in_array($N->n, $class2)) {
-						$class2[] = $N->n;
-					}
-				}				
-			}
-			for ($i=1; $i < 61; $i++) {
-				if(!in_array($i, $class1)&&!in_array($i, $class2)) {
-					$class3[] = $i;
-				}		
-			}
-			sort($class1);
-			sort($class2);
-			sort($class3);
-			$g = array($class1,$class2,$class3);
-			$cD = array(array(),array(),array());
-			$dF = array(array(),array(),array());
+				for ($i=5; $i < 9; $i++) {
+					foreach ($this->wCombs[$i]->d as $key => $N) {
+						if(!in_array($N->n, $class1)&&!in_array($N->n, $class2)) {
+							$class2[] = $N->n;
+						}
+					}				
+				}
+				for ($i=1; $i < 61; $i++) {
+					if(!in_array($i, $class1)&&!in_array($i, $class2)) {
+						$class3[] = $i;
+					}		
+				}
+				sort($class1);
+				sort($class2);
+				sort($class3);
+				$g = array($class1,$class2,$class3);
+				$cD = array(array(),array(),array());
+				$dF = array(array(),array(),array());
 
-			for ($j=0; $j < 3; $j++) { 
-				foreach ($g[$j] as $k => $n) {
-					// sort by tens
-					$N = new Number($n);
-					switch($N->n) {
-						case ((1 <= $N->n)&&($N->n <=10)):
-							$cD[$j][0][] = $N->n;
-							break;
-						case ((11 <= $N->n)&&($N->n <=20)):
-							$cD[$j][1][] = $N->n;
-							break;
-						case ((21 <= $N->n)&&($N->n <=30)):
-							$cD[$j][2][] = $N->n;
-							break;
-						case ((31 <= $N->n)&&($N->n <=40)):
-							$cD[$j][3][] = $N->n;
-							break;
-						case ((41 <= $N->n)&&($N->n <=50)):
-							$cD[$j][4][] = $N->n;
-							break;
-						case ((51 <= $N->n)&&($N->n <=60)):
-							$cD[$j][5][] = $N->n;
-							break;
+				for ($j=0; $j < 3; $j++) { 
+					foreach ($g[$j] as $k => $n) {
+						// sort by tens
+						$N = new Number($n);
+						switch($N->n) {
+							case ((1 <= $N->n)&&($N->n <=10)):
+								$cD[$j][0][] = $N->n;
+								break;
+							case ((11 <= $N->n)&&($N->n <=20)):
+								$cD[$j][1][] = $N->n;
+								break;
+							case ((21 <= $N->n)&&($N->n <=30)):
+								$cD[$j][2][] = $N->n;
+								break;
+							case ((31 <= $N->n)&&($N->n <=40)):
+								$cD[$j][3][] = $N->n;
+								break;
+							case ((41 <= $N->n)&&($N->n <=50)):
+								$cD[$j][4][] = $N->n;
+								break;
+							case ((51 <= $N->n)&&($N->n <=60)):
+								$cD[$j][5][] = $N->n;
+								break;
+						}
+						$dF[$j][$N->DF][] = $N->n;
+						unset($N);
 					}
-					$dF[$j][$N->DF][] = $N->n;
-					unset($N);
 				}
+				ksort($dF[0]);
+				ksort($dF[1]);
+				ksort($dF[2]);
+				$this->groups_2_1_2 = array($g, $cD, $dF);
 			}
-			ksort($dF[0]);
-			ksort($dF[1]);
-			ksort($dF[2]);
-			$this->groups_2_1_2 = array($g, $cD, $dF);
 		}
 
 		public function combinationConfiguration($C, $offset = 0) {
@@ -814,7 +816,7 @@
 				foreach ($this->groups_2_1_2[$i] as $k => $class) {
 					$curCount = 0;			
 					for($j=0; $j < 5; $j++) {
-						if((in_array($C->d[$j]->n)) {
+						if((in_array($C->d[$j]->n))) {
 							$curCount++;
 						}
 					}
@@ -832,10 +834,10 @@
 		public function check_rule_2_2_1a(){
 			foreach ($this->groups_2_2 as $k => $gp) {
 				$fiveGroupsPairs = 0;
-				if(in_array($this->wCombs[0], $gp)){
+				if(in_array($this->wCombs[0]->cRd_cRf, $gp)){
 					$fiveGroupsPairs++;
 				}
-				if(in_array($this->wCombs[1], $gp)){
+				if(in_array($this->wCombs[1]->cRd_cRf, $gp)){
 					$fiveGroupsPairs++;
 				}
 				if($fiveGroupsPairs > 1) {
@@ -949,40 +951,42 @@
 			$this->listRule_2_2_1e = $final;
 		}*/
 		public function genrateListRule_2_2_1e() {
-			$list = array();
-			$list2 = array();
-			$final =  array();
-			foreach ($this->wCombs[0]->d as $k => $N) {	
-				for ($i=1; $i < 4; $i++) { 							
-					if(in_array($N, $this->wCombs[$i]->d)){
-						if(!array_key_exists($N->n, $list)) {
-							$list[$N->n] = 0;
-						} 
-						$list[$N->n]++;
-						if ($list[$N->n] == 3) {
-							$final[] = $N->n;
+			if(10<=count($this->wCombs)) {
+				$list = array();
+				$list2 = array();
+				$final =  array();
+				foreach ($this->wCombs[0]->d as $k => $N) {	
+					for ($i=1; $i < 4; $i++) { 							
+						if(in_array($N, $this->wCombs[$i]->d)){
+							if(!array_key_exists($N->n, $list)) {
+								$list[$N->n] = 0;
+							} 
+							$list[$N->n]++;
+							if ($list[$N->n] == 3) {
+								$final[] = $N->n;
+							}
 						}
 					}
 				}
-			}
-			//print_r($list);
+				//print_r($list);
 
-			foreach ($this->wCombs[1]->d as $k => $N) {	
-				for ($i=2; $i < 5; $i++) { 							
-					if(in_array($N, $this->wCombs[$i]->d)){
-						if(!array_key_exists($N->n, $list2)) {
-							$list2[$N->n] = 0;
-						} 
-						$list2[$N->n]++;						
-						if ($list2[$N->n] == 3) {
-							$final[] = $N->n;
+				foreach ($this->wCombs[1]->d as $k => $N) {	
+					for ($i=2; $i < 5; $i++) { 							
+						if(in_array($N, $this->wCombs[$i]->d)){
+							if(!array_key_exists($N->n, $list2)) {
+								$list2[$N->n] = 0;
+							} 
+							$list2[$N->n]++;						
+							if ($list2[$N->n] == 3) {
+								$final[] = $N->n;
+							}
 						}
 					}
 				}
-			}
-			//print_r($list2);
+				//print_r($list2);
 
-			$this->listRule_2_2_1e = $final;
+				$this->listRule_2_2_1e = $final;
+			}
 		}
 
 		/*public function rule_2_2_1e($C, $override = False) {
