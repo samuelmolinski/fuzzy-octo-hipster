@@ -19,7 +19,7 @@
 		public $rule_2_2_1a_invalid; // -1 if we do not use it, 0-4 to indicate which group to exclude
 		public $rule_2_2_1b_invalid; // Boolean
 		public $rule_2_2_1c_invalid; // Boolean
-		public $rule_2_2_1d_invalid; // -1 if we do not use it
+		public $rule_2_2_1d_invalid; // 0 if we do not use it
 		public $listRule_2_2_1e;
 		public $rule_2_2_2_invalid;
 		public $rule_2_2_2_limit;
@@ -92,12 +92,12 @@
 			$this->wCombs = array_reverse($this->CL->toCombinations());
 			$this->rule_2_1b_subList = array_slice($this->wCombs, 0, 3, FALSE);
 			$this->generate2_1cLimit();
-			$this->generateRule_2_1_2();
+			$this->groups_2_1_2 = $this->generateRule_2_1_2();
 			$this->rule_2_2_1a_invalid = $this->check_rule_2_2_1a();
 			$this->rule_2_2_1b_invalid = $this->rule_2_2_1b($this->wCombs[0], TRUE);
 			$this->rule_2_2_1c_invalid = $this->rule_2_2_1c($this->wCombs[0], TRUE);
 			$this->rule_2_2_1d_invalid = $this->rule_2_2_1d($this->wCombs[1], TRUE, $this->rule_2_2_1d($this->wCombs[0], TRUE));
-			$this->genrateListRule_2_2_1e();
+			$this->checkRule_2_2_1e();
 			$this->checkRule_2_2_2();
 		}
 
@@ -565,53 +565,19 @@
 			return TRUE;
 		}
 
-		/*public function generateRule_2_1_2() {
-			$groups = array('1_5'=>array(), '6_10'=>array(), 'terms'=>array());
-			for ($i=0; $i < 5; $i++) {
-				foreach ($this->wCombs[$i]->d as $key => $N) {
-					if(!array_key_exists($N->n, $groups['1_5'])){
-						$groups['1_5'][$N->n] = 0;
-					}
-					$groups['1_5'][$N->n]++;
-				}
-			}
-			for ($i=5; $i < 9; $i++) {
-				foreach ($this->wCombs[$i]->d as $key => $N) {
-					if(1<=@$groups['6_10'][$N->n]) {
-						if(!array_key_exists($N->n, $groups['6_10'])) {
-							$groups['6_10'][$N->n] = 0;
-						}
-						$groups['6_10'][$N->n]++;
-					}
-				}				
-			}
-			// check the number of matching N's in previous tests
-			for ($i=0; $i < 2; $i++) {
-				//print_r($this->wCombs[$i]->d);
-				foreach ($this->wCombs[$i]->d as $key => $N) {
-					//print_r($N->n);
-					if(!array_key_exists($N->n, $groups['1_5'])){ 
-						$groups['1_5'][$N->n] = 0;
-					}
-					$groups['1_5'][$N->n]++;
-				}
-				$this->groups_2_1_2 = $groups;
-			}
-		}*/
-
-		public function generateRule_2_1_2() {
-			if(10<=count($this->wCombs)){
+		public function generateRule_2_1_2($offset = 0) {
+			if(10+$offset<=count($this->wCombs)){
 				$class1 = array();
 				$class2 = array();
 				$class3 = array();
-				for ($i=0; $i < 5; $i++) {
+				for ($i=0+$offset; $i < 5+$offset; $i++) {
 					foreach ($this->wCombs[$i]->d as $key => $N) {
 						if(!in_array($N->n,$class1)){
 							$class1[] = $N->n;
 						}
 					}
 				}
-				for ($i=5; $i < 9; $i++) {
+				for ($i=5+$offset; $i < 9+$offset; $i++) {
 					foreach ($this->wCombs[$i]->d as $key => $N) {
 						if(!in_array($N->n, $class1)&&!in_array($N->n, $class2)) {
 							$class2[] = $N->n;
@@ -661,79 +627,82 @@
 				ksort($dF[0]);
 				ksort($dF[1]);
 				ksort($dF[2]);
-				$this->groups_2_1_2 = array($g, $cD, $dF);
+				return array($g, $cD, $dF);
 			}
 		}
 
-		public function combinationConfiguration($C, $offset = 0) {
+		public function combinationConfiguration($C, $list = array()) {
+			if(!$list) {
+				$list = $this->groups_2_1_2;
+			}
 			$config = array();
-			$temp = array();
-			$tCount = 0;
-			for ($i = 0+$offset; $i < 6+$offset; $i++) {
-				$count = 0;
-				foreach ($this->wCombs[$i]->d as $k => $N) {
-					if(!in_array($N, $C->d)&&!in_array($N->n, $temp)) {
-						$temp[] = $N->n;
-						$count++;
-					}
+			$numMatched = 0;
+			foreach ($C->d as $k => $N) {
+				if(in_array($N->n,$list[0][0])) {
+					$numMatched++;
 				}
 			}
-			$tCount += $count;
-			$config[] = $count;
-			for ($i = 6+$offset; $i <= 10+$offset; $i++) { 
-				$count = 0;
-				foreach ($this->wCombs[$i]->d as $k => $N) {					
-					if(!in_array($N, $C->d)&&!in_array($N->n, $temp)) {
-						$temp[] = $N->n;
-						$count++;
-					}
+			$config[] = $numMatched;
+			$numMatched = 0;
+
+			foreach ($C->d as $k => $N) {
+				if(in_array($N->n,$list[0][1])) {
+					$numMatched++;
 				}
 			}
-			$tCount += $count;
-			$config[] = $count;
-			$config[] = 6 - $tCount;
-			$config['N'] = $temp;
+			$config[] = $numMatched;
+			$numMatched = 0;
+
+			foreach ($C->d as $k => $N) {
+				if(in_array($N->n,$list[0][2])) {
+					$numMatched++;
+				}
+			}
+			$config[] = $numMatched;
 
 			return $config;
 		}
 
 		public function generateConfiguration_2_1_2() {
 			$this->configuration_2_1_2 = array();
+			
 
 			for ($i=0; $i < 2; $i++) { 
-				$this->configuration_2_1_2[] = $this->combinationConfiguration($this->wCombs[$i], $i);
-			}
-			foreach ($this->configuration_2_1_2 as $key => $value) {
-				$this->configuration_2_1_2[$key] = sort($value);
-				print_r($value);
+				$rule = $this->generateRule_2_1_2($i+1);
+				$this->configuration_2_1_2[] = $this->combinationConfiguration($this->wCombs[$i], $rule);
+				print_r($rule);
 			}
 		}
 
 		//a-it cannot have more than 4N in any of the 3(2) classes; (obs:6,4 million combinations don't fit)
 		public function rule_2_1_2a($C) {
 			$numMatched = 0;
+			//does it match the first class, 1-5
 			foreach ($C->d as $k => $N) {
-				if(in_array($N->n,$this->groups_2_1_2[0]['1-5'])) {
+				if(in_array($N->n,$this->groups_2_1_2[0][0])) {
 					$numMatched++;
 				}
 			}
-			if((4 <= $numMatched)||(1 > $numMatched)) {
+			if((4 < $numMatched)||(1 > $numMatched)) {
 				return false;
 			}
+			$numMatched = 0;
+			//does it match the first class, 6-10
 			foreach ($C->d as $k => $N) {
-				if(in_array($N->n,$this->groups_2_1_2[0]['6_10'])) {
+				if(in_array($N->n,$this->groups_2_1_2[0][1])) {
 					$numMatched++;
 				}
 			}
-			if(4 <= $numMatched){
+			if(4 < $numMatched){
 				return false;
 			} 
+			$numMatched = 0;
 			foreach ($C->d as $k => $N) {
-				if(!in_array($N->n,$this->groups_2_1_2[0]['1-5'])&&!in_array($N->n,$this->groups_2_1_2[0]['6_10'])) {
+				if(in_array($N->n,$this->groups_2_1_2[0][2])) {
 					$numMatched++;
 				}
 			}
-			if(4 <= $numMatched){
+			if(4 < $numMatched){
 				return false;
 			} else {
 				return true;
@@ -887,7 +856,7 @@
 		*/
 		public function rule_2_2_1d($C, $override = False, $carryOver = 0) {
 
-			if((1 > $this->rule_2_2_1d_invalid) || $override) {
+			if((1 < $this->rule_2_2_1d_invalid) || $override) {
 
 				$count = count($C->d);
 				$limit = 0;
@@ -912,45 +881,63 @@
 			}	
 		}
 
-		/*public function genrateListRule_2_2_1e() {
-			$list = array();
-			$list2 = array();
-			$final =  array();
-			foreach ($this->wCombs[0]->d as $k => $N) {	
-				for ($i=1; $i < 4; $i++) { 							
-					if(in_array($N, $this->wCombs[$i]->d)){
-						if(!array_key_exists($N->n, $list)) {
-							$list[$N->n] = 0;
-						} 
-						$list[$N->n]++;
+		public function checkRule_2_2_1e() {
+			if(6<=count($this->wCombs)) {
+				$list = array();
+				$list2 = array();
+				$final =  array();
+				foreach ($this->wCombs[0]->d as $k => $N) {	
+					for ($i=1; $i < 4; $i++) { 							
+						if(in_array($N, $this->wCombs[$i]->d)){
+							if(!array_key_exists($N->n, $list)) {
+								$list[$N->n] = 1;
+							} 
+							//$list[$N->n]++;
+						}
 					}
 				}
-			}
-			//print_r($list);
+        		/*print_r("\nlist: ");
+				print_r($list);*/
 
-			foreach ($this->wCombs[1]->d as $k => $N) {	
-				for ($i=2; $i < 5; $i++) { 							
-					if(in_array($N, $this->wCombs[$i]->d)){
-						if(!array_key_exists($N->n, $list2)) {
-							$list2[$N->n] = 0;
-						} 
-						$list2[$N->n]++;	
+				foreach ($this->wCombs[1]->d as $k => $N) {	
+					for ($i=2; $i < 5; $i++) { 							
+						if(in_array($N, $this->wCombs[$i]->d)){
+							if(!array_key_exists($N->n, $list2)) {
+								$list2[$N->n] = 0;
+							} 
+							$list2[$N->n]++;	
+						}
 					}
 				}
+				/*print_r("\nlist2: ");
+				print_r($list2);*/
+
+				$count = count($list);
+				$count2 = count($list2);
+				/*print_r("\ncount: ");
+				print_r($count);
+				print_r("\ncount2: ");
+				print_r($count2);*/
+				$ct = $count+$count2;
+				/*print_r("\n ct: ");
+				print_r($ct);*/
+				if($count == $count2) {
+					//print_r("\n -equal- ");
+					if(0 == $count) {
+						$this->listRule_2_2_1e = 3;
+					} else {
+						$this->listRule_2_2_1e = $count;
+					}					
+				} elseif((($count==0)||($count==3))&&(3 == $ct)) {
+					$this->listRule_2_2_1e = 3;
+				} else {
+					//print_r("\n -inequal- ");
+					$this->listRule_2_2_1e = 0;
+				}
 			}
-			//print_r($list2);
-			$count = count($list);
-			$count2 = count($list2);
-			if($count == $count2) {
-				$this->listRule_2_2_1e = $count;
-			} elseif((($count==0)||($count==3))&&(3 == $count+$count2)) {
-				$this->listRule_2_2_1e = 3;
-			} else {
-				$this->listRule_2_2_1e = 0;
-			}
-			$this->listRule_2_2_1e = $final;
-		}*/
-		public function genrateListRule_2_2_1e() {
+			//$this->listRule_2_2_1e = $final;
+		}
+		/*public function genrateListRule_2_2_1e() {
 			if(10<=count($this->wCombs)) {
 				$list = array();
 				$list2 = array();
@@ -968,7 +955,8 @@
 						}
 					}
 				}
-				//print_r($list);
+        		print_r("\nlist: ");
+				print_r($list);
 
 				foreach ($this->wCombs[1]->d as $k => $N) {	
 					for ($i=2; $i < 5; $i++) { 							
@@ -983,13 +971,14 @@
 						}
 					}
 				}
-				//print_r($list2);
+        		print_r("\nlist2: ");
+				print_r($list2);
 
 				$this->listRule_2_2_1e = $final;
 			}
-		}
+		}*/
 
-		/*public function rule_2_2_1e($C, $override = False) {
+		public function rule_2_2_1e($C, $override = False) {
 			if($this->listRule_2_2_1e){
 				foreach ($C->d as $k => $N) {	
 					for ($i=0; $i < 3; $i++) { 							
@@ -1011,15 +1000,15 @@
 				
 			} 
 			return true;
-		}*/
-		public function rule_2_2_1e($C) {
+		}
+		/*public function rule_2_2_1e($C) {
 			foreach ($C->d as $k => $N) {
 				if(in_array($N->n, $this->listRule_2_2_1e)){
 					return false;
 				}
 			}
 			return true;
-		}
+		}*/
 
 		public function checkRule_2_2_2() {
 			$list = array();

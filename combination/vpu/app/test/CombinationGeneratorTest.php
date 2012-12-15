@@ -80,7 +80,7 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
         $combGen = new CombinationGenerator(); 
         $combGen2 = new CombinationGenerator(array('winningCombinations'=>$this->winningNumbers));        
         $combGen->setWinningCombinations($this->winningNumbers);
-        print_r($this->combGen->wCombs[0]);
+        //print_r($this->combGen->wCombs[0]);
         $this->assertNotNull($combGen->wCombs, 'Init the wCombs');
         $this->assertEquals($this->combGen->wCombs, $combGen->wCombs, 'does it match the already init CG');
         $this->assertEquals($combGen2->wCombs, $combGen->wCombs, 'does it match the already init CG');
@@ -380,6 +380,7 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
     public function testGenerate2_1cLimit()
     {
         $r = '{"c1":["1258","2349","3789","2367","0147","0247","2345","0236","2469","0459","0568","0789","1578","0127","0268","1469","2489","1289","0239","0134","3456"],"c2":["0(2)2(2)45","1(2)345(2)","123(2)5(2)","0(2)235(2)","03(2)4(2)5","12(2)4(2)5"],"c3":["0123(2)5","0134(2)5","01235(2)"],"c4":["012346","134679","346789","035789","234579","145678","012789","123458","034679","145789","023479","146789","012349","012568","345679","023457","245789","134789","012689","024567","023678"],"c5":["58","25","29","57","28"],"c6":["1(3)234","013(3)4","012(3)5","014(3)5","01(3)34","0(3)125"],"c7":["2(3)3(2)4","0(2)2(3)4","01(2)3(3)","0(3)2(2)3","3(2)45(3)","01(3)4(2)","0(3)14(2)","02(3)3(2)","2(3)3(2)4","0(2)34(3)"]}';
+
         //  $r = '{"c1":["1346","1368","2459","2359","2567","1347","0137","1257","0147","0278","1678","1389","3468","2568","0124","2348","0156","0249","3489","1589","0569"],"c2":["12(2)4(2)5","01(2)35(2)","02(2)3(2)5","02(2)35(2)","134(2)5(2)","0(2)123(2)"],"c3":["12(2)345","0(2)2345","01234(2)"],"c4":["014689","024678","012469","345789","012458","135689","145679","123468","013458","012579","024578","012346","134679","256789","235678","045789","024678","034679","034568","013568","125679"],"c5":["13","46","57","04","37"],"c6":["034(3)5","0125(3)","023(3)4","0134(3)","2345(3)","1(3)245"],"c7":["1(2)3(3)4","0(3)2(2)5","0(3)3(2)5","0(3)23(2)","2(2)3(3)4","2(3)45(2)","12(3)4(2)","0(3)14(2)","04(3)5(2)","1(3)35(2)","24(2)5(3)","13(2)5(3)"]}';
         
         //print_r($C1);
@@ -387,7 +388,7 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
         //print_r($this->combGen->wCombs);
         // Remove the following lines when you implement this test.
         //$this->combGen->generate2_1cLimit();
-        print_r($this->combGen->limit_2_1c);
+        //print_r($this->combGen->limit_2_1c);
         //echo '.';
         $a = (array)json_decode($r);
         print_r($a);
@@ -420,7 +421,7 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
         $C5 = new CombinationStatistics('011527284548');
         $C6 = new CombinationStatistics('040726375156');
         $C9 = new CombinationStatistics('040518344558');
-        print_r($this->combGen->limit_2_1c);
+        //print_r($this->combGen->limit_2_1c);
         //$this->combGen->rule_2_1c($C2, $this->combGen->limit_2_1c);
         //$this->assertTrue(!$this->combGen->rule_2_1c($C1), 'Does it match one of the last forms forbidden by 2.1c (FALSE)');
         //$this->assertTrue(!$this->combGen->rule_2_1c($C2), 'Does it match one of the last forms forbidden by 2.1c (FALSE)');
@@ -432,27 +433,150 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers CombinationGenerator::check_rule_2_2_1a
-     * @todo   Implement testCheck_rule_2_2_1a().
+     * @covers 
      */
-    public function testCheck_rule_2_1_2a()
+    public function testGenerateRule_2_1_2()
     {   
-        print_r($this->combGen->groups_2_1_2);
-        //$this->assertequals( null, $this->combGen->rule_2_1_2d(), 'Is the rule 2.2.1a valid (FALSE)');
+        $s = 'a:3:{i:0;a:3:{i:0;a:22:{i:0;s:2:"02";i:1;s:2:"05";i:2;s:2:"06";i:3;s:2:"12";i:4;s:2:"13";i:5;s:2:"19";i:6;s:2:"20";i:7;s:2:"24";i:8;s:2:"27";i:9;s:2:"28";i:10;s:2:"30";i:11;s:2:"32";i:12;s:2:"34";i:13;s:2:"40";i:14;s:2:"41";i:15;s:2:"48";i:16;s:2:"49";i:17;s:2:"51";i:18;s:2:"52";i:19;s:2:"54";i:20;s:2:"55";i:21;s:2:"58";}i:1;a:13:{i:0;s:2:"07";i:1;s:2:"14";i:2;s:2:"17";i:3;s:2:"29";i:4;s:2:"31";i:5;s:2:"33";i:6;s:2:"35";i:7;s:2:"36";i:8;s:2:"38";i:9;s:2:"42";i:10;s:2:"43";i:11;s:2:"53";i:12;s:2:"56";}i:2;a:25:{i:0;i:1;i:1;i:3;i:2;i:4;i:3;i:8;i:4;i:9;i:5;i:10;i:6;i:11;i:7;i:15;i:8;i:16;i:9;i:18;i:10;i:21;i:11;i:22;i:12;i:23;i:13;i:25;i:14;i:26;i:15;i:37;i:16;i:39;i:17;i:44;i:18;i:45;i:19;i:46;i:20;i:47;i:21;i:50;i:22;i:57;i:23;i:59;i:24;i:60;}}i:1;a:3:{i:0;a:6:{i:0;a:3:{i:0;s:2:"02";i:1;s:2:"05";i:2;s:2:"06";}i:1;a:4:{i:0;s:2:"12";i:1;s:2:"13";i:2;s:2:"19";i:3;s:2:"20";}i:2;a:4:{i:0;s:2:"24";i:1;s:2:"27";i:2;s:2:"28";i:3;s:2:"30";}i:3;a:3:{i:0;s:2:"32";i:1;s:2:"34";i:2;s:2:"40";}i:4;a:3:{i:0;s:2:"41";i:1;s:2:"48";i:2;s:2:"49";}i:5;a:5:{i:0;s:2:"51";i:1;s:2:"52";i:2;s:2:"54";i:3;s:2:"55";i:4;s:2:"58";}}i:1;a:6:{i:0;a:1:{i:0;s:2:"07";}i:1;a:2:{i:0;s:2:"14";i:1;s:2:"17";}i:2;a:1:{i:0;s:2:"29";}i:3;a:5:{i:0;s:2:"31";i:1;s:2:"33";i:2;s:2:"35";i:3;s:2:"36";i:4;s:2:"38";}i:4;a:2:{i:0;s:2:"42";i:1;s:2:"43";}i:5;a:2:{i:0;s:2:"53";i:1;s:2:"56";}}i:2;a:6:{i:0;a:6:{i:0;s:2:"01";i:1;s:2:"03";i:2;s:2:"04";i:3;s:2:"08";i:4;s:2:"09";i:5;s:2:"10";}i:1;a:4:{i:0;s:2:"11";i:1;s:2:"15";i:2;s:2:"16";i:3;s:2:"18";}i:2;a:5:{i:0;s:2:"21";i:1;s:2:"22";i:2;s:2:"23";i:3;s:2:"25";i:4;s:2:"26";}i:3;a:2:{i:0;s:2:"37";i:1;s:2:"39";}i:4;a:5:{i:0;s:2:"44";i:1;s:2:"45";i:2;s:2:"46";i:3;s:2:"47";i:4;s:2:"50";}i:5;a:3:{i:0;s:2:"57";i:1;s:2:"59";i:2;s:2:"60";}}}i:2;a:3:{i:0;a:10:{i:0;a:3:{i:0;s:2:"20";i:1;s:2:"30";i:2;s:2:"40";}i:1;a:2:{i:0;s:2:"41";i:1;s:2:"51";}i:2;a:4:{i:0;s:2:"02";i:1;s:2:"12";i:2;s:2:"32";i:3;s:2:"52";}i:3;a:1:{i:0;s:2:"13";}i:4;a:3:{i:0;s:2:"24";i:1;s:2:"34";i:2;s:2:"54";}i:5;a:2:{i:0;s:2:"05";i:1;s:2:"55";}i:6;a:1:{i:0;s:2:"06";}i:7;a:1:{i:0;s:2:"27";}i:8;a:3:{i:0;s:2:"28";i:1;s:2:"48";i:2;s:2:"58";}i:9;a:2:{i:0;s:2:"19";i:1;s:2:"49";}}i:1;a:9:{i:1;a:1:{i:0;s:2:"31";}i:2;a:1:{i:0;s:2:"42";}i:3;a:3:{i:0;s:2:"33";i:1;s:2:"43";i:2;s:2:"53";}i:4;a:1:{i:0;s:2:"14";}i:5;a:1:{i:0;s:2:"35";}i:6;a:2:{i:0;s:2:"36";i:1;s:2:"56";}i:7;a:2:{i:0;s:2:"07";i:1;s:2:"17";}i:8;a:1:{i:0;s:2:"38";}i:9;a:1:{i:0;s:2:"29";}}i:2;a:10:{i:0;a:3:{i:0;s:2:"10";i:1;s:2:"50";i:2;s:2:"60";}i:1;a:3:{i:0;s:2:"01";i:1;s:2:"11";i:2;s:2:"21";}i:2;a:1:{i:0;s:2:"22";}i:3;a:2:{i:0;s:2:"03";i:1;s:2:"23";}i:4;a:2:{i:0;s:2:"04";i:1;s:2:"44";}i:5;a:3:{i:0;s:2:"15";i:1;s:2:"25";i:2;s:2:"45";}i:6;a:3:{i:0;s:2:"16";i:1;s:2:"26";i:2;s:2:"46";}i:7;a:3:{i:0;s:2:"37";i:1;s:2:"47";i:2;s:2:"57";}i:8;a:2:{i:0;s:2:"08";i:1;s:2:"18";}i:9;a:3:{i:0;s:2:"09";i:1;s:2:"39";i:2;s:2:"59";}}}}';
+
+        //special case during init
+        //:1431;s:12:"050913334054";i:1432;s:12:"162425424559";i:1433;s:12:"041314404652";i:1434;s:12:"031822345558";i:
+        // 1435;s:12:"041545475052";i:1436;s:12:"011323243057";i:1437;s:12:"222326373848";i:1438;s:12:"071431333649";i
+        //:1439;s:12:"023435424355";i:1440;s:12:"020628365156";i:1441;s:12:"172936385356";i:1442;s:12:"121320303449";i
+        //:1443;s:12:"122032485254";i:1444;s:12:"020527284855";i:1445;s:12:"051932414958";i:1446;s:12:"061324324051";}');
+        $cl = new CombinationList(array('031822345558','041545475052','041545475052','011323243057',
+                                        '222326373848','071431333649',
+                                         '023435424355','020628365156',
+                                         '172936385356','121320303449',
+                                         '122032485254','020527284855',
+                                         '051932414958','061324324051')); // ...,1445,1446
+
+        $cg = new CombinationGenerator(array('winningCombinations'=>$cl));
+        print_r("\n groups_2_1_2 (init): ");
+        print_r($cg->generateRule_2_1_2());
+        print_r("\n groups_2_1_2 (1): ");
+        print_r($cg->generateRule_2_1_2(1));
+        //print_r("\n groups_2_1_2 (serialize): ");
+        //print_r(serialize($cg->groups_2_1_2));
+        $this->assertequals(unserialize($s), $cg->groups_2_1_2);
+        $this->assertequals($cg->generateRule_2_1_2(), $cg->groups_2_1_2);
     }
 
-    public function testcheck_rule_2_2_1a() {
+    public function testRule_2_1_2a() {
+
+        $C1 = new CombinationStatistics('051632414858');
+        $C2 = new CombinationStatistics('051632414658');
+
+        $cl = new CombinationList(array('222326373848','071431333649',
+                                         '023435424355','020628365156',
+                                         '172936385356','121320303449',
+                                         '122032485254','020527284855',
+                                         '051932414958','061324324051')); // ...,1445,1446
+
+        $cg = new CombinationGenerator(array('winningCombinations'=>$cl));
+        print_r("\n rule_2_1_2a (051632414858) - : ");
+        print_r($cg->rule_2_1_2a($C1));
+        print_r("\n rule_2_1_2a (051632414658) - : ");
+        print_r($cg->rule_2_1_2a($C2));
+        //print_r("\n groups_2_1_2 (serialize): ");
+        //print_r(serialize($cg->groups_2_1_2));
+        $this->assertequals(false, $cg->rule_2_1_2a($C1));
+        $this->assertequals(true, $cg->rule_2_1_2a($C2));
+    }
+
+    public function testCombinationConfiguration() {
+
+        $C1 = new CombinationStatistics('182732435052');
+        $C2 = new CombinationStatistics('051632414658');
+
+        $cl = new CombinationList(array('222326373848','071431333649',
+                                         '023435424355','020628365156',
+                                         '172936385356','121320303449',
+                                         '122032485254','020527284855',
+                                         '051932414958','061324324051')); // ...,1445,1446
+
+        $cg = new CombinationGenerator(array('winningCombinations'=>$cl));
+        print_r("\n CombinationConfiguration (182732435052) - : ");
+        print_r($cg->combinationConfiguration($C1));
+        print_r("\n CombinationConfiguration (051632414658) - : ");
+        print_r($cg->combinationConfiguration($C2));
+        $this->assertequals(array(3,1,2), $cg->combinationConfiguration($C1));
+        $this->assertequals(array(4,0,2), $cg->combinationConfiguration($C2));
+    }
+
+    public function testGenerateConfiguration_2_1_2() {
+
+        $C1 = new CombinationStatistics('182732435052');
+        $C2 = new CombinationStatistics('051632414658');
+
+        $cl = new CombinationList(array('222326373848','071431333649',
+                                         '023435424355','020628365156',
+                                         '172936385356','121320303449',
+                                         '122032485254','020527284855',
+                                         '051932414958','061324324051')); // ...,1445,1446
+
+        $cg = new CombinationGenerator(array('winningCombinations'=>$cl));
+
+        $cg->generateConfiguration_2_1_2();
+        print_r("\n configuration_2_1_2 - : ");
+        print_r($cg->configuration_2_1_2);
+        //print_r("\n CombinationConfiguration (051632414658) - : ");
+        //print_r($cg->combinationConfiguration($C2));
+        //$this->assertequals(array(3,1,2), $cg->rule_2_1_2a($C1));
+        //$this->assertequals(array(4,0,2), $cg->rule_2_1_2a($C2));
+    }
+
+    public function testRule_2_1_2b() {
+
+        $C1 = new CombinationStatistics('051632414858');
+        $C2 = new CombinationStatistics('051632414658');
+
+        $cl = new CombinationList(array('222326373848','071431333649',
+                                         '023435424355','020628365156',
+                                         '172936385356','121320303449',
+                                         '122032485254','020527284855',
+                                         '051932414958','061324324051')); // ...,1445,1446
+
+        $cg = new CombinationGenerator(array('winningCombinations'=>$cl));
+        print_r("\n rule_2_1_2b (051632414858) - : ");
+        print_r($cg->rule_2_1_2b($C1));
+        print_r("\n rule_2_1_2b (051632414658) - : ");
+        print_r($cg->rule_2_1_2b($C2));
+        //print_r("\n groups_2_1_2 (serialize): ");
+        //print_r(serialize($cg->groups_2_1_2));
+        //$this->assertequals(false, $cg->rule_2_1_2a($C1));
+        //$this->assertequals(true, $cg->rule_2_1_2a($C2));
+    }
+
+    public function testCheck_rule_2_2_1a() {
         //:84;s:12:"050913334054";i:85;s:12:"162425424559";i:86;s:12:"041314404652";i:87;s:12:"031822345558";i:
         // 88;s:12:"041545475052";i:89;s:12:"011323243057";i:90;s:12:"222326373848";i:91;s:12:"071431333649";i
         //:92;s:12:"023435424355";i:93;s:12:"020628365156";i:94;s:12:"172936385356";i:95;s:12:"121320303449";i
-        //:96;s:12:"122032485254";i:97;s:12:"020527284855";i:98;s:12:"3";i:99;s:12:"061324324051";}');
-        $cl  = new CombinationList(array('041545475052','011323243057')); // 1435,1436,1437
+        //:96;s:12:"122032485254";i:97;s:12:"020527284855";i:98;s:12:"051932414958";i:99;s:12:"061324324051";}');
+        $cl  = new CombinationList(array('041314404652','031822345558')); // 1433,1434
         $cl2  = new CombinationList(array('051932414958','061324324051')); // 1445,1446
         $cg = new CombinationGenerator(array('winningCombinations'=>$cl));
         $cg2 = new CombinationGenerator(array('winningCombinations'=>$cl2));
-        print_r($cg);
-        print_r($cg2);
+        print_r($cg2->check_rule_2_2_1a());
+        $this->assertequals($cg->rule_2_2_1a_invalid, $cg->check_rule_2_2_1a());
+        $this->assertequals(2, $cg->rule_2_2_1a_invalid);
+        $this->assertequals(-1, $cg2->check_rule_2_2_1a());
     }
+
+    /*public function testRule_2_2_1b() {
+        //:1431;s:12:"050913334054";i:1432;s:12:"162425424559";i:1433;s:12:"041314404652";i:1434;s:12:"031822345558";i:
+        // 1435;s:12:"041545475052";i:1436;s:12:"011323243057";i:1437;s:12:"222326373848";i:1438;s:12:"071431333649";i
+        //:1439;s:12:"023435424355";i:1440;s:12:"020628365156";i:1441;s:12:"172936385356";i:1442;s:12:"121320303449";i
+        //:1443;s:12:"122032485254";i:1444;s:12:"020527284855";i:1445;s:12:"051932414958";i:1446;s:12:"061324324051";}');
+        $cl  = new CombinationList(array('071431333649','023435424355')); // 1438,1439
+        $cl2  = new CombinationList(array('051932414958','061324324051')); // 1445,1446
+        $cg = new CombinationGenerator(array('winningCombinations'=>$cl));
+        $cg2 = new CombinationGenerator(array('winningCombinations'=>$cl2));
+        print_r($cg2->check_rule_2_2_1a());
+        $this->assertequals($cg->rule_2_2_1b_invalid, $cg->rule_2_2_1b());
+        $this->assertequals(false, $cg->rule_2_2_1b_invalid);
+        $this->assertequals(true, $cg2->rule_2_2_1b());
+    }*/
 
     /**
      * @covers CombinationGenerator::check_rule_2_2_1a
@@ -497,6 +621,7 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_2_2_1b()
     {
+        //current list
         print_r("test: 010423242556\n");
         print_r("test: 153137464956\n");
         $C1 = new CombinationStatistics('010423242556');
@@ -505,6 +630,19 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(!$this->combGen->rule_2_2_1b($C1, true), 'pass the rule 2.2.1b valid (false)');
         $this->assertTrue(!$this->combGen->rule_2_2_1b($C2, true), 'pass the rule 2.2.1b valid (false)');
         $this->assertTrue($this->combGen->rule_2_2_1b($C3, true), 'pass the rule 2.2.1b valid (true)');
+        //special case during init
+        //:1431;s:12:"050913334054";i:1432;s:12:"162425424559";i:1433;s:12:"041314404652";i:1434;s:12:"031822345558";i:
+        // 1435;s:12:"041545475052";i:1436;s:12:"011323243057";i:1437;s:12:"222326373848";i:1438;s:12:"071431333649";i
+        //:1439;s:12:"023435424355";i:1440;s:12:"020628365156";i:1441;s:12:"172936385356";i:1442;s:12:"121320303449";i
+        //:1443;s:12:"122032485254";i:1444;s:12:"020527284855";i:1445;s:12:"051932414958";i:1446;s:12:"061324324051";}');
+        $cl  = new CombinationList(array('071431333649','023435424355')); // 1438,1439
+        $cl2  = new CombinationList(array('051932414958','061324324051')); // 1445,1446
+        $cg = new CombinationGenerator(array('winningCombinations'=>$cl));
+        $cg2 = new CombinationGenerator(array('winningCombinations'=>$cl2));
+        print_r($cg->rule_2_2_1b_invalid);
+        $this->assertequals($cg->rule_2_2_1b_invalid, $cg->rule_2_2_1b($C1));
+        $this->assertequals(false, $cg->rule_2_2_1b_invalid);
+        $this->assertequals(true, $cg2->rule_2_2_1b($C2));
     }
 
     /**
@@ -513,8 +651,8 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_2_2_1c()
     {
-        print_r("test: 010423242556\n");
-        print_r("test: 153137464956\n");
+        print_r("test: 010422242856\n");
+        print_r("test: 153137434956\n");
         print_r("test(true): 152137464956\n");
         $C1 = new CombinationStatistics('010422242856');
         $C2 = new CombinationStatistics('153137434956');
@@ -522,6 +660,20 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(!$this->combGen->rule_2_2_1c($C1, true), 'pass the rule 2.2.1c valid (false)');
         $this->assertTrue(!$this->combGen->rule_2_2_1c($C2, true), 'pass the rule 2.2.1c valid (false)');
         $this->assertTrue($this->combGen->rule_2_2_1c($C3, true), 'pass the rule 2.2.1c valid (true)');
+
+        //special case during init
+        //:1431;s:12:"050913334054";i:1432;s:12:"162425424559";i:1433;s:12:"041314404652";i:1434;s:12:"031822345558";i:
+        // 1435;s:12:"041545475052";i:1436;s:12:"011323243057";i:1437;s:12:"222326373848";i:1438;s:12:"071431333649";i
+        //:1439;s:12:"023435424355";i:1440;s:12:"020628365156";i:1441;s:12:"172936385356";i:1442;s:12:"121320303449";i
+        //:1443;s:12:"122032485254";i:1444;s:12:"020527284855";i:1445;s:12:"051932414958";i:1446;s:12:"061324324051";}');
+        $cl  = new CombinationList(array('162425424559','041314404652')); // 1432,1433
+        $cl2  = new CombinationList(array('051932414958','061324324051')); // 1445,1446
+        $cg = new CombinationGenerator(array('winningCombinations'=>$cl));
+        $cg2 = new CombinationGenerator(array('winningCombinations'=>$cl2));
+        print_r($cg->rule_2_2_1c_invalid);
+        $this->assertequals($cg->rule_2_2_1c_invalid, $cg->rule_2_2_1c($C1));
+        $this->assertequals(false, $cg->rule_2_2_1c_invalid);
+        $this->assertequals(true, $cg2->rule_2_2_1c($C3));
     }
 
     /**
@@ -539,6 +691,21 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $this->combGen->rule_2_2_1d($C1, true), 'pass the rule 2.2.1d valid (2)');
         $this->assertEquals(1, $this->combGen->rule_2_2_1d($C2, true), 'pass the rule 2.2.1d valid (1)');
         $this->assertEquals(0, $this->combGen->rule_2_2_1d($C3, true), 'pass the rule 2.2.1d valid (0)');
+
+        //special case during init
+        //:1431;s:12:"050913334054";i:1432;s:12:"162425424559";i:1433;s:12:"041314404652";i:1434;s:12:"031822345558";i:
+        // 1435;s:12:"041545475052";i:1436;s:12:"011323243057";i:1437;s:12:"222326373848";i:1438;s:12:"071431333649";i
+        //:1439;s:12:"023435424355";i:1440;s:12:"020628365156";i:1441;s:12:"172936385356";i:1442;s:12:"121320303449";i
+        //:1443;s:12:"122032485254";i:1444;s:12:"020527284855";i:1445;s:12:"051932414958";i:1446;s:12:"061324324051";}');
+        $cl  = new CombinationList(array('162425424559','041314404652')); // 1432,1433
+        $cl2  = new CombinationList(array('051932414958','061324324051')); // 1445,1446
+        $cg = new CombinationGenerator(array('winningCombinations'=>$cl));
+        $cg2 = new CombinationGenerator(array('winningCombinations'=>$cl2));
+        print_r($cg->rule_2_2_1d_invalid);
+        $this->assertequals(2, $cg->rule_2_2_1d($cg->wCombs[1], TRUE, $cg->rule_2_2_1d($cg->wCombs[0], TRUE)));
+        $this->assertequals(2, $cg->rule_2_2_1d_invalid);
+        $this->assertequals(false, $cg->rule_2_2_1d($C1));
+        $this->assertequals(true, $cg2->rule_2_2_1d($C3));
     }
 
     /**
@@ -547,7 +714,7 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRule_2_2_1e()
     {
-        $listRule_2_2_1e = array('05', '45');
+        /*$listRule_2_2_1e = array('05', '45');
         print_r("test(true): 010423242556\n");
         print_r("test: 153137454956\n");
         $C1 = new CombinationStatistics('010423242556');
@@ -562,7 +729,35 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
         print_r($this->combGen->listRule_2_2_1e);
 
         $this->assertEquals(true, $this->combGen->rule_2_2_1e($C1), 'pass the rule 2.2.1d valid (1)');
-        $this->assertEquals(false, $this->combGen->rule_2_2_1e($C2), 'pass the rule 2.2.1d valid (0)');
+        $this->assertEquals(false, $this->combGen->rule_2_2_1e($C2), 'pass the rule 2.2.1d valid (0)');*/
+
+
+        //special case during init
+        //:1431;s:12:"050913334054";i:1432;s:12:"162425424559";i:1433;s:12:"041314404652";i:1434;s:12:"031822345558";i:
+        // 1435;s:12:"041545475052";i:1436;s:12:"011323243057";i:1437;s:12:"222326373848";i:1438;s:12:"071431333649";i
+        //:1439;s:12:"023435424355";i:1440;s:12:"020628365156";i:1441;s:12:"172936385356";i:1442;s:12:"121320303449";i
+        //:1443;s:12:"122032485254";i:1444;s:12:"020527284855";i:1445;s:12:"051932414958";i:1446;s:12:"061324324051";}');
+        $cl  = new CombinationList(array('061324324051','050913334054',
+                                         '162425424559','041314404652',
+                                         '031822345558','041545475052',
+                                         '011323243057','222326373848',
+                                         '071431333649','023435424355')); // ...,1438,1439
+        $cl2 = new CombinationList(array('222326373848','071431333649',
+                                         '023435424355','020628365156',
+                                         '172936385356','121320303449',
+                                         '122032485254','020527284855',
+                                         '051932414958','061324324051')); // ...,1445,1446
+
+        $cg = new CombinationGenerator(array('winningCombinations'=>$cl));
+        print_r("\n listRule_2_2_1e (init): ");
+        print_r($cg->listRule_2_2_1e);
+
+        $cg2 = new CombinationGenerator(array('winningCombinations'=>$cl2));
+        print_r("\n listRule_2_2_1e (init): ");
+        print_r($cg2->listRule_2_2_1e);
+        $this->assertequals(3, $cg->listRule_2_2_1e);
+        $this->assertequals(0, $cg2->listRule_2_2_1e);
+
     } 
     public function testRule_2_2(){
         
