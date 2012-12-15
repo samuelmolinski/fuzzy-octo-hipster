@@ -450,8 +450,8 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
         $cl2  = new CombinationList(array('051932414958','061324324051')); // 1445,1446
         $cg = new CombinationGenerator(array('winningCombinations'=>$cl));
         $cg2 = new CombinationGenerator(array('winningCombinations'=>$cl2));
-        print_r($cg);
-        print_r($cg2);
+        print_r($cg->check_rule_2_2_1a());
+        print_r($cg2->check_rule_2_2_1a());
     }
 
     /**
