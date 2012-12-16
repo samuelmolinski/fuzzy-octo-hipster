@@ -72,4 +72,4 @@
 	</table>
 </div>
 
-<?php d($cg); ?>
+<?php //d($cg); ?>

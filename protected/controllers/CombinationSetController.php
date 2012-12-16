@@ -134,6 +134,7 @@ class CombinationSetController extends Controller
 		
 		print_r($_POST);
 		if(isset($_POST['cs_id'])&&isset($_POST['email'])){
+			print_r('\n Inside: ')
 			$emails = $_POST['email'];
 			$id = $_POST['cs_id'];
 
@@ -180,7 +181,8 @@ class CombinationSetController extends Controller
 			    'Reply-To: no-reply@Nissenidea.com' . "\r\n" .
 			    'X-Mailer: PHP/' . phpversion();*/
 
-			//mail($to, $subject, $message, $headers);
+			mail($to, $subject, $message, $headers);
+			print_r('\n Sent: ')
 
 		}
 		

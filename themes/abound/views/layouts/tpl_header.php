@@ -47,7 +47,8 @@
     if(!window.log) {window.log = function() {log.history = log.history || [];log.history.push(arguments);if(this.console) {console.log(Array.prototype.slice.call(arguments));}};}
 
     $(function() {
-    	$( "#dialog" ).dialog({    		
+    	$( "#dialog" ).dialog({ 
+    		autoOpen: false,
             modal: true,
             width: 340,
             buttons: {
