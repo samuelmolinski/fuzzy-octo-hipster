@@ -509,7 +509,8 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
         $C1 = new CombinationStatistics('182732435052');
         $C2 = new CombinationStatistics('051632414658');
 
-        $cl = new CombinationList(array('222326373848','071431333649',
+        $cl = new CombinationList(array('031822345558','041545475052','041545475052','011323243057',
+                                        '222326373848','071431333649',
                                          '023435424355','020628365156',
                                          '172936385356','121320303449',
                                          '122032485254','020527284855',
@@ -518,34 +519,87 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
         $cg = new CombinationGenerator(array('winningCombinations'=>$cl));
 
         $cg->generateConfiguration_2_1_2();
-        print_r("\n configuration_2_1_2 - : ");
-        print_r($cg->configuration_2_1_2);
+        //print_r("\n configuration_2_1_2 - : ");
+        //print_r($cg->configuration_2_1_2);
         //print_r("\n CombinationConfiguration (051632414658) - : ");
-        //print_r($cg->combinationConfiguration($C2));
-        //$this->assertequals(array(3,1,2), $cg->rule_2_1_2a($C1));
+        //print_r($cg->combinationConfiguration($C1));
+        $this->assertequals(array(array(2,2,2), array(3,0,3)), $cg->configuration_2_1_2);
+        //$this->assertequals(array(array(2,2,2), array(3,0,3)), $cg->combinationConfiguration($C1));
         //$this->assertequals(array(4,0,2), $cg->rule_2_1_2a($C2));
     }
 
     public function testRule_2_1_2b() {
 
         $C1 = new CombinationStatistics('051632414858');
-        $C2 = new CombinationStatistics('051632414658');
+        $C2 = new CombinationStatistics('071423374051');
 
-        $cl = new CombinationList(array('222326373848','071431333649',
+        $cl = new CombinationList(array('031822345558','041545475052','041545475052','011323243057',
+                                        '222326373848','071431333649',
                                          '023435424355','020628365156',
                                          '172936385356','121320303449',
                                          '122032485254','020527284855',
                                          '051932414958','061324324051')); // ...,1445,1446
 
         $cg = new CombinationGenerator(array('winningCombinations'=>$cl));
+
+        print_r("\n configuration_2_1_2 - : ");
+        print_r($cg->configuration_2_1_2);
         print_r("\n rule_2_1_2b (051632414858) - : ");
         print_r($cg->rule_2_1_2b($C1));
-        print_r("\n rule_2_1_2b (051632414658) - : ");
+        print_r("\n rule_2_1_2b (061324324051) - : ");
         print_r($cg->rule_2_1_2b($C2));
         //print_r("\n groups_2_1_2 (serialize): ");
         //print_r(serialize($cg->groups_2_1_2));
-        //$this->assertequals(false, $cg->rule_2_1_2a($C1));
-        //$this->assertequals(true, $cg->rule_2_1_2a($C2));
+        $this->assertequals(true, $cg->rule_2_1_2b($C1));
+        $this->assertequals(false, $cg->rule_2_1_2b($C2));
+    }
+
+    public function testRule_2_1_2c() {
+
+        $C1 = new CombinationStatistics('023435424355');
+        $C2 = new CombinationStatistics('222326373848');
+
+        $cl = new CombinationList(array('031822345558','041545475052','041545475052','011323243057',
+                                        '222326373848','071431333649',
+                                         '023435424355','020628365156',
+                                         '172936385356','121320303449',
+                                         '122032485254','020527284855',
+                                         '051932414958','061324324051')); // ...,1445,1446
+
+        $cg = new CombinationGenerator(array('winningCombinations'=>$cl));
+
+        print_r("\n rule_2_1_2b (023435424355) - : ");
+        print_r($cg->rule_2_1_2c($C1));
+        print_r("\n rule_2_1_2b (222326373848) - : ");
+        print_r($cg->rule_2_1_2c($C2));
+        //print_r("\n groups_2_1_2 (serialize): ");
+        //print_r(serialize($cg->groups_2_1_2));
+        $this->assertequals(true, $cg->rule_2_1_2c($C1));
+        $this->assertequals(false, $cg->rule_2_1_2c($C2));
+    }
+
+    public function testRule_2_1_2d() {
+
+        $C1 = new CombinationStatistics('023435424355');
+        $C2 = new CombinationStatistics('222325263848');
+
+        $cl = new CombinationList(array('031822345558','041545475052','041545475052','011323243057',
+                                        '222326373848','071431333649',
+                                         '023435424355','020628365156',
+                                         '172936385356','121320303449',
+                                         '122032485254','020527284855',
+                                         '051932414958','061324324051')); // ...,1445,1446
+
+        $cg = new CombinationGenerator(array('winningCombinations'=>$cl));
+
+        print_r("\n rule_2_1_2b (023435424355) - : ");
+        print_r($cg->rule_2_1_2d($C1));
+        print_r("\n rule_2_1_2b (222325263848) - : ");
+        print_r($cg->rule_2_1_2d($C2));
+        //print_r("\n groups_2_1_2 (serialize): ");
+        //print_r(serialize($cg->groups_2_1_2));
+        $this->assertequals(true, $cg->rule_2_1_2d($C1));
+        $this->assertequals(false, $cg->rule_2_1_2d($C2));
     }
 
     public function testCheck_rule_2_2_1a() {
@@ -562,21 +616,6 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
         $this->assertequals(2, $cg->rule_2_2_1a_invalid);
         $this->assertequals(-1, $cg2->check_rule_2_2_1a());
     }
-
-    /*public function testRule_2_2_1b() {
-        //:1431;s:12:"050913334054";i:1432;s:12:"162425424559";i:1433;s:12:"041314404652";i:1434;s:12:"031822345558";i:
-        // 1435;s:12:"041545475052";i:1436;s:12:"011323243057";i:1437;s:12:"222326373848";i:1438;s:12:"071431333649";i
-        //:1439;s:12:"023435424355";i:1440;s:12:"020628365156";i:1441;s:12:"172936385356";i:1442;s:12:"121320303449";i
-        //:1443;s:12:"122032485254";i:1444;s:12:"020527284855";i:1445;s:12:"051932414958";i:1446;s:12:"061324324051";}');
-        $cl  = new CombinationList(array('071431333649','023435424355')); // 1438,1439
-        $cl2  = new CombinationList(array('051932414958','061324324051')); // 1445,1446
-        $cg = new CombinationGenerator(array('winningCombinations'=>$cl));
-        $cg2 = new CombinationGenerator(array('winningCombinations'=>$cl2));
-        print_r($cg2->check_rule_2_2_1a());
-        $this->assertequals($cg->rule_2_2_1b_invalid, $cg->rule_2_2_1b());
-        $this->assertequals(false, $cg->rule_2_2_1b_invalid);
-        $this->assertequals(true, $cg2->rule_2_2_1b());
-    }*/
 
     /**
      * @covers CombinationGenerator::check_rule_2_2_1a
@@ -713,26 +752,7 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
      * @todo   Implement testRule_2_2_1d().
      */
     public function testRule_2_2_1e()
-    {
-        /*$listRule_2_2_1e = array('05', '45');
-        print_r("test(true): 010423242556\n");
-        print_r("test: 153137454956\n");
-        $C1 = new CombinationStatistics('010423242556');
-        $C2 = new CombinationStatistics('153137454956');
-
-
-        print_r($this->combGen->listRule_2_2_1e);
-
-        $this->assertEquals(array(), $this->combGen->listRule_2_2_1e, 'pass the rule 2.2.1d valid (2)');
-        $this->combGen->listRule_2_2_1e = $listRule_2_2_1e;
-        print_r("\nlistRule_2_2_1e: ");
-        print_r($this->combGen->listRule_2_2_1e);
-
-        $this->assertEquals(true, $this->combGen->rule_2_2_1e($C1), 'pass the rule 2.2.1d valid (1)');
-        $this->assertEquals(false, $this->combGen->rule_2_2_1e($C2), 'pass the rule 2.2.1d valid (0)');*/
-
-
-        //special case during init
+    {   //special case during init
         //:1431;s:12:"050913334054";i:1432;s:12:"162425424559";i:1433;s:12:"041314404652";i:1434;s:12:"031822345558";i:
         // 1435;s:12:"041545475052";i:1436;s:12:"011323243057";i:1437;s:12:"222326373848";i:1438;s:12:"071431333649";i
         //:1439;s:12:"023435424355";i:1440;s:12:"020628365156";i:1441;s:12:"172936385356";i:1442;s:12:"121320303449";i

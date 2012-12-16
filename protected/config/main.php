@@ -108,7 +108,7 @@ return array(
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@example.com',
-		//'root'=> 'http://localhost/fuzzy-octo-hipster/',
-		'root'=> 'http://nissenidea.com/',
+		'root'=> 'http://localhost/fuzzy-octo-hipster/',
+		//'root'=> 'http://nissenidea.com/',
 	),
 );

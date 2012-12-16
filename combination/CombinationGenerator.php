@@ -93,6 +93,7 @@
 			$this->rule_2_1b_subList = array_slice($this->wCombs, 0, 3, FALSE);
 			$this->generate2_1cLimit();
 			$this->groups_2_1_2 = $this->generateRule_2_1_2();
+			$this->configuration_2_1_2 = $this->generateConfiguration_2_1_2();
 			$this->rule_2_2_1a_invalid = $this->check_rule_2_2_1a();
 			$this->rule_2_2_1b_invalid = $this->rule_2_2_1b($this->wCombs[0], TRUE);
 			$this->rule_2_2_1c_invalid = $this->rule_2_2_1c($this->wCombs[0], TRUE);
@@ -494,10 +495,10 @@
 
 		public function rule_2_1c($combination) {
 			//c1
-			print_r("\ncombination->cRf : ");
+			/*print_r("\ncombination->cRf : ");
 			print_r($combination->cRf);
 			print_r("\ncombination->cRd : ");
-			print_r($combination->cRd);
+			print_r($combination->cRd);*/
 			if($combination->cRf == '21111') {
 				$cDfs = '';
 				foreach ($combination->cDf as $k => $vDF) {
@@ -505,15 +506,15 @@
 						$cDfs .= $k;
 					}
 				}
-				print_r("\ncDfs = ".$cDfs.' ');
+				//print_r("\ncDfs = ".$cDfs.' ');
 				if(in_array($cDfs, $this->limit_2_1c['c1'])) {
 					return FALSE;
 				}					
 			}
 			//c2
 			if($combination->cRd == '2211') {
-			print_r("\ncombination->print_cDd() : ");
-				print_r($combination->print_cDd());
+				//print_r("\ncombination->print_cDd() : ");
+				//print_r($combination->print_cDd());
 				if(in_array($combination->print_cDd(), $this->limit_2_1c['c2'])) {
 					return FALSE;
 				}					
@@ -566,7 +567,7 @@
 		}
 
 		public function generateRule_2_1_2($offset = 0) {
-			if(10+$offset<=count($this->wCombs)){
+			if((10+$offset)<=count($this->wCombs)){
 				$class1 = array();
 				$class2 = array();
 				$class3 = array();
@@ -628,6 +629,8 @@
 				ksort($dF[1]);
 				ksort($dF[2]);
 				return array($g, $cD, $dF);
+			} else {
+				return array(array(array(),array(),array(),array(),array(),array()),array(),array());
 			}
 		}
 
@@ -664,14 +667,20 @@
 		}
 
 		public function generateConfiguration_2_1_2() {
-			$this->configuration_2_1_2 = array();
-			
+			//if(11<=count($this->wCombs)) {
+				$c = array();
+				//print_r("\n Setting configuration_2_1_2 -");
 
-			for ($i=0; $i < 2; $i++) { 
-				$rule = $this->generateRule_2_1_2($i+1);
-				$this->configuration_2_1_2[] = $this->combinationConfiguration($this->wCombs[$i], $rule);
-				print_r($rule);
-			}
+				for ($i=0; $i < 2; $i++) { 
+					$rule = $this->generateRule_2_1_2($i+1);
+					$c[] = $this->combinationConfiguration($this->wCombs[$i], $rule);
+				}
+
+				return $c;
+			/*} else {
+				return FALSE;
+			}*/
+			
 		}
 
 		//a-it cannot have more than 4N in any of the 3(2) classes; (obs:6,4 million combinations don't fit)
@@ -711,11 +720,13 @@
 		//b-a “configuration” (amount of N, from the first on, occurred in each class) happened in the last test cannot repeat in the next 2 tests, unless it is 222, 231, 312 or 321 which cannot happen only in the next test;
 		public function rule_2_1_2b($C) {
 			$cConfig = $this->combinationConfiguration($C);
-			$onetimelimit = array(array(2,2,2), array(2,3,1), array(3,1,2), array(3,2,1));
+			//print_r("\n cConfig :");
+			//print_r($cConfig);
+			$oneTimeLimit = array(array(2,2,2), array(2,3,1), array(3,1,2), array(3,2,1));
 			if($cConfig == $this->configuration_2_1_2[0]) {
 				return false;
 			}
-			if((!in_array($cConfig, $onetimeLimit))&&($cConfig == $this->configuration_2_1_2[1])) {
+			if((!in_array($cConfig, $oneTimeLimit))&&($cConfig == $this->configuration_2_1_2[1])) {
 				return false;
 			}
 			return true;
@@ -736,6 +747,9 @@
 								// check only N inside the range and if is matches we count.
 								if(($N->d = $tens)&&(in_array($N->n,$this->groups_2_1_2[0][$i]))){
 									$count++;
+
+									//print_r("\n count :");
+									//print_r($count);
 								}
 								if($count > 2) {
 									return false;
@@ -761,6 +775,8 @@
 								// check only N inside the range and if is matches we count.
 								if(($N->df = $df)&&(in_array($N->n,$this->groups_2_1_2[0][$i]))){
 									$count++;
+									/*print_r("\n count :");
+									print_r($count);*/
 								}
 								if($count > 2) {
 									return false;
@@ -779,25 +795,31 @@
 		//d-it cannot have 2 pairs of N of two tens or of two DF in a single class.
 		public function rule_2_1_2d($C) {
 			//does it match any 4 numbers in the group?
-			print_r($this->groups_2_1_2);
-			for ($i=1; $i < 3; $i++) { 
-				$count = 0;
-				foreach ($this->groups_2_1_2[$i] as $k => $class) {
-					$curCount = 0;			
-					for($j=0; $j < 5; $j++) {
-						if((in_array($C->d[$j]->n))) {
-							$curCount++;
+			//print_r($this->groups_2_1_2);
+			for ($h=1; $h < 3; $h++) { 				
+				for ($i=0; $i < 3; $i++) { 
+					$count = 0;
+					foreach ($this->groups_2_1_2[$h][$i] as $k => $class) {
+						$curCount = 0;			
+						for($j=0; $j < 5; $j++) {
+							if((in_array($C->d[$j]->n, $class))) {
+								$curCount++;
+								//print_r("\n curCount :");
+								//print_r($curCount);
+							}
+							if($curCount>2){
+								$count++;
+								//print_r("\n count :");
+								//print_r($count);						
+							}
 						}
 					}
-					if($curCount>=2){
-						$count++;
+					if($count>=2){
+						return false;
 					}
 				}
-				if($count>=2){
-					return false;
-				}
+				return true;
 			}
-			return true;
 		}
 
 		public function check_rule_2_2_1a(){
@@ -937,46 +959,6 @@
 			}
 			//$this->listRule_2_2_1e = $final;
 		}
-		/*public function genrateListRule_2_2_1e() {
-			if(10<=count($this->wCombs)) {
-				$list = array();
-				$list2 = array();
-				$final =  array();
-				foreach ($this->wCombs[0]->d as $k => $N) {	
-					for ($i=1; $i < 4; $i++) { 							
-						if(in_array($N, $this->wCombs[$i]->d)){
-							if(!array_key_exists($N->n, $list)) {
-								$list[$N->n] = 0;
-							} 
-							$list[$N->n]++;
-							if ($list[$N->n] == 3) {
-								$final[] = $N->n;
-							}
-						}
-					}
-				}
-        		print_r("\nlist: ");
-				print_r($list);
-
-				foreach ($this->wCombs[1]->d as $k => $N) {	
-					for ($i=2; $i < 5; $i++) { 							
-						if(in_array($N, $this->wCombs[$i]->d)){
-							if(!array_key_exists($N->n, $list2)) {
-								$list2[$N->n] = 0;
-							} 
-							$list2[$N->n]++;						
-							if ($list2[$N->n] == 3) {
-								$final[] = $N->n;
-							}
-						}
-					}
-				}
-        		print_r("\nlist2: ");
-				print_r($list2);
-
-				$this->listRule_2_2_1e = $final;
-			}
-		}*/
 
 		public function rule_2_2_1e($C, $override = False) {
 			if($this->listRule_2_2_1e){
@@ -1001,14 +983,6 @@
 			} 
 			return true;
 		}
-		/*public function rule_2_2_1e($C) {
-			foreach ($C->d as $k => $N) {
-				if(in_array($N->n, $this->listRule_2_2_1e)){
-					return false;
-				}
-			}
-			return true;
-		}*/
 
 		public function checkRule_2_2_2() {
 			$list = array();

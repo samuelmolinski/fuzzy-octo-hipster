@@ -6,3 +6,7 @@ table.CombinationsSet{margin-bottom:0;width:200px;float:left;border-width:0 0 2p
 .matching4 .match{background-color:#ffdca5;}
 .matching5 .match{background-color:#c6efc6;}
 .matching6 .match{background-color:#00db00;}
+#emailsort{width:620px;}#emailsort #toEmail,#emailsort #notToEmail{list-style-type:none;margin:5px;padding:0 0 2.5em;float:left;margin-right:10px;}
+#emailsort #toEmail,#emailsort #notToEmail{min-height:30px;width:280px;padding:10px;float:left;}#emailsort #toEmail li,#emailsort #notToEmail li{margin:0 5px 5px 5px;padding:5px;font-size:1.2em;width:260px;}
+#emailsort #toEmail{background-color:#a0e5a0;}
+#emailsort #notToEmail{background-color:#f7d2b9;}

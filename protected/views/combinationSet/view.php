@@ -34,6 +34,28 @@ $this->menu=array(
 <div class="row" style="margin-left:0;">
 	<?php echo CHtml::link('Export', array('CombinationSet/Export', 'id'=>$model->id)); ?>
 </div>
+<div class="row" style="margin-left:0;">
+	<a onclick="$('#dialog').dialog('open'); return false;" >Email</a>
+</div>
+
+<div id="dialog" title="Send Emails:">
+    <p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
+	<div id="emailsort">	
+		<ul id="toEmail" class="connectedSortable">
+		</ul>
+		 
+		<ul id="notToEmail" class="connectedSortable">
+			<?php 
+				foreach ($users as $k => $u) {
+					echo "<li class='ui-state-default'><span class='name'>{$u->name}</span><br/><span class='email'>{$u->email}</span></li>";
+				}
+			?>
+		</ul>
+	</div>
+	<form id="sendEmails" method='post' action='<?php echo Yii::app()->params["root"]."index.php/combinationSet/email/"; ?>'>
+		<input type="hidden" name="cs_id" id='cs_id' value="<?php echo $model->id ?>">
+	</form>
+</div>
 
 <?php 
 	if(@$results[6]){ ?>

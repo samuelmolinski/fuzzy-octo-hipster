@@ -33,7 +33,7 @@ class CombinationSetController extends Controller
 				'roles'=>array('admin','authenticated'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update','email'),
 				//'users'=>array('@'),
 				'roles'=>array('admin'),
 			),
@@ -54,6 +54,9 @@ class CombinationSetController extends Controller
 	 */
 	public function actionView($id)
 	{
+		$users = new User;
+		$users = User::model()->findAll();
+
 		$model = $this->loadModel($id);
 		$tables = '';
 		//get test combinations
@@ -95,7 +98,7 @@ class CombinationSetController extends Controller
 			$tables = $CL->printListTable();
 		}
 		
-		$this->render('view', array('model'=>$this->loadModel($id),'engineSettings'=>$engineSettings, 'engineSettingId'=>$engineSettingId, 'wc'=>$wc, 'premade'=>$premade, 'tables'=>$tables['table'], 'results'=>$tables['results'], 'testedCombination'=>$testedCombination));
+		$this->render('view', array('model'=>$this->loadModel($id),'engineSettings'=>$engineSettings, 'engineSettingId'=>$engineSettingId, 'wc'=>$wc, 'premade'=>$premade, 'tables'=>$tables['table'], 'results'=>$tables['results'], 'testedCombination'=>$testedCombination, 'users'=>$users));
 	}
 	/**
 	 * Export a new model.
@@ -126,6 +129,83 @@ class CombinationSetController extends Controller
 		Yii::app()->end();
 	}
 
+	public function actionEmail()
+	{
+		
+		print_r($_POST);
+		if(isset($_POST['cs_id'])&&isset($_POST['email'])){
+			$emails = $_POST['email'];
+			$id = $_POST['cs_id'];
+
+			//divide combinations
+			$tables = array();
+			$model = $this->loadModel($id);
+			$CL = unserialize($model->combinations);
+			$combs = $CL->toCombinations();
+			$results =  array();
+			$totalCombs = count($combs);
+			$count = 0;
+
+			$perGroup = ceil($totalCombs/count($emails));
+
+			$ttemp = '<table class="table table-striped CombinationsSet"><tbody>';
+	    	
+			foreach ($combs as $k => $c) {
+				$count++;					
+				if((0 == ($count-1)%$perGroup)&&(0 != $count-1)){
+					$tables[] =  $ttemp.'</tbody></table>';
+					$ttemp = '<table class="table table-striped CombinationsSet"><tbody>';					
+				}
+				$ttemp .= "<tr><td>$count</td><td>".$c->print_id()."</td></tr>";
+			}
+
+			$ttemp .= '</tbody></table>';
+			$tables[] = $ttemp;
+
+			//d($tables);
+			foreach ($emails as $k => $email) {
+				$to      = $email;
+				$subject = 'MegaSena';
+				$message = $tables[$k];
+				$headers = 'From: no-reply@Nissenidea.com' . "\r\n" .
+				    'Reply-To: no-reply@Nissenidea.com' . "\r\n" .
+				    'X-Mailer: PHP/' . phpversion();
+
+				mail($to, $subject, $message, $headers);
+			}
+			/*$to      = implode(', ', $_POST['email']);
+			$subject = 'MegaSena';
+			$message = 'hello';
+			$headers = 'From: no-reply@Nissenidea.com' . "\r\n" .
+			    'Reply-To: no-reply@Nissenidea.com' . "\r\n" .
+			    'X-Mailer: PHP/' . phpversion();*/
+
+			//mail($to, $subject, $message, $headers);
+
+		}
+		
+		/*$model=$this->loadModel($id);
+		$d = date("Y-m-d-Hi");
+		//d($model);
+		$CL = unserialize($model->combinations);
+		//d($CL);
+
+		header('Content-Type: text/plain');
+		header("Content-Disposition: attachment;filename='Megasena_Combinations_$d.txt'");
+		header('Cache-Control: max-age=0');
+		foreach ($CL->list as $k => $c) {
+			$C = new Combination($c);
+			for ($i=0; $i < 6; $i++) { 
+				echo $C->d[$i]->n;
+				if(5 == $i){
+					echo "\r\n";
+				} else {
+					echo "\t";
+				}
+			}
+		}*/
+		Yii::app()->end();
+	}
 	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
