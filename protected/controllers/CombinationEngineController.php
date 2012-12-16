@@ -114,7 +114,7 @@ class CombinationEngineController extends Controller
 			$tests = unserialize($engineSettings->ruleOrder);
 		}
 
-		$tests == array (	array ('rule_2_2_2','c'),
+		/*$tests == array (	array ('rule_2_2_2','c'),
 							array ('rule_2_2_1b','c'),
 							array ('rule_2_2_1a','c'),
 							array ('rule_2_2_1c','c'),
@@ -138,7 +138,7 @@ class CombinationEngineController extends Controller
 							array ('rule_2_1_2b','c'),
 							array ('rule_2_1_2c','c'),
 							array ('rule_2_1_2d','c'),
-						);
+						);*/
 
 		set_time_limit(0);
 		$p = new Performance();
