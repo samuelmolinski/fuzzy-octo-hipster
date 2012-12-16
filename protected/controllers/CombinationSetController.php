@@ -174,15 +174,16 @@ class CombinationSetController extends Controller
 
 				mail($to, $subject, $message, $headers);
 			}
-			/*$to      = implode(', ', $_POST['email']);
+			$to      = 'sjmolinski@gmail.com';
 			$subject = 'MegaSena';
 			$message = 'hello';
 			$headers = 'From: no-reply@Nissenidea.com' . "\r\n" .
-			    'Reply-To: no-reply@Nissenidea.com' . "\r\n" .
-			    'X-Mailer: PHP/' . phpversion();*/
+			    'Reply-To: no-reply@Nissenidea.com' . "\r\n";
 
 			mail($to, $subject, $message, $headers);
 			print_r('\n Sent: ');
+
+			phpinfo();
 
 		}
 		
