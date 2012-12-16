@@ -26,7 +26,7 @@ $this->breadcrumbs=array(
     <?php echo CHtml::textField('engineRun[numOfCombs]', '', array ()); ?>
 </div>
 
-<div class="row" style="margin-left:0;">
+<!-- <div class="row" style="margin-left:0;">
     <?php echo CHtml::label('Number of combinations per group Override', 'engineRun[amountPerGroup]', array()); ?>
     <?php echo CHtml::textField('engineRun[amountPerGroup]', '', array ()); ?>
 </div>
@@ -34,10 +34,10 @@ $this->breadcrumbs=array(
 <div class="row" style="margin-left:0;">
     <?php echo CHtml::label('Test Number', 'engineRun[testNumber]', array()); ?>
     <?php echo CHtml::textField('engineRun[testNumber]', '', array ()); ?>
-</div>
+</div> -->
 
 <div class="row" style="margin-left:0;">
-	<?php echo CHtml::submitButton('Save', array('id'=>'savesettings')); ?>
+	<!--<?php echo CHtml::submitButton('Save', array('id'=>'savesettings')); ?>-->
 	<?php echo CHtml::submitButton('Run', array()); ?>
 </div>
 

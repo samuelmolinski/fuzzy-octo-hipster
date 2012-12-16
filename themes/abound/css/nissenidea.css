@@ -10,3 +10,5 @@ table.CombinationsSet{margin-bottom:0;width:200px;float:left;border-width:0 0 2p
 #emailsort #toEmail,#emailsort #notToEmail{min-height:30px;width:280px;padding:10px;float:left;}#emailsort #toEmail li,#emailsort #notToEmail li{margin:0 5px 5px 5px;padding:5px;font-size:1.2em;width:260px;}
 #emailsort #toEmail{background-color:#a0e5a0;}
 #emailsort #notToEmail{background-color:#f7d2b9;}
+#emailsort .email{line-height:1.1em;font-style:11px;}
+#emailsort .name{font-weight:600;line-height:1.1em;font-style:12px;}

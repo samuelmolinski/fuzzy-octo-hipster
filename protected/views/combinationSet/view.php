@@ -39,7 +39,7 @@ $this->menu=array(
 </div>
 
 <div id="dialog" title="Send Emails:">
-    <p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
+    <p>Select the users to be added to be emailed and drag their names into the green box.  To remove them from recieving the email, drag them to the redbox.</p>
 	<div id="emailsort">	
 		<ul id="toEmail" class="connectedSortable">
 		</ul>
