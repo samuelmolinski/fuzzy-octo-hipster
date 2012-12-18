@@ -961,6 +961,7 @@
 		}
 
 		public function rule_2_2_1e($C, $override = False) {
+			$list = array();
 			if($this->listRule_2_2_1e){
 				foreach ($C->d as $k => $N) {	
 					for ($i=0; $i < 3; $i++) { 							
