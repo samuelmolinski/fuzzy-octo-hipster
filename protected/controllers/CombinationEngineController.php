@@ -182,7 +182,7 @@ class CombinationEngineController extends Controller
 				}
 			}
 			// if all is well we add it 
-			$cg->currentBettingCombinations[] = $c;
+			$cg->addBettingCombination($c);
 		} while ($numOfCombinations > count($cg->currentBettingCombinations));
 		$p->end_timer("Over All");
 		$p->sortByTotalTime();

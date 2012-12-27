@@ -780,13 +780,12 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
 
     } 
     public function testRule_2_2(){
-        
-    {   //special case during init
+        //special case during init
         //:1431;s:12:"050913334054";i:1432;s:12:"162425424559";i:1433;s:12:"041314404652";i:1434;s:12:"031822345558";i:
         // 1435;s:12:"041545475052";i:1436;s:12:"011323243057";i:1437;s:12:"222326373848";i:1438;s:12:"071431333649";i
         //:1439;s:12:"023435424355";i:1440;s:12:"020628365156";i:1441;s:12:"172936385356";i:1442;s:12:"121320303449";i
         //:1443;s:12:"122032485254";i:1444;s:12:"020527284855";i:1445;s:12:"051932414958";i:1446;s:12:"061324324051";}');
-        $cl  = new CombinationList(array('071431333649',,'222326373848''023435424355',
+        $cl  = new CombinationList(array('071431333649','222326373848','023435424355',
                                          '061324324051','050913334054',
                                          '162425424559','041314404652',
                                          '031822345558','041545475052',
@@ -795,21 +794,119 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
                                          '023435424355','020628365156',
                                          '172936385356','121320303449',
                                          '122032485254','020527284855',
-                                         '051932414958','061324324051')); // ...,1445,1446
+                                         '051932414958','061324324051',     // 1445,1446
+                                         '011928333941','012529365660',     // 1447,1448
+                                         '020618305256','262731384445',     // 1449,1450
+                                         ));
         $cl3 = new CombinationList(array('222326373848','071431333649',
                                          '023435424355','020628365156',
                                          '172936385356','121320303449',
                                          '122032485254','020527284855',
-                                         '051932414958','061324324051')); // ...,1445,1446
+                                         '051932414958','061324324051',     // 1445,1446
+                                         '011928333941','012529365660',     // 1447,1448
+                                         '020618305256','262731384445',     // 1449,1450
+                                         '021011335257','021428505758',     // 1451,1452
+                                         '061325324757','042729414852',));  // 1453,1454
 
         $cg = new CombinationGenerator(array('winningCombinations'=>$cl));
-        print_r("\n listRule_2_2_1e (init): ");
-        print_r($cg->listRule_2_2_1e);
+        print_r("\n rule_2_2_2_invalid (cg): ");
+        print_r($cg->rule_2_2_2_invalid);
 
         $cg2 = new CombinationGenerator(array('winningCombinations'=>$cl2));
-        print_r("\n listRule_2_2_1e (init): ");
-        print_r($cg2->listRule_2_2_1e);
-        $this->assertequals(3, $cg->listRule_2_2_1e);
-        $this->assertequals(0, $cg2->listRule_2_2_1e);
+        print_r("\n rule_2_2_2_invalid (cg2): ");
+        print_r($cg2->rule_2_2_2_invalid);
+        $this->assertequals(2, $cg->rule_2_2_2_invalid);
+        $this->assertequals(-1, $cg2->rule_2_2_2_invalid);
+
+        $cg = $this->gen($cg);
+        //print_r($cg->currentBettingCombinations);
+        
+        $ccSort = $this->sortBy_cRd_cRf($cg);
+        print_r($ccSort);
+
+        $ccSort2 = $this->sortBy_cRd_cRf($cg2);
+        print_r($ccSort2);
+    }
+
+    function gen($cg, $numOfCombinations = 100) {
+
+        set_time_limit(0);
+        $tests = array (   array ('rule_2_2_2','c'),
+                            array ('rule_2_2_1b','c'),
+                            array ('rule_2_2_1a','c'),
+                            array ('rule_2_2_1c','c'),
+                            array ('rule_1a1','c',),
+                            array ('rule_2_1a','c','list'),
+                            array ('rule_1a2','c'),
+                            array ('rule_1a8','c'),
+                            array ('rule_1a6','c'),
+                            array ('rule_1a5','c'),
+                            array ('rule_2_2_1d','c'),
+                            array ('rule_1a7','c'),
+                            array ('rule_2_1c','c'),
+                            array ('rule_2_2_1e','c'),
+                            array ('rule_1a3','c'),
+                            array ('rule_1a4','c'),
+                            array ('rule_1b3','c','list'),
+                            array ('rule_2_1b','c'),
+                            array ('rule_1b2','c','list'),
+                            array ('rule_1b1','c','list'),
+                            array ('rule_2_1_2a','c'),
+                            array ('rule_2_1_2b','c'),
+                            array ('rule_2_1_2c','c'),
+                            array ('rule_2_1_2d','c'),
+                        );
+        //starting the process
+        $fail = 0;
+        $count = 0;
+        $comb = array();
+        do {
+            do {
+                $list = array();
+                for ($i=0; $i < 6; $i++) { 
+                    $comb[$i] = $cg->genUniqueRand($list);
+                    $list[] = $comb[$i]->n;
+                }
+                $c = new CombinationStatistics($comb);
+            } while (in_array($c, $cg->currentBettingCombinations));
+            $count++;
+            foreach ($tests as $j => $test) {
+                $currentFunction = $test[0];
+                if(2 < count($test)) {
+                    //echo "<li>requires \$list</li>";
+                    $r = $cg->$currentFunction($c, $cg->wCombs);
+                    if(!$r) {
+                        $fail++;
+                        continue 2;
+                    }
+                } else {
+                    $r = $cg->$currentFunction($c);
+                    
+                    if(!$r) {
+                        $fail++;
+                        continue 2;
+                    }
+                }
+            }
+            // if all is well we add it 
+            $cg->addBettingCombination($c);
+        } while ($numOfCombinations > count($cg->currentBettingCombinations));
+
+        sort($cg->currentBettingCombinations);
+        return $cg;
+    }
+    function sortBy_cRd_cRf($cg)   {
+        $groups_2_2_Count = array(0,0,0,0,0);
+        foreach ($cg->currentBettingCombinations as $key => $C) {
+            print_r("\nC->group2_2: ");
+            print_r($C->group2_2);
+             if (null === $C->group2_2) {
+                print_r($C);
+            } else {
+                $groups_2_2_Count[$C->group2_2]++;
+            }
+            //
+        }
+        return $groups_2_2_Count;
     }
 }

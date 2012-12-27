@@ -70,7 +70,7 @@
 					array('2211-3111','2211-2211','2211-111111'),
 					array('21111-21111','3111-21111'),
 					array('3111-2211','3111-111111','21111-3111','21111-2211','21111-111111'),
-					array('411-21111','321-21111','222-21111','11111-21111','321-2211','321-111111','3111-3111', '2211-321', '21111-321')
+					array('411-21111','321-21111','222-21111','111111-21111','321-2211','321-111111','3111-3111', '2211-321', '21111-321')
 				);
 			}
 
@@ -986,6 +986,7 @@
 		}
 
 		public function checkRule_2_2_2() {
+
 			$list = array();
 			foreach ($this->groups_2_2 as $key => $group) {
 				if(in_array($this->wCombs[0]->cRd_cRf, $group)){
@@ -996,9 +997,10 @@
 				}
 			}				
 			
-			//d($list);
+			//print_r("\n List:");
+			//print_r($list);
 			foreach ($list as $group => $occured) {
-				if(2 > $occured) {
+				if(1 <= $occured) {
 					return $this->rule_2_2_2_invalid = $group;
 
 				}
@@ -1006,9 +1008,9 @@
 			return $this->rule_2_2_2_invalid = -1;
 		}
 
-		public function Rule_2_2_2($C) {
+		public function rule_2_2_2($C) {
 			$count = count($this->currentBettingCombinations);
-			if((-1 != $this->rule_2_2_1a_invalid)&&$count&&($this->rule_2_2_2_limit <($this->rule_2_2_2_total/$count))) {
+			if((-1 != $this->rule_2_2_2_invalid)&&$count&&($this->rule_2_2_2_limit <($this->rule_2_2_2_total/$count))) {
 				return false;
 			}
 
