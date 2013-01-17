@@ -1,4 +1,4 @@
-<h1>Test A.a & B.b</h1>
+<h1>Test 2 N not used</h1>
 <?php 
 	
 	set_time_limit(0);
@@ -35,21 +35,31 @@
 	for ($i=1; $i < 101; $i++) {
 		$cN =  $count - $i;
 		$C = $winningNumbers[$cN];
-		$Ns = array();
+		$Ds = array();
+		//d($C->d);
 		foreach ($C->d as $k => $N) {
-			for ($j=1; $j < 11; $j++) { 
-				if(in_array($N, $winningNumbers[$cN-$j]->d)){
-					if(!array_key_exists($N->n, $Ns)) {
-						$Ns[$N->n] = 1;
-					}
-					$Ns[$N->n]++;
-				}				
+			if(!array_key_exists($N->D, $Ds)) {
+				$Ds[$N->D] = 0;
 			}
+			$Ds[$N->D]++;
 		}
-		$record[$i] = $Ns;
+		$record[$i] = $Ds;
 	}
 
-	d($record);
+	//d($record);
 
-
+	echo "<span style='margin-left: 1em;width:70px;display:inline-block;'>1-10</span><span style='width:70px;display:inline-block;'>11-20</span><span style='width:70px;display:inline-block;'>21-30</span><span style='width:70px;display:inline-block;'>31-40</span><span style='width:70px;display:inline-block;'>41-50</span><span style='width:70px;display:inline-block;'>51-60</span>";
+	echo "<ol>";
+	foreach ($record as $k => $test) {
+		echo "<li>";
+		for ($i=0; $i < 6; $i++) { 
+			echo "<span style='width:70px;display:inline-block;'>";
+			if(!array_key_exists($i, $test)){
+				echo 'no';
+			}
+			echo "</span>";
+		}
+		echo "</li>";
+	}
+	echo "</ol>";
 	
