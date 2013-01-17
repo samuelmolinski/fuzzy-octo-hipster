@@ -8,7 +8,11 @@ class Combination {
 
     public function Combination($d = NULL) {
         if (is_array($d) && (count($d) == 6)) {
-            $this->set_d($d);
+            $ds = array();
+            foreach ($d as $k => $n) {
+                $ds[] = new Number($n);
+            }
+            $this->set_d($ds);
             $this->order_d();
             $this->gen_id();
         } else if (is_string($d)&&(12 == strlen($d))){
