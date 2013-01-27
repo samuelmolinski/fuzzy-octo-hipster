@@ -109,8 +109,60 @@ class CombinationDrawnController extends Controller
 	 */
 	public function actionView($id)
 	{
+		$model = $this->loadModel($id);
+		$engineSettingId = SystemOptions::model()->findByAttributes(array('name'=>'engineSettingId'));
+		    	$dc = CombinationDrawn::model()->findAll();
+		    	$CL = new CombinationList;
+
+		    	foreach ($dc as $k => $c) {
+		    		$CL->addString($c->combination);
+		    	}
+				
+			$engineSettings = EngineSettings::model()->findByAttributes(array('id'=>$engineSettingId->value));
+
+	    	// The order of the test to be used
+			$numOfCombinations = $engineSettings->numOfCombs;
+
+		$tests = array (	
+						array ('rule_2_1a','c','list'),
+						array ('rule_2_1c','c'),
+						array ('rule_1b3','c','list'),
+						array ('rule_2_1b','c'),
+						array ('rule_1b2','c','list'),
+						array ('rule_1b1','c','list'),
+						);
+
+		set_time_limit(180);
+		$p = new Performance();
+    	$winningNumbers = array();
+    	$cgSettings = array('winningCombinations'=>$CL, 'ranges1a1'=> unserialize($engineSettings->ranges1a1), 'permitted1a8'=> unserialize($engineSettings->permitted1a8), 'group2_2'=> unserialize($engineSettings->group2_2), 'rule_2_2_2_limit'=>$engineSettings->rule_2_2_2_limit);
+    	
+    	$cg = new CombinationGenerator($cgSettings);
+
+		$c = new CombinationStatistics($model->combination);
+		//starting the process
+		$fail =  "<h3>Failed :</h3><ul>";
+		//d($tests);
+		foreach ($tests as $j => $test) {
+			$currentFunction = $test[0];
+			if(2 < count($test)) {
+				$r = $cg->$currentFunction($c, $cg->wCombs);
+			} else {
+				$r = $cg->$currentFunction($c);		
+			}
+			if($r) {
+				$fail .= "<li>$currentFunction = Passed</li>";
+			} else {
+				$fail .= "<li>$currentFunction = Failed</li>";
+			}
+			
+		}
+
+		$fail .=  "</ul>";
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
+			'fail'=>$fail,
+			"cg"=>$cg,
 		));
 	}
 

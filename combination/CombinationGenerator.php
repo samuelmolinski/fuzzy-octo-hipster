@@ -85,6 +85,24 @@
 			}		
 		}
 
+		public function returnConfig(){
+			$config = array(
+							'limit_2_1c'=> $this->limit_2_1c,
+							'groups_2_1_2'=> $this->groups_2_1_2,
+							'configuration_2_1_2'=> $this->configuration_2_1_2,
+							'rule_2_2_1a_invalid'=> $this->rule_2_2_1a_invalid,
+							'rule_2_2_1b_invalid'=> $this->rule_2_2_1b_invalid,
+							'rule_2_2_1c_invalid'=> $this->rule_2_2_1c_invalid,
+							'rule_2_2_1d_invalid'=> $this->rule_2_2_1d_invalid,
+							'listRule_2_2_1e'=> $this->listRule_2_2_1e,
+							'$rule_2_2_2_invalid'=> $this->rule_2_2_2_invalid,
+							'rule_2_2_2_limit'=> $this->rule_2_2_2_limit,
+							'rule_2_2_2_total'=> $this->rule_2_2_2_total,
+							);
+
+			return $config;
+		}
+
 		public function setWinningCombinations($wCombs){
 			// this assumes chronological order (most recent drawings are last)
 			// need the more recent drawings first so use "array_reverse"
@@ -103,10 +121,10 @@
 		}
 
 		public function addBettingCombination($C) {
-			if(($this->rule_2_2_2_invalid)||(0 == count($this->currentBettingCombinations))||((!$this->rule_2_2_2_invalid)&&($this->rule_2_2_2_limit >($this->rule_2_2_2_total/count($this->currentBettingCombinations))))) {
-				$this->currentBettingCombinations[] = $C;
-				$this->rule_2_2_2_limit++;
+			if(($this->rule_2_2_2_invalid == $C->group2_2)) {
+				$this->rule_2_2_2_total++;
 			}
+			$this->currentBettingCombinations[] = $C;
 		}
 
 		/*	Com todos os DF consecutivos (ex: 01-11-22-33-44-54)
@@ -163,11 +181,11 @@
 			return true;
 		}
 
-		public function genUniqueRand($comb, $min = 1, $max = 60) {
+		public function genUniqueRand($omittedNumberList, $min = 1, $max = 60) {
 
 			$N = new Number(mt_rand($min, $max));
 
-			while (in_array($N->n, $comb)) {
+			while (in_array($N->n, $omittedNumberList)) {
 				unset($N);
 				$N = new Number(mt_rand($min, $max));
 			}
@@ -356,12 +374,8 @@
 			False if it fails
 		 */
 		public function rule_1b1($combination, $list, $threshold = 5) {
-			//print_r($list);
 			foreach ($list as $j => $value) {
 				if($this->numElementsEqual($combination, $value) >= $threshold) {
-					//print_r($combination);
-					//print_r($value);
-					//print_r($this->numElementsEqual($combination, $value));
 					return FALSE;
 				}
 			}
@@ -1010,7 +1024,11 @@
 
 		public function rule_2_2_2($C) {
 			$count = count($this->currentBettingCombinations);
-			if((-1 != $this->rule_2_2_2_invalid)&&$count&&($this->rule_2_2_2_limit <($this->rule_2_2_2_total/$count))) {
+			//d($C->group2_2);
+			if(($this->rule_2_2_1a_invalid == -1) &&
+				($this->rule_2_2_2_invalid == $C->group2_2) &&		//if it is not invalid (equal to -1)
+				$count && // and the number of the combinations is not 0 (we should add it to the set anyways if there are none)
+				($this->rule_2_2_2_limit <($this->rule_2_2_2_total/$count))) {		// and the total is not more than the limit
 				return false;
 			}
 

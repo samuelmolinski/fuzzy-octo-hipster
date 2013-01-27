@@ -72,4 +72,13 @@
 	</table>
 </div>
 
-<?php //d($cg); ?>
+<?php 
+	echo "<h3>Group Totals</h3>\n\r";
+	echo "<ul>";
+	for ($i=0; $i < 5; $i++) { 
+		$gn = $i +1;
+		echo "<li>Group $gn - {$sorted[$i]}</li>";
+	}
+	echo "</ul>";
+	d($cg->returnConfig());
+?>

@@ -7,10 +7,11 @@ class Combination {
 	public $d = array();
 
     public function Combination($d = NULL) {
+
         if (is_array($d) && (count($d) == 6)) {
             $ds = array();
             foreach ($d as $k => $n) {
-                $ds[] = new Number($n);
+                $ds[] = new Number((int)$n->n);
             }
             $this->set_d($ds);
             $this->order_d();

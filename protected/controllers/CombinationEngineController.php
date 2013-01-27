@@ -140,7 +140,7 @@ class CombinationEngineController extends Controller
 							array ('rule_2_1_2d','c'),
 						);*/
 
-		set_time_limit(0);
+		set_time_limit(180);
 		$p = new Performance();
     	$winningNumbers = array();
     	$cgSettings = array('winningCombinations'=>$CL, 'ranges1a1'=> unserialize($engineSettings->ranges1a1), 'permitted1a8'=> unserialize($engineSettings->permitted1a8), 'group2_2'=> unserialize($engineSettings->group2_2), 'rule_2_2_2_limit'=>$engineSettings->rule_2_2_2_limit);
@@ -161,6 +161,7 @@ class CombinationEngineController extends Controller
 					$list[] = $comb[$i]->n;
 				}
 				$c = new CombinationStatistics($comb);
+				d($c->group2_2);
 			} while (in_array($c, $cg->currentBettingCombinations));
 			$count++;
 			foreach ($tests as $j => $test) {
@@ -168,13 +169,18 @@ class CombinationEngineController extends Controller
 				if(2 < count($test)) {
 					//echo "<li>requires \$list</li>";
 					$r = $cg->$currentFunction($c, $cg->wCombs);
+					if(($c->group2_2 == 4) && (!$r)){
+						d($currentFunction);
+					}
 					if(!$r) {
 						$fail++;
 						continue 2;
 					}
 				} else {
-					$r = $cg->$currentFunction($c);
-					
+					$r = $cg->$currentFunction($c);					
+					if(($c->group2_2 == 4) && (!$r)){
+						d($currentFunction);
+					}
 					if(!$r) {
 						$fail++;
 						continue 2;
@@ -188,30 +194,36 @@ class CombinationEngineController extends Controller
 		$p->sortByTotalTime();
 		sort($cg->currentBettingCombinations);
 
+		$cl = new CombinationList($cg->currentBettingCombinations);
+
+		$sorted = $cl->sort_CRD_CRF();
+
 		$list = new CombinationList($cg->currentBettingCombinations);		
 		$model = new CombinationSet;
 		$model->combinations = serialize($list);
-		if($model->save()) {
+		/* if($model->save()) {
 			$render =array(
 				"numOfCombinations"=>$numOfCombinations,
 				"numberOfWinningCombinations"=>$numberOfWinningCombinations,
 				"cg"=>$cg,
 				"totalTested"=>$count,
 				"performance"=>$p,
+				"sorted"=>$sorted,
 				"tests"=>$tests,
 				'saved'=>true
 			);
-		} else {
+		} else { */
 			$render =array(
 				"numOfCombinations"=>$numOfCombinations,
 				"numberOfWinningCombinations"=>$numberOfWinningCombinations,
 				"cg"=>$cg,
 				"totalTested"=>$count,
 				"performance"=>$p,
+				"sorted"=>$sorted,
 				"tests"=>$tests,
 				'saved'=>false
 			);
-		}
+		//}
 
 		$this->render('run',$render);
 	}

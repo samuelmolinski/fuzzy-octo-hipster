@@ -26,4 +26,9 @@ $this->menu=array(
 		'date',
 		'group',
 	),
-)); ?>
+)); 
+	
+	//echo $fail;
+	//d($cg->rule_2_1c);
+
+?>
