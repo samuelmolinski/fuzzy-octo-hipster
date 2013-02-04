@@ -124,7 +124,7 @@ class CombinationSetController extends Controller
 				if(5 == $i){
 					echo "\r\n";
 				} else {
-					echo "\t";
+					echo " ";
 				}
 			}
 		}
