@@ -140,7 +140,7 @@ class CombinationEngineController extends Controller
 							array ('rule_2_1_2d','c'),
 						);*/
 
-		set_time_limit(180);
+		//set_time_limit(3600);
 		$p = new Performance();
     	$winningNumbers = array();
     	$cgSettings = array('winningCombinations'=>$CL, 'ranges1a1'=> unserialize($engineSettings->ranges1a1), 'permitted1a8'=> unserialize($engineSettings->permitted1a8), 'group2_2'=> unserialize($engineSettings->group2_2), 'rule_2_2_2_limit'=>$engineSettings->rule_2_2_2_limit);
