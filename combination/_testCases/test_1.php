@@ -1,3 +1,16 @@
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		li span {
+			width: 120px;
+			text-align: center;
+			display: inline-block;
+		}
+		</style>
+</head>
+<body>
+
 <h1>Test A.a & B.b</h1>
 <?php 
 	
@@ -49,13 +62,29 @@
 		$record[$C->id] = $Ns;
 	}
 
-
+	echo "<ul><li><strong>_______________</strong> : <span>2N</span><span>3N</span><span>4N</span></li>";
 	foreach ($record as $id => $results) {
-		echo "<li><strong>$id</strong> - </li>";
+		$string = '';
+		$list = array('','','','','','','','','','');
+		foreach ($results as $N => $t) {
+			$list[$t] .= $N.' ';
+		}
+		array_shift($list);
+		array_shift($list);
+		array_shift($list);
+		foreach ($list as $key => $v) {
+			$string .= "<span>$v</span>";
+		}
+		$C = new CombinationStatistics($id);
+		$Cp = $C->print_id();
+		echo "<li><strong>$Cp</strong> : $string</li>";
 	}
+	echo "</ul>";
 
-	d($record);
+	//d($record);
 
 
-
+?>
 	
+</body>
+</html>
