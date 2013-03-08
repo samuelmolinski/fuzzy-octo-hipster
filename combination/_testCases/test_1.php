@@ -46,10 +46,16 @@
 				}				
 			}
 		}
-		$record[$i] = $Ns;
+		$record[$C->id] = $Ns;
+	}
+
+
+	foreach ($record as $id => $results) {
+		echo "<li><strong>$id</strong> - </li>";
 	}
 
 	d($record);
+
 
 
 	

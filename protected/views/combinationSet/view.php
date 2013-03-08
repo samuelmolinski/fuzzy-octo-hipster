@@ -118,5 +118,15 @@ $this->menu=array(
 ?>
 <br />
 <?php 
+	//d($sorted);
+	echo "<h3>Group totals</h3>\n\r";
+	echo "<ul>";
+	for ($i=0; $i < 5; $i++) { 
+		$gn = $i +1;
+		echo "<li>Group - $gn{$sorted[$i]}</li>";
+	}
+	echo "</ul>";
+	
 	echo $tables;
+
 ?>

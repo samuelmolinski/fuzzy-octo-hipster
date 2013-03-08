@@ -7,12 +7,9 @@ class Combination {
 	public $d = array();
 
     public function Combination($d = NULL) {
+
         if (is_array($d) && (count($d) == 6)) {
-            $ds = array();
-            foreach ($d as $k => $n) {
-                $ds[] = new Number($n);
-            }
-            $this->set_d($ds);
+            $this->set_d($d);
             $this->order_d();
             $this->gen_id();
         } else if (is_string($d)&&(12 == strlen($d))){
@@ -44,7 +41,15 @@ class Combination {
     }
 
     public function set_d($arr) {
-        $this->d = $arr;
+        $ds = array();
+        if(@$arr[0]->n) {
+            $ds = $arr;
+        } else {
+            foreach ($arr as $k => $n) {
+                $ds[] = new Number((int)$n);
+            }
+        }        
+        $this->d = $ds;
     }
 
     public function gen_id() {

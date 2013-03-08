@@ -97,8 +97,10 @@ class CombinationSetController extends Controller
 		} else {
 			$tables = $CL->printListTable();
 		}
+
+		$sorted = $CL->sort_CRD_CRF();
 		
-		$this->render('view', array('model'=>$this->loadModel($id),'engineSettings'=>$engineSettings, 'engineSettingId'=>$engineSettingId, 'wc'=>$wc, 'premade'=>$premade, 'tables'=>$tables['table'], 'results'=>$tables['results'], 'testedCombination'=>$testedCombination, 'users'=>$users));
+		$this->render('view', array('model'=>$this->loadModel($id),'engineSettings'=>$engineSettings, 'engineSettingId'=>$engineSettingId, 'wc'=>$wc, 'premade'=>$premade, 'tables'=>$tables['table'], 'results'=>$tables['results'], 'testedCombination'=>$testedCombination, 'users'=>$users, 'sorted'=>$sorted));
 	}
 	/**
 	 * Export a new model.
@@ -122,7 +124,7 @@ class CombinationSetController extends Controller
 				if(5 == $i){
 					echo "\r\n";
 				} else {
-					echo "\t";
+					echo " ";
 				}
 			}
 		}
