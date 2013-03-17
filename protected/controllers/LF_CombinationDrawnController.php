@@ -53,7 +53,7 @@ class LF_CombinationDrawnController extends Controller
 	{
 		set_time_limit(0);
 
-		$path = yii::app()->params['root'].'Combination/D_LOTFAC.htm';
+		$path = yii::app()->params['root'].'combination/D_LOTFAC.HTM';
 		d($path);
 
 		$winningNumbers = Seed_LF::get_wC_raw($path);
