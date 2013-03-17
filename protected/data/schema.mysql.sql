@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `ni_lf_combinationdrawn` (
   `date` varchar(10) NOT NULL,
   `group` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=0 ;
 
 
 --

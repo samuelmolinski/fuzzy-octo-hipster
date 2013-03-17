@@ -44,25 +44,12 @@ class LF_CombinationEngineController extends Controller
 
 	public function actionIndex()
 	{	
-		//$this->setEngine();
-		//get current setting
-		/*$engineSettingId = SystemOptions::model()->findByAttributes(array('name'=>'engineSettingId'));
-		//need to get the setting options
-		$settings = new EngineSettings;
-		$settings = EngineSettings::model()->findAll();
-
-		$premade = array();
-		foreach ($settings as $k => $a) {
-			$premade[$a->id] = $a->name;
-		}*/
-
-		//$this->render('index', array('settings'=>$settings, 'engineSettingId'=>$engineSettingId, 'premade'=>$premade));
 		$this->render('index');
 	}
 
 	public function actionCheck($id)
 	{			
-		$this->render(array('combinationSet/view', $id));
+		$this->render(array('LF_CombinationSet/view', $id));
 	}
 
 	/**
