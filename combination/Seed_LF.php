@@ -1,5 +1,8 @@
 <?php
-	require_once('m_toolbox/m_toolbox.php');
+	
+	if(!function_exists('shortenURL')){
+		require_once('m_toolbox/m_toolbox.php');
+	}
 	require_once('Number.php');
 	require_once('LF_Combination.php');
 

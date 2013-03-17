@@ -59,7 +59,7 @@
 		}
 
 		static function restrict_accepted_D_config($C) {
-			$accepted = array(array(8,6,1), array(6,8,1), array(7,7,1), array(8,5,2), array(5,8,2), array(7,6,2), array(6,7,2), array(8,4,3),
+			$accepted = array(array(4,6,5), array(6,4,5), array(5,5,5), array(8,5,2), array(5,8,2), array(7,6,2), array(6,7,2), array(8,4,3),
 							  array(4,8,3), array(7,5,3), array(5,7,3), array(6,6,3), array(7,4,4), array(4,7,4), array(6,5,4), array(5,6,4));
 			if (in_array($C->D_config, $accepted)) {
 				return true;
@@ -284,9 +284,20 @@
 		}
 
 		static function restrict_N_consec_limit($C) {
-			if((@$C->N_consec[1] > 5)||(@$C->N_consec[1] == 0)) {
+			if((@$C->N_consec[1] > 5)) {
 				return false;
 			}
+			return true;
+		}
+
+		static function restrict_N_consec_config_limit($C, $prev10_C_list) {
+			foreach ($prev10_C_list as $k => $C2) {
+				if($C->N_consec == $C2->N_consec) {
+					//d($C->N_consec == $C2->N_consec);
+					return false;
+				}
+			}
+			
 			return true;
 		}
 
@@ -333,13 +344,22 @@
 			}			
 			return false;
 		}
-		public function N_X_equal($C, $limit) {
+		public function N_X_equal($C, $id = null) {
+			$equalN = 0;
 			foreach ($this->wC as $k => $c) {
-				if($this->N_equal($C, $c) < $limit){
-					return true;
+				$temp = $this->N_equal($C, $c);
+				if($id != $k) {
+					$temp = $this->N_equal($C, $c);
+				} else {
+					//d($k);
+					//d($id);
+				}
+				//d($temp);
+				if($equalN < $temp){
+					$equalN = $temp;
 				}
 			}			
-			return false;
+			return $equalN;
 		}
 		public function restrict_1_2config($C, $prev10_C_list) {
 			$C_1 = $C->D_config;

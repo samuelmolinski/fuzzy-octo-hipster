@@ -99,7 +99,7 @@ class LF_CombinationEngineController extends Controller
 		$list = new CombinationList($LF_cg->currentBettingCombinations);		
 		$model = new LF_CombinationSet;
 		$model->combinations = serialize($list);
-		d($model->combinations);
+		//d($model->combinations);
 
 		if($model->save()) {
 			$render =array(

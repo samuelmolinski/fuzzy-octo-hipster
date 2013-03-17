@@ -1,6 +1,6 @@
 <?php
 require_once('m_toolbox/m_toolbox.php');
-require_once ('combination/Performance.php');
+require_once('combination/Performance.php');
 require_once('combination/CombinationGenerator.php');
 require_once('combination/CombinationList.php');
 require_once('combination/LF_Combination.php');

@@ -148,10 +148,10 @@
 					}
 					if($matching){
 						$results[$matching][] = $str;
-						$matched = "<td class='matching$matching'>$str</td>";
+						$matched = "<td class='comb matching$matching'>$str</td>";
 					} else {
 						$results[0][] = $str;
-						$matched = "<td>$str</td>";
+						$matched = "<td class='comb'>$str</td>";
 					}
 					$tables .= "<tr><td>$count</td>$matched</tr>";
 				}
