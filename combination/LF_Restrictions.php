@@ -347,14 +347,10 @@
 		public function N_X_equal($C, $id = null) {
 			$equalN = 0;
 			foreach ($this->wC as $k => $c) {
-				$temp = $this->N_equal($C, $c);
+				$temp = 0;
 				if($id != $k) {
 					$temp = $this->N_equal($C, $c);
-				} else {
-					//d($k);
-					//d($id);
-				}
-				//d($temp);
+				} 
 				if($equalN < $temp){
 					$equalN = $temp;
 				}

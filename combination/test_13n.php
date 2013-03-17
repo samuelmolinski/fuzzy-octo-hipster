@@ -92,7 +92,8 @@
 		$table = array();
 		$limit = 150;
 		$limit = $wNc-10;
-		//d($r->N_X_equal($test->wC[25]));
+		//d($r->N_X_equal($test->wC[25], 25));
+		
 		for ($i=0; $i < $wNc; $i++) { 
 			$id = $wNc-$i;
 			$C = $test->wC[$id];
@@ -112,9 +113,6 @@
 		$tr .= "\n\r<tr style='background: #cbb;'>";
 		$tr .= "\n\r\t<td>Total<br>Errors</td>";
 		$tr .= "\n\r\t<td></td>";
-		foreach ($errors as $key => $error) {
-			$tr .= "\n\r\t<td>$error</td>";
-		}
 		$tr .= "\n\r</tr>";
 		$table[] = $tr;
 
