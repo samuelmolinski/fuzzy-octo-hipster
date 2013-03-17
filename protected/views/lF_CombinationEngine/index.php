@@ -7,7 +7,7 @@ $this->breadcrumbs=array(
 ?>
 <h1><?php echo $this->id . '/' . $this->action->id; ?></h1>
 
-<?php echo CHtml::beginForm(array('lf_combinationEngine/run'), 'post', array(
+<?php echo CHtml::beginForm(array('lF_CombinationEngine/run'), 'post', array(
     'id'=>'engineRun-form',
 )); ?>
 

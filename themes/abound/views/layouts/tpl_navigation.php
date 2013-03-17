@@ -18,12 +18,6 @@
                             array('label'=>'Engine', 'url'=>array('/lF_CombinationEngine/index')),
                             array('label'=>'Combinations', 'url'=>array('/lF_CombinationSet/admin')),
                             array('label'=>'Drawn', 'url'=>array('/lF_CombinationDrawn/admin')),
-                            array('label'=>'Users', 'url'=>array('/user/admin')),
-                            array('label'=>'Settings <span class="caret"></span>', 'url'=>'#','itemOptions'=>array('class'=>'dropdown','tabindex'=>"-1"),'linkOptions'=>array('class'=>'dropdown-toggle','data-toggle'=>"dropdown"), 
-                            'items'=>array(
-                                array('label'=>'System', 'url'=>array('/systemOptions/index')),
-                                array('label'=>'Engine', 'url'=>array('/engineSettings/index')),
-                            )),
                             array('label'=>'Systems <span class="caret"></span>', 'url'=>'#','itemOptions'=>array('class'=>'dropdown','tabindex'=>"-1"),'linkOptions'=>array('class'=>'dropdown-toggle','data-toggle'=>"dropdown"), 
                             'items'=>array(
                                 array('label'=>'Mega Sena', 'url'=>array('/combinationEngine/index')),

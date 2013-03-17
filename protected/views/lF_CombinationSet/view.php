@@ -18,7 +18,7 @@ $this->menu=array(
 
 <h1>View Betting Combination Set : <?php echo date('d/m/Y', strtotime($model->create_time)); ?></h1>
 
-<?php echo CHtml::beginForm(array('LF_CombinationSet/'.$model->id), 'post', array(
+<?php echo CHtml::beginForm(array('lF_CombinationSet/'.$model->id), 'post', array(
     'id'=>'combinationCheck-form',
 )); ?>
 
