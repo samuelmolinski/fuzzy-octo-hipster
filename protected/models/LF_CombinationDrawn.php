@@ -1,15 +1,15 @@
 <?php
 
 /**
- * This is the model class for table "ni_combinationdrawn".
+ * This is the model class for table "ni_lf_combinationdrawn".
  *
- * The followings are the available columns in table 'ni_combinationdrawn':
+ * The followings are the available columns in table 'ni_lf_combinationdrawn':
  * @property integer $id
  * @property string $combination
  * @property string $date
  * @property integer $group
  */
-class CombinationDrawn extends CActiveRecord
+class LF_CombinationDrawn extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
@@ -26,7 +26,7 @@ class CombinationDrawn extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'ni_combinationdrawn';
+		return 'ni_lf_combinationdrawn';
 	}
 
 	/**
@@ -39,7 +39,7 @@ class CombinationDrawn extends CActiveRecord
 		return array(
 			array('combination, date, group', 'required'),
 			array('group', 'numerical', 'integerOnly'=>true),
-			array('combination', 'length', 'max'=>12),
+			array('combination', 'length', 'max'=>30),
 			array('date', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.

@@ -8,12 +8,12 @@
 	class CombinationList {
 		public $list = array(); //should be a array of strings, each 12 char in length
 		public $date = '';
-		public $userId = NULL;
-		public $groupId = NULL;
+		public $classType = 'CombinationStatistics';
+		//public $userId = NULL;
+		//public $groupId = NULL;
 
 		// Init
 		public function CombinationList($list = NULL) {
-			//print_r($list);
 			if(NULL != $list) {
 				$this->add($list);
 			}
@@ -33,7 +33,8 @@
 			} elseif("CombinationList" == @get_class($list)) {
 				$this->list = array_merge($this->list, $list->list);
 				return true;	
-			} elseif(("CombinationStatistics" == @get_class($list))||("Combination" == @get_class($list))){
+			} elseif(("CombinationStatistics" == @get_class($list))||("Combination" == @get_class($list))||("LF_Combination" == @get_class($list))) {
+				$this->classType = get_class($list);
 				$this->addCombination($list);
 				return true;	
 			} elseif (is_string($list)) {
@@ -52,18 +53,30 @@
 				//print_r("sting list\n");
 				$l = str_replace('-', '', $string);
 				$l = explode($delimiter, $l);
-					//print_r($l);
+				//print_r($l);
+
 				foreach ($l as $k => $str) {
 					$str = trim($str);
 					//print_r("sub str ".$str."\n");
 					//print_r("strlen ".strlen($str)."\n");
-					if(12 == strlen($str)) {
-						//print_r("= ".$str."\n");
-						$this->list[] = $str;
-					} elseif(12 < strlen($str)) {
+					if('LF_Combination' == $this->classType){
+						if(30 == strlen($str)) {
+							//print_r("= ".$str."\n");
+							$this->list[] = $str;
+						} elseif(30 < strlen($str)) {
 
-						//print_r("> ".$str."\n");
-						$this->addString($str, ' ');
+							//print_r("> ".$str."\n");
+							$this->addString($str, ' ');
+						}
+					} else {						
+						if(12 == strlen($str)) {
+							//print_r("= ".$str."\n");
+							$this->list[] = $str;
+						} elseif(12 < strlen($str)) {
+
+							//print_r("> ".$str."\n");
+							$this->addString($str, ' ');
+						}
 					}
 				}
 				return true;
@@ -80,8 +93,9 @@
 		public function toCombinations() {
 			$temp = array();
 			foreach ($this->list as $k => $id) {
-				$temp[] = new CombinationStatistics($id);
+				$temp[] = new $this->classType($id);
 			}
+			//d($temp);
 			return $temp;
 		}
 
@@ -100,14 +114,19 @@
 			$results =  array();
 			$totalCombs = count($combs);
 			$count = 0;
-			$tables = '<table class="table table-striped CombinationsSet"><tbody>';
+			$tables = '<table class="table table-striped CombinationsSet '.$this->classType.'"><tbody>';
 
 	    	if(NULL != $CombinationToCheck){
-	    		$results =  array(array(),array(),array(),array(),array(),array(),array());
+	    		if($this->classType != 'LF_Combination') {
+	    			$results =  array(array(),array(),array(),array(),array(),array(),array());
+	    		} else {
+	    			$results =  array(array(),array(),array(),array(),array(),array(),array(),array(),array(),array(),array(),array(),array(),array(),array(),array());
+
+	    		}
 				foreach ($combs as $k => $c) {
 					$count++;
 					if((0 == ($count-1)%$perGroup)&&(0 != $count-1)){
-						$tables .= '</tbody></table><table class="table table-striped CombinationsSet"><tbody>';					
+						$tables .= '</tbody></table><table class="table table-striped CombinationsSet '.$this->classType.'"><tbody>';					
 					}
 					$matching = 0;
 					foreach ($c->d as $key => $N) {
@@ -140,7 +159,7 @@
 				foreach ($combs as $k => $c) {
 					$count++;					
 					if((0 == ($count-1)%$perGroup)&&(0 != $count-1)){
-						$tables .= '</tbody></table><table class="table table-striped CombinationsSet"><tbody>';					
+						$tables .= '</tbody></table><table class="table table-striped CombinationsSet '.$this->classType.'"><tbody>';					
 					}
 					$tables .= "<tr><td>$count</td><td>".$c->print_id()."</td></tr>";
 				}

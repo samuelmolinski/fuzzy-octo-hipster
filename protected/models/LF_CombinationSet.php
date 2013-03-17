@@ -1,20 +1,19 @@
 <?php
 
 /**
- * This is the model class for table "ni_combinationdrawn".
+ * This is the model class for table "ni_lf_combinationset".
  *
- * The followings are the available columns in table 'ni_combinationdrawn':
+ * The followings are the available columns in table 'ni_lf_combinationset':
  * @property integer $id
- * @property string $combination
- * @property string $date
- * @property integer $group
+ * @property string $create_time
+ * @property string $combinations
  */
-class CombinationDrawn extends CActiveRecord
+class LF_CombinationSet extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return CombinationDrawn the static model class
+	 * @return LF_CombinationSet the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -26,7 +25,7 @@ class CombinationDrawn extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'ni_combinationdrawn';
+		return 'ni_lf_combinationset';
 	}
 
 	/**
@@ -37,13 +36,10 @@ class CombinationDrawn extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('combination, date, group', 'required'),
-			array('group', 'numerical', 'integerOnly'=>true),
-			array('combination', 'length', 'max'=>12),
-			array('date', 'length', 'max'=>10),
+			array('combinations', 'required'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, combination, date, group', 'safe', 'on'=>'search'),
+			array('id, create_time, combinations', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -65,9 +61,8 @@ class CombinationDrawn extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'combination' => 'Combination',
-			'date' => 'Date',
-			'group' => 'Group',
+			'create_time' => 'Create Time',
+			'combinations' => 'Combinations',
 		);
 	}
 
@@ -83,14 +78,11 @@ class CombinationDrawn extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('combination',$this->combination,true);
-		$criteria->compare('date',$this->date,true);
-		$criteria->compare('group',$this->group);
-		$criteria->order = 'id DESC';
+		$criteria->compare('create_time',$this->create_time,true);
+		$criteria->compare('combinations',$this->combinations,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
-			'pagination'=>array('pageSize'=>50)
 		));
 	}
 }

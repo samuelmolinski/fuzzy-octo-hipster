@@ -30,7 +30,12 @@
 	  $cs->registerCssFile($baseUrl.'/css/bootstrap.min.css');
 	  $cs->registerCssFile($baseUrl.'/css/bootstrap-responsive.min.css');
 	  $cs->registerCssFile($baseUrl.'/css/abound.css');
-	  $cs->registerCssFile($baseUrl.'/css/style-blue.css');
+      if("Lotofacil" == Yii::app()->params['engine']) {
+        $cs->registerCssFile($baseUrl.'/css/style-red.css');
+      } else {
+        $cs->registerCssFile($baseUrl.'/css/style-blue.css');
+      }
+	  
 	  $cs->registerCssFile($baseUrl.'/css/nissenidea.css');
 	  
 	  $cs->registerScriptFile($baseUrl.'/js/bootstrap.min.js');

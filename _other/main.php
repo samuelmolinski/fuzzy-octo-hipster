@@ -24,8 +24,8 @@ return array(
 
 	'modules'=>array(
 		// uncomment the following to enable the Gii tool
-		 
-		/*'user'=>array(
+		/* 
+		'user'=>array(
                 'tableUsers' => 'ni_users',
                 'tableProfiles' => 'ni_profiles',
                 'tableProfileFields' => 'ni_profiles_fields',
@@ -95,9 +95,9 @@ return array(
 				),
 				// uncomment the following to show log messages on web pages
 				
-				array(
+				/*array(
 					'class'=>'CWebLogRoute',
-				),/*
+				),
 				*/
 			),
 		),
@@ -105,12 +105,10 @@ return array(
 
 	// application-level parameters that can be accessed
 	// using Yii::app()->params['paramName']
-	// trace statement: echo Yii::trace(CVarDumper::dumpAsString($Cstring),'comment_here');
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'sjmolinski@gmail.com',
 		//'root'=> 'http://localhost/fuzzy-octo-hipster/',
 		'root'=> 'http://nissenidea.com/',
-		'engine'=> 'Mega Sena',
 	),
 );

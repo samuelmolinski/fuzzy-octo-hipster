@@ -3,18 +3,18 @@
 require_once("Number.php");
 
 class Combination {
-	public $id; 
-	public $d = array();
+    public $id; 
+    public $d = array();
 
     public function Combination($d = NULL) {
 
-        if (is_array($d) && (count($d) == 6)) {
+        if (is_array($d)) {
             $this->set_d($d);
             $this->order_d();
             $this->gen_id();
-        } else if (is_string($d)&&(12 == strlen($d))){
+        } else if (is_string($d)){
             $ds = array();
-            for ($i=0; $i < 12; $i=$i+2) {
+            for ($i=0; $i < strlen($d); $i=$i+2) {
                 $sub = substr($d, $i, 2);
                 $ds[] = new Number($sub);
             }
@@ -24,12 +24,12 @@ class Combination {
         }
     }
 
-	public function __set($name, $value) {
-    	switch($name){
-    		case 'id':
-    			$this->gen_id();
-    			break;
-    	}
+    public function __set($name, $value) {
+        switch($name){
+            case 'id':
+                $this->gen_id();
+                break;
+        }
     } 
 
     public function __get($name) {
@@ -67,9 +67,11 @@ class Combination {
 
     public function print_id() {
         $d = $this->id;
-
-        //return $d[0].$d[1].'-'.$d[2].$d[3].'-'.$d[4].$d[5].'-'.$d[6].$d[7].'-'.$d[8].$d[9].'-'.$d[10].$d[11];
-        return $this->d[0]->n.'-'.$this->d[1]->n.'-'.$this->d[2]->n.'-'.$this->d[3]->n.'-'.$this->d[4]->n.'-'.$this->d[5]->n;
-
+        $print = '';
+        $count = count($this->d);
+        for ($i=0; $i < $count-1; $i++) { 
+            $print .= $this->d[$i]->n.'-';
+        }
+        return $print.$this->d[$count-1]->n;
     }
 }
