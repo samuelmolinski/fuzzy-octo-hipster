@@ -8,7 +8,7 @@
 	*/
 	class LF_Restrictions
 	{
-		//public $wC;
+		public $wC;
 		public $recent_2_7config;
 		function __construct($wC = null)
 		{

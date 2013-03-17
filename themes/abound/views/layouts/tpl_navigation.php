@@ -15,9 +15,9 @@
                 if ('Lotofacil' == Yii::app()->params['engine']) {
                     $items = array(
                             /*array('label'=>'Dashboard', 'url'=>array('/site/index')),*/
-                            array('label'=>'Engine', 'url'=>array('/lf_combinationEngine/index')),
-                            array('label'=>'Combinations', 'url'=>array('/lf_combinationSet/admin')),
-                            array('label'=>'Drawn', 'url'=>array('/lf_combinationDrawn/admin')),
+                            array('label'=>'Engine', 'url'=>array('/lF_CombinationEngine/index')),
+                            array('label'=>'Combinations', 'url'=>array('/lF_CombinationSet/admin')),
+                            array('label'=>'Drawn', 'url'=>array('/lF_CombinationDrawn/admin')),
                             array('label'=>'Users', 'url'=>array('/user/admin')),
                             array('label'=>'Settings <span class="caret"></span>', 'url'=>'#','itemOptions'=>array('class'=>'dropdown','tabindex'=>"-1"),'linkOptions'=>array('class'=>'dropdown-toggle','data-toggle'=>"dropdown"), 
                             'items'=>array(
@@ -27,7 +27,7 @@
                             array('label'=>'Systems <span class="caret"></span>', 'url'=>'#','itemOptions'=>array('class'=>'dropdown','tabindex'=>"-1"),'linkOptions'=>array('class'=>'dropdown-toggle','data-toggle'=>"dropdown"), 
                             'items'=>array(
                                 array('label'=>'Mega Sena', 'url'=>array('/combinationEngine/index')),
-                                array('label'=>'Lotto Facil', 'url'=>array('/lf_combinationEngine/index')),
+                                array('label'=>'Lotto Facil', 'url'=>array('/lF_CombinationEngine/index')),
                             )),
                             array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
                             array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest),
@@ -53,7 +53,7 @@
                             array('label'=>'Systems <span class="caret"></span>', 'url'=>'#','itemOptions'=>array('class'=>'dropdown','tabindex'=>"-1"),'linkOptions'=>array('class'=>'dropdown-toggle','data-toggle'=>"dropdown"), 
                             'items'=>array(
                                 array('label'=>'Mega Sena', 'url'=>array('/combinationEngine/index')),
-                                array('label'=>'Lotto Facil', 'url'=>array('/lf_combinationEngine/index')),
+                                array('label'=>'Lotto Facil', 'url'=>array('/lF_CombinationEngine/index')),
                             )),
                             array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
                             array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest),
