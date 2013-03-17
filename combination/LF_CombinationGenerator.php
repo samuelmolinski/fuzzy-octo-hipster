@@ -81,7 +81,9 @@
 				$this->attemptedCombinations++;
 				//d($this->test_FL_Combination($c));
 				$id = count($this->wC)-1;
-				$c->cal_Ns_ta($this->wC[$id]);
+				if(isset($this->wC[$id])){
+					$c->cal_Ns_ta($this->wC[$id]);
+				}			
 
 				if($this->test_FL_Combination($c)) {
 					$this->addBettingCombination($c);

@@ -54,15 +54,15 @@ class LF_CombinationDrawnController extends Controller
 		set_time_limit(0);
 
 		$path = yii::app()->params['root'].'combination/D_LOTFAC.HTM';
-		d($path);
+		//d($path);
 
 		$winningNumbers = Seed_LF::get_wC_raw($path);
-		d($winningNumbers);
+		//d($winningNumbers);
 
 		$modeltemp = new LF_CombinationDrawn;
 		foreach ($winningNumbers as $k => $wc) {
 			$model = new LF_CombinationDrawn;
-			echo Yii::trace(CVarDumper::dumpAsString($model),'LF_CombinationDrawn');
+			//echo Yii::trace(CVarDumper::dumpAsString($model),'LF_CombinationDrawn');
 
 			$model->attributes = $wc;
 			$criteria=new CDbCriteria;
