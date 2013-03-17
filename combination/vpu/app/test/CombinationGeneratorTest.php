@@ -813,17 +813,20 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
         print_r($cg->rule_2_2_2_invalid);
 
         $cg2 = new CombinationGenerator(array('winningCombinations'=>$cl2));
-        print_r("\n rule_2_2_2_invalid (cg2): ");
+        print_r("\nrule_2_2_2_invalid (cg2): ");
         print_r($cg2->rule_2_2_2_invalid);
         $this->assertequals(2, $cg->rule_2_2_2_invalid);
         $this->assertequals(-1, $cg2->rule_2_2_2_invalid);
 
         $cg = $this->gen($cg);
+        $cg2 = $this->gen($cg2);
         //print_r($cg->currentBettingCombinations);
         
+        print_r("\n ccSort (cg): ");
         $ccSort = $this->sortBy_cRd_cRf($cg);
         print_r($ccSort);
 
+        print_r("\n ccSort2 (cg2): ");
         $ccSort2 = $this->sortBy_cRd_cRf($cg2);
         print_r($ccSort2);
     }
@@ -898,10 +901,10 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
     function sortBy_cRd_cRf($cg)   {
         $groups_2_2_Count = array(0,0,0,0,0);
         foreach ($cg->currentBettingCombinations as $key => $C) {
-            print_r("\nC->group2_2: ");
-            print_r($C->group2_2);
+            //print_r("\nC->group2_2: ");
+            //print_r($C->group2_2);
              if (null === $C->group2_2) {
-                print_r($C);
+                //print_r($C);
             } else {
                 $groups_2_2_Count[$C->group2_2]++;
             }

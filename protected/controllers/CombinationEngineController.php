@@ -64,6 +64,7 @@ class CombinationEngineController extends Controller
 	public function actionRun()
 	{	
 		//d($_POST);
+		set_time_limit(0);
 		$engineSettingId = SystemOptions::model()->findByAttributes(array('name'=>'engineSettingId'));
 		    	$dc = CombinationDrawn::model()->findAll();
 		    	$CL = new CombinationList;
