@@ -8,7 +8,7 @@
           </a>
      
           <!-- Be sure to leave the brand out there if you want it shown -->
-          <a class="brand" href="#">Nissen Idea - <?php echo Yii::app()->params['engine']; ?></a>
+          <a class="brand" >Nissen Idea - <?php echo Yii::app()->params['engine']; ?></a>
           
           <div class="nav-collapse">
 			<?php 

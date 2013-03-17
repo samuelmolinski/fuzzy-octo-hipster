@@ -49,7 +49,7 @@ class LF_CombinationEngineController extends Controller
 
 	public function actionCheck($id)
 	{			
-		$this->render(array('LF_CombinationSet/view', $id));
+		$this->render(array('lf_combinationSet/view', $id));
 	}
 
 	/**
