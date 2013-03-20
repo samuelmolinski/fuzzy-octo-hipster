@@ -290,8 +290,8 @@
 			return true;
 		}
 
-		static function restrict_N_consec_config_limit($C, $prev10_C_list) {
-			foreach ($prev10_C_list as $k => $C2) {
+		static function restrict_N_consec_config_limit($C, $prev4_C_list) {
+			foreach ($prev4_C_list as $k => $C2) {
 				if($C->N_consec == $C2->N_consec) {
 					//d($C->N_consec == $C2->N_consec);
 					return false;
@@ -357,7 +357,7 @@
 			}			
 			return $equalN;
 		}
-		public function restrict_1_2config($C, $prev10_C_list) {
+		public function restrict_1_2config($C, $prev4_C_list) {
 			$C_1 = $C->D_config;
 			$C_2 = $C->P_I;
 
@@ -375,8 +375,8 @@
 				$list = array();
 
 				
-				for($i=0; $i <10; $i++) {
-					$c = $prev10_C_list[$i];
+				for($i=0; $i < 4; $i++) {
+					$c = $prev4_C_list[$i];
 					if(in_array($c->P_I, array(6,7,8))&&in_array($c->D_config, $arr_N)) {
 						$list[] = array($c->D_config, $c->P_I);
 					}
