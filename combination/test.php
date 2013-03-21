@@ -88,7 +88,7 @@
 ?>
 <table>
 	<tr>
-		<th>Test</th><th>Values</th><th>D</th><th>P/I</th><th>DF1/5</th><th>DF6/0=s</th><th>3DF=s</th><th>DF Único</th><th>N consec.</th><th>N=s t.a</th><th>restriction 1-2</th><th>14N = a</th>
+		<th>Test</th><th>Values</th><th>D</th><th>P/I</th><th>DF1/5</th><th>DF6/0=s</th><th>3DF=s</th><th>DF Único</th><th>N consec.</th><th>N=s t.a</th><th>restriction 1-2</th><th>N consec limit</th>
 	</tr>
 	<?php 
 		$wNc = count($test->wC);
@@ -108,6 +108,7 @@
 			$C8 = $test->wC[$id-8];
 			$C9 = $test->wC[$id-9];
 			$C10 = $test->wC[$id-10];
+			$list4 = array($C1, $C2, $C3, $C4);
 			$list = array($C1, $C2, $C3, $C4, $C5, $C6, $C7, $C8, $C9, $C10);
 
 			$tr = '';
@@ -166,32 +167,33 @@
 			$tr .= "</td>";
 
 			//print N_consec
-			$tr .= "\n\r\t<td ".hasError($id, 7, $r->restrict_N_consec($C), $r->restrict_N_consec_limit($C), $r->restrict_N_consec_config_limit($C, $list)).">";
+			$tr .= "\n\r\t<td ".hasError($id, 7, $r->restrict_N_consec($C), $r->restrict_N_consec_limit($C)).">";
 			$temp = $C->N_consec;
 			krsort($temp);
 			if(!empty($temp)){
+				$Nconsec = '';
 				$first = true;
 				foreach ($temp as $key => $v) {
 					if($first) {
-						$tr .= $key.'x'.$v;
+						$Nconsec .= $key.'x'.$v;
 					} else if($key != 1) {
-						$tr .= ', '.$key.'x'.$v;
+						$Nconsec .= ', '.$key.'x'.$v;
 					} else {
-						$tr .= ', '.$v;
+						$Nconsec .= ', '.$v;
 					}
 					$first = false;
 				}
 				if(!isset($temp[1])) {
-					$tr .= ', 0';
+					$Nconsec .= ', 0';
 				}
 			} else {
-				$tr .= '-';
+				$Nconsec .= '-';
 			}
-			$tr .= "</td>";
+			$tr .= "$Nconsec</td>";
 
 			$tr .= "\n\r\t<td ".hasError($id, 8, $r->restrict_Ns_ta($C), $r->restrict_Ns_ta_limit($C, $list)).">{$C->Ns_ta}</td>";
 			$tr .= "\n\r\t<td ".hasError($id, 9, $r->restrict_1_2config($C, $list)).">{$C->config_1_2}</td>";
-			$tr .= "\n\r\t<td ".hasError($id, 10, $r->N_14_equal($C, $list))."><span class='fail'>Fail</span><span class='pass'>Pass</span></td>";
+			$tr .= "\n\r\t<td ".hasError($id, 10, $r->restrict_N_consec_config_limit($C, $list4)).">$Nconsec</td>";
 			$tr .= "\n\r</tr>";
 			$table[] = $tr;
 
@@ -265,12 +267,12 @@
 	d($configs); */
 	$configs2 = array();
 ?>
-<table>
+<!-- <table>
 	<tr>
 		<th>1-2</th> <th>1-6</th> <th>5-6</th> <th>6-7</th> <th>3-4-6-8</th>
 	</tr>
 	<?php 
-	foreach ($configs as $j => $con) {
+	/*foreach ($configs as $j => $con) {
 		$newArr = array();
 		foreach ($con as $key => $value) {
 			$configs2[$j][] = array($key, $value);
@@ -306,8 +308,8 @@
 				echo "<td>&nbsp;</td>";
 			}
 			echo "</tr>";
-		}
+		}*/
 	 ?>
-</table>
+</table> -->
 </body>
 </html>
