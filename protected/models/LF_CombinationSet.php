@@ -80,6 +80,7 @@ class LF_CombinationSet extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('create_time',$this->create_time,true);
 		$criteria->compare('combinations',$this->combinations,true);
+		$criteria->order = 'id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
