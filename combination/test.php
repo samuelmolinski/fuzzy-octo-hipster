@@ -76,8 +76,9 @@
 		if(!$passed || !$p2 || !$p3 || !$p4){
 			$errors[$key]++;
 			$pass[$id] = false;
-		}
-			return $class."'";
+		} 
+		
+		return $class."'";
 	}
 	function isValid($passed, $p2 = true, $p3 = true, $p4 = true) {
 		if(!$passed || !$p2 || !$p3 || !$p4){
@@ -112,7 +113,7 @@
 			$list = array($C1, $C2, $C3, $C4, $C5, $C6, $C7, $C8, $C9, $C10);
 
 			$tr = '';
-			$tr .= "\n\r<tr>";
+			//$tr .= "\n\r<tr>";
 			$tr .= "\n\r\t<td>$id</td>";
 			$tr .= "\n\r\t<td id='printID' ".hasError($id, 0, $r->restrict_N0($C), $r->restrict_N1($C), $r->restrict_N14($C)).">".$C->printHTML_id()."</td>";
 
@@ -195,7 +196,14 @@
 			$tr .= "\n\r\t<td ".hasError($id, 9, $r->restrict_1_2config($C, $list)).">{$C->config_1_2}</td>";
 			$tr .= "\n\r\t<td ".hasError($id, 10, $r->restrict_N_consec_config_limit($C, $list4)).">$Nconsec</td>";
 			$tr .= "\n\r</tr>";
-			$table[] = $tr;
+
+			if($pass[$id]) {
+				$table[] = "\n\r<tr class='countError'>".$tr;
+			} else {
+				$table[] = "\n\r<tr>".$tr;
+			}
+
+			//$table[] = $tr;
 
 			// get config information
 			if( isValid($r->restrict_D_config($C))&&
@@ -227,14 +235,15 @@
 			}
 		}
 
-			$tr = '';
-			$tr .= "\n\r<tr style='background: #cbb;'>";
-			$tr .= "\n\r\t<td>Total<br>Errors</td>";
-			foreach ($errors as $key => $error) {
-				$tr .= "\n\r\t<td>$error</td>";
-			}
-			$tr .= "\n\r</tr>";
-			$table[] = $tr;
+		$tr = '';
+		$tr .= "\n\r<tr style='background: #cbb;'>";
+		$tr .= "\n\r\t<td>Total<br>Errors</td>";
+		foreach ($errors as $key => $error) {
+			$tr .= "\n\r\t<td>$error</td>";
+		}
+		$tr .= "\n\r</tr>";
+		$table[] = $tr;
+
 		//$table = array_reverse($table);
 		foreach ($table as $k => $tr) {
 			echo $tr;
@@ -266,6 +275,8 @@
 	d(count($configs['3_4_6_8']));
 	d($configs); */
 	$configs2 = array();
+
+	d($pass);
 ?>
 <!-- <table>
 	<tr>

@@ -115,7 +115,7 @@ class CombinationSetController extends Controller
 		//d($CL);
 
 		header('Content-Type: text/plain');
-		header("Content-Disposition: attachment;filename='Megasena_Combinations_$d.txt'");
+		header("Content-Disposition: attachment;filename=Megasena_Combinations_$d.txt");
 		header('Cache-Control: max-age=0');
 		foreach ($CL->list as $k => $c) {
 			$C = new Combination($c);
