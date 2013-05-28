@@ -32,7 +32,7 @@ $this->menu=array(
 <?php echo CHtml::endForm(); ?>
 
 <div class="row" style="margin-left:0;">
-	<?php echo CHtml::link('Export', array('LF_CombinationSet/Export', 'id'=>$model->id)); ?>
+	<?php echo CHtml::link('Export', array('lF_CombinationSet/Export', 'id'=>$model->id)); ?>
 </div>
 <!-- <div class="row" style="margin-left:0;">
 	<a onclick="$('#dialog').dialog('open'); return false;" >Email</a>

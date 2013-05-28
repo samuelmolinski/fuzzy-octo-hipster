@@ -138,11 +138,11 @@
 			if(!$r->restrict_DF_unique($C)) {return false;}
 			if(!$r->restrict_DF_unique_limit($C, $prev3_C_list)) {return false;}
 			if(!$r->restrict_N_consec($C)) {return false;}
-			if(!$r->restrict_N_consec_config_limit($C, $prev10_C_list)) {return false;}
+			if(!$r->restrict_N_consec_config_limit($C, $prev4_C_list)) {return false;}
 			if(!$r->restrict_Ns_ta($C)) {return false;}
 			if(!$r->restrict_Ns_ta_limit($C, $prev4_C_list)) {return false;}
 			if(!$r->N_14_equal($C)) {return false;}
-			if(!$r->restrict_1_2config($C, $prev10_C_list)) {return false;}
+			if(!$r->restrict_1_2config($C, $prev4_C_list)) {return false;}
 
 			return true;
 		}

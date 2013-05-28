@@ -17,7 +17,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'combination'); ?>
-		<?php echo $form->textField($model,'combination',array('size'=>12,'maxlength'=>12)); ?>
+		<?php echo $form->textField($model,'combination',array('size'=>30,'maxlength'=>30)); ?>
 		<?php echo $form->error($model,'combination'); ?>
 	</div>
 
