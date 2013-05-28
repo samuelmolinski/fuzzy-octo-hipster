@@ -133,17 +133,17 @@
 			switch ($cRd_cRf) {
 				//12 pairs cRd-Cdf using CRf to eliminate
 				case '2211-2211':
-				case '21111-2211':
-				case '3111-2211':
-				case '321-2211':
-				case '3111-21111':
-				case '321-21111':
+				case '21111-2211'://*
+				case '3111-2211'://*
+				case '321-2211'://*
+				case '3111-21111'://*
+				case '321-21111'://*
 				case '2211-3111':
 				case '21111-3111':
 						$this->foe = $this->print_cDf();
 					break;
-				case '111111-21111':
-				case '222-21111':
+				case '111111-21111'://*
+				case '222-21111'://*
 				case '411-21111':
 				case '3111-3111':// only the 111 of cDf
 						$cDf = $this->print_cDf();
@@ -151,7 +151,7 @@
 						$this->foe = $cDf;
 					break;
 				//8 pairs cRd-Cdf using CRf in part with cRd to eliminate
-				case '2211-21111'://
+				case '2211-21111'://*
 						$cDd = $this->print_cDd();
 						$cDd = preg_replace('/(?<!\()[0-9](?!\()/', '', $cDd);
 						$cDf = $this->print_cDf();
@@ -164,7 +164,7 @@
 						$cDf = $this->print_cDf();
 						$this->foe = $cDd.''.$cDf;
 					break;
-				case '21111-21111': //???
+				case '21111-21111': //??? //*
 						$cDd = $this->print_cDd();
 						$cDd = preg_replace('/[0-9]\([0-9]\)/', '', $cDd);
 						$cDf = $this->print_cDf();
@@ -177,7 +177,7 @@
 						$cDf = $this->print_cDf();
 						$this->foe = $cDd.''.$cDf;
 					break;
-				case '321-111111':
+				case '321-111111': //*
 						$cDd = $this->print_cDd();
 						$cDd = preg_replace('/(?<!\()[0-9](?!\()/', '', $cDd);
 						$cDf = $this->print_cDf();
@@ -212,11 +212,17 @@
 
 		public function find_group2_2() {
 			$groups_2_2 = array(
-				array('2211-21111'),
+				/*array('2211-21111'),
 				array('2211-3111','2211-2211','2211-111111'),
 				array('21111-21111','3111-21111'),
 				array('3111-2211','3111-111111','21111-3111','21111-2211','21111-111111'),
-				array('411-21111','321-21111','222-21111','11111-21111','321-2211','321-111111','3111-3111', '2211-321', '21111-321')
+				array('411-21111','321-21111','222-21111','11111-21111','321-2211','321-111111','3111-3111', '2211-321', '21111-321')*/
+
+				array('2211-21111'),//*
+				array('2211-3111','2211-2211','2211-111111'),
+				array('21111-21111','3111-21111'),//*
+				array('3111-111111','21111-3111','21111-2211','21111-111111'),
+				array('321-21111','222-21111','11111-21111','321-2211','321-111111')
 			);
 			foreach ($groups_2_2 as $key => $group) {
 				if(in_array($this->cRd_cRf, $group)){

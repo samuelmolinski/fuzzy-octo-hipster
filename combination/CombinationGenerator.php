@@ -284,7 +284,7 @@
 				$DFs[] = $N->DF;
 			}
 			sort($DFs);
-			if(($DFs[0] >= 4)||($DFs[5] <= 5)) {
+			if(($DFs[0] >= 3)||($DFs[5] <= 6)) {
 				return FALSE;
 			}
 			return TRUE;
@@ -859,13 +859,26 @@
 			return TRUE;
 		}
 
-		public function rule_2_2_1b($combination, $override = False){
+		public function rule_2_2_1b($combination, $override = False){ // $this->wCombs[0]
 			if(!$this->rule_2_2_1b_invalid || $override) {
 				$c = 0;
 				foreach ($combination->d as $k => $v) {
 					if($v->n <=30) {$c++;}
 				}
-				if(($c==1)||($c==5)) {
+				if(($c==2)||($c==4)) {
+					return FALSE;
+				}
+			}
+			if(!$this->rule_2_2_1b_invalid || $override) {
+				$c = 0;
+				$d = 0;
+				foreach ($combination->d as $k => $v) {
+					if($v->n <=30) {$c++;}
+				}
+				foreach ($this->wCombs[1]->d as $k => $v) {
+					if($v->n <=30) {$d++;}
+				}
+				if(($c==3)&&($d==3)) {
 					return FALSE;
 				}
 			}
@@ -996,6 +1009,42 @@
 				}
 				
 			} 
+			return true;
+		}
+		
+		public function rule_2_2_1f($C) {
+			$c1 = $this->wCombs[0];
+			$c2 = $this->wCombs[1];
+			$e1 = $this->numElementsEqual($C, $c1);
+			$e2 = $this->numElementsEqual($C, $c2);
+
+			if($e1 >= 2) {
+				//d('false');
+				return false;
+			}
+			//d($e1);
+			$n3 = array();
+			foreach ($c1->cDd as $n => $v) {
+				if($v >= 2) {
+					$n3[] = $n;
+				}
+			}
+			//d($n3);
+			foreach ($n3 as $k => $c) {
+				if($C->cDd[$c] == 2) {
+					//d('found false');
+					return false;
+				}
+			}
+			if(($C->cDd[0]==0)&&($C->cDd[5]==0)) {
+				d('found false 2');
+				return FALSE;
+			}
+			/*d($C->cDd[0]);
+			d($C->cDd[1]);
+			print_r('<pre>');
+			print_r(' -true- ');
+			print_r('</pre>');*/
 			return true;
 		}
 

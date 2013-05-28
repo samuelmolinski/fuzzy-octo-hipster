@@ -18,3 +18,5 @@ table.CombinationsSet{margin-bottom:0;width:200px;float:left;border-width:0 0 2p
 #emailsort .email{line-height:1.1em;font-style:11px;}
 #emailsort .name{font-weight:600;line-height:1.1em;font-style:12px;}
 .CombinationsSet.LF_Combination{width:325px;}.CombinationsSet.LF_Combination td.comb{width:275px;}
+
+.button-column .delete { display: none; }
