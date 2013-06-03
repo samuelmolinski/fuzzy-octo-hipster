@@ -25,6 +25,9 @@
 		public $rule_2_2_2_limit;
 		public $rule_2_2_2_total;
 		public $rule_2_1b_subList;
+		public $last_cDf_21111;
+		public $rule_2_1c_prev_3n_in_last_10;
+		public $last_N3 = array();
 
 		public function CombinationGenerator($args = null) {
 			$this->CL = new CombinationList;
@@ -82,7 +85,7 @@
 
 			if(isset($args['winningCombinations'])){
 				$this->setWinningCombinations($args['winningCombinations']);
-			}		
+			}
 		}
 
 		public function returnConfig(){
@@ -118,6 +121,32 @@
 			$this->rule_2_2_1d_invalid = $this->rule_2_2_1d($this->wCombs[1], TRUE, $this->rule_2_2_1d($this->wCombs[0], TRUE));
 			$this->checkRule_2_2_1e();
 			$this->checkRule_2_2_2();
+			
+			foreach($this->wCombs as $k=> $c) {
+				if ($c->cRf == 21111) {
+					$this->last_cDf_21111 = $c;
+					break;
+				}
+			}
+			if(count($this->wCombs) > 9){
+				$last_N3 = array();
+				for ($j=0; $j < 10; $j++) { 				
+					for ($i=0; $i < 6; $i++) { 
+						// $this->rule_2_1c_prev_3n_in_last_10
+						if(!isset($this->last_N3[$this->wCombs[$j]->d[$i]->n])){
+							//$this->last_N3[$this->wCombs[$i]->['d']->n] = 0;
+							$this->rule_2_1c_prev_3n_in_last_10[$this->wCombs[$j]->d[$i]->n] = 0;
+						} 
+						//$this->last_N3[$this->wCombs[$i]->['d']->n]++;
+						$this->rule_2_1c_prev_3n_in_last_10[$this->wCombs[$j]->d[$i]->n]++;			
+					}
+				}
+				/*foreach ($last_N3 as $k => $v) {
+					if($v >= 2) {
+						$this->rule_2_1c_prev_3n_in_last_10[] = $k;
+					}
+				}*/
+			}
 		}
 
 		public function addBettingCombination($C) {
@@ -417,7 +446,7 @@
  
 		public function generate2_1cLimit(){
 			$limits = array('c1'=>array(),'c2'=>array(),'c3'=>array(),'c4'=>array(),'c5'=>array(),'c6'=>array(), 'c7'=>array());
-			//c1
+			//c1 : Lets toggles this because of the new implimentation of 2.1c.1
 			foreach ($this->wCombs as $key => $value) {
 
 				if($value->cRf == '21111') {
@@ -508,13 +537,9 @@
 		}
 
 		public function rule_2_1c($combination) {
-			//c1
-			/*print_r("\ncombination->cRf : ");
-			print_r($combination->cRf);
-			print_r("\ncombination->cRd : ");
-			print_r($combination->cRd);*/
-			if($combination->cRf == '21111') {
-				$cDfs = '';
+			//c1 : Lets toggles this because of the new implimentation of 2.1c.1
+			if($combination->cDf == '21111') {
+				/*$cDfs = '';
 				foreach ($combination->cDf as $k => $vDF) {
 					if($vDF==1){
 						$cDfs .= $k;
@@ -523,7 +548,34 @@
 				//print_r("\ncDfs = ".$cDfs.' ');
 				if(in_array($cDfs, $this->limit_2_1c['c1'])) {
 					return FALSE;
-				}					
+				}*/	
+				// New 2.1c.1
+				//part a : the same ten with 2N of the last comibination drawn with cDf type 21111
+				$n = $this->numElementsEqual($combination, $this->last_cDf_21111);
+				if($n >= 2) {
+					return false;
+				}
+				$prev1 = array();
+				for ($i=0; $i < 10; $i++) { 
+					if($this->last_cDf_21111->cDf[$i] >= 2) {
+						if($combination->cDf[$i] >= 2) {
+							return false;
+						}
+					}
+					if($this->last_cDf_21111->cDf[$i] == 1) {
+						$prev1[] = $i;
+					}
+				}
+				$count = 0;
+				foreach ($prev1 as $k => $j) {
+					if($combination->cDf[$j] >= 1) {
+						$count ++;
+					}
+				}
+				if($count <= 0 || $count >= 3) {
+					return false;
+				}
+
 			}
 			//c2
 			if($combination->cRd == '2211') {
@@ -577,6 +629,59 @@
 			if((in_array($this->wCombs[0]->cRf, $arr)&&(in_array($combination->cRf, $arr)))) {
 				return false;
 			}
+			// Additional rules
+
+				// remove :				
+				$config = array();
+				//print_r($this->rule_2_1c_prev_3n_in_last_10);
+				foreach ($combination->d as $d => $N) {
+					if(isset($this->rule_2_1c_prev_3n_in_last_10[$N->n])) {
+						$config[] = $this->rule_2_1c_prev_3n_in_last_10[$N->n];
+					} else {
+						$config[] = 0;
+					}
+				}
+
+				// Additional restrictions
+				// b.1 more than 3N in the last 10 test with 2 or more times
+				$count = 0;
+				foreach ($config as $k => $c) {
+					if($c >= 2) {
+						$count++;
+					}
+				}
+				if($count > 3) {
+					return false;
+				}
+				// b.2 more than 3N in the last 10 test with 1 time
+				$count = 0;
+				foreach ($config as $k => $c) {
+					if($c == 1) {
+						$count++;
+					}
+				}
+				if(($count ==0 )||($count > 3)) {
+					return false;
+				}
+				// b.3 more than 4N in the last 10 test with 0 time
+				$count = 0;
+				foreach ($config as $k => $c) {
+					if($c == 0) {
+						$count++;
+					}
+				}
+				if(($count == 0 )||($count > 4)) {
+					return false;
+				}
+
+				if(($this->wCombs[0]->cRd_cRf == '21111-111111') && ($combination->cRd_cRf == $this->wCombs[0]->cRd_cRf) && ($combination->cDf == $this->wCombs[0]->cDf)) {
+					return false;
+				}
+
+				if( (($this->wCombs[0]->cRf == '2211')||($this->wCombs[0]->cRf == '111111')||($this->wCombs[0]->cRf == '3111')) && ($combination->cRf == $this->wCombs[0]->cRf) && ($combination->cDf == $this->wCombs[0]->cDf)) {
+					return false;
+				}
+
 			return TRUE;
 		}
 

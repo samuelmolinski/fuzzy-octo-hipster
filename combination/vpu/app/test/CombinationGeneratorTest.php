@@ -604,6 +604,9 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
     }
 
     public function testCheck_rule_2_2_1a() {
+        $this->markTestSkipped(
+              'The test requires 10 or more wCombs.'
+            );
         //:84;s:12:"050913334054";i:85;s:12:"162425424559";i:86;s:12:"041314404652";i:87;s:12:"031822345558";i:
         // 88;s:12:"041545475052";i:89;s:12:"011323243057";i:90;s:12:"222326373848";i:91;s:12:"071431333649";i
         //:92;s:12:"023435424355";i:93;s:12:"020628365156";i:94;s:12:"172936385356";i:95;s:12:"121320303449";i
@@ -903,6 +906,7 @@ class CombinationGeneratorTest extends PHPUnit_Framework_TestCase
         sort($cg->currentBettingCombinations);
         return $cg;
     }
+
     function sortBy_cRd_cRf($cg)   {
         $groups_2_2_Count = array(0,0,0,0,0);
         foreach ($cg->currentBettingCombinations as $key => $C) {
