@@ -222,7 +222,7 @@ class CombinationEngineController extends Controller
 				$N1_possibilities[2]++;
 			}
 			$N1_possibilities[3]++;
-			d()
+			d($N1_possibilities);
 			$cg->addBettingCombination($c);
 		} while ($numOfCombinations > count($cg->currentBettingCombinations));
 		$p->end_timer("Over All");
