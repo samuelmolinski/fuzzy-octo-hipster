@@ -1006,7 +1006,8 @@
 			return TRUE;
 		}
 		/*
-			2N consecutivos, caso eles tenham ocorrido nos 2 últimos testes; 13% 19 milh
+			-	2N consecutivos, caso eles tenham ocorrido nos 2 últimos testes; 13% 19 milh "changed to"
+				1N consecutivos, caso eles tenham ocorrido nos 2 últimos testes
 		*/
 		public function rule_2_2_1d($C, $override = False, $carryOver = 0) {
 
