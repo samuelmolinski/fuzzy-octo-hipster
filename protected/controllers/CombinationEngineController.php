@@ -212,13 +212,13 @@ class CombinationEngineController extends Controller
 				}
 			}
 			// if all is well we add it 
-			if($c['d'][1]['n'] < 11){
+			if($c['d'][0]['n'] < 11){
 				$N1_possibilities[0]++;
 			}
-			if(($c['d'][1]['n'] >= 11) && ($c['d'][1]['n'] <21)){
+			if(($c->d[0]->n >= 11) && ($c->d[0]->n <21)){
 				$N1_possibilities[1]++;
 			}
-			if($c['d'][1]['n'] >= 21){
+			if($c->d[0]->n >= 21){
 				$N1_possibilities[2]++;
 			}
 			$N1_possibilities[3]++;
