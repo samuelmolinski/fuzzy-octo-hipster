@@ -26,6 +26,7 @@
 		public $rule_2_2_2_total;
 		public $rule_2_1b_subList;
 		public $last_cDf_21111;
+		public $last_cRf_21111;
 		public $rule_2_1c_prev_3n_in_last_10;
 		public $last_N3 = array();
 
@@ -1143,7 +1144,7 @@
 				}
 			}
 			if(($C->cDd[0]==0)&&($C->cDd[5]==0)) {
-				d('found false 2');
+				//d('found false 2');
 				return FALSE;
 			}
 			/*d($C->cDd[0]);
@@ -1188,5 +1189,21 @@
 			}
 
 			return true;
+		}
+		public function rule_5a4($C) {
+			if($C->cRf == $this->last_cDf_21111->cRf) {
+				$count = 0;
+				for ($i=0; $i < 10; $i++) { 
+					if(($C->cDf[$i] == $this->last_cDf_21111->cDf[$i])&&($C->cDf[$i] == 1)){
+						$count++;
+						if($count > 2){
+							return false;
+						}
+					}
+					if(($C->cDf[$i] == $this->last_cDf_21111->cDf[$i])&&($C->cDf[$i] == 2)){
+						return false;
+					}
+				}
+			}
 		}
 	}

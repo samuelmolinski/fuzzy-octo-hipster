@@ -163,27 +163,32 @@ class CombinationEngineController extends Controller
 					$list[] = $comb[$i]->n;
 				}
 				$c = new CombinationStatistics($comb);
-				//lets keep the combinations N1 with in these ranges
-				// 1-10 => 77.5%, 11-20 => 17.5%, 21-30 => 5% (of the total values possible for N1)
-				if($N1_possibilities['total']>10) { // let it get some numbers first
-					if($c['d'][1]['n'] < 11){
-						if(($N1_possibilities[0]+1)/($N1_possibilities[3]+1)>77.5) {
-							continue;
-						}
-					}
-					if(($c['d'][1]['n'] >= 11) && ($c['d'][1]['n'] <21)){
-						if(($N1_possibilities[1]+1)/($N1_possibilities[3]+1)>17.5) {
-							continue;
-						}
-					}
-					if($c['d'][1]['n'] >= 21){						
-						if(($N1_possibilities[2]+1)/($N1_possibilities[3]+1)>5) {
-							continue;
-						}
+				//d($c);				//d($c->group2_2);
+			} while (in_array($c, $cg->currentBettingCombinations));
+
+			//lets keep the combinations N1 with in these ranges
+			// 1-10 => 77.5%, 11-20 => 17.5%, 21-30 => 5% (of the total values possible for N1)
+			if($N1_possibilities['total']>10) { // let it get some numbers first
+				if($c->d[0]->n < 11){
+						$num = (($N1_possibilities['n1_10'])/($N1_possibilities['total']));
+					if($num>.775) {
+						continue;
 					}
 				}
-				//d($c->group2_2);
-			} while (in_array($c, $cg->currentBettingCombinations));
+				if(($c->d[0]->n >= 11) && ($c->d[0]->n <21)){
+						$num = ($N1_possibilities['n11_20'])/($N1_possibilities['total']);
+					if($num>.175) {
+						continue;
+					}
+				}
+				if($c->d[0]->n >= 21){		
+						$num = ($N1_possibilities['n21_30'])/($N1_possibilities['total']);
+					if($num>.05) {
+						continue;
+					}
+				}
+			}
+
 			$count++;
 			$numTestsFailed = 0;
 			foreach ($tests as $j => $test) {
@@ -212,22 +217,23 @@ class CombinationEngineController extends Controller
 				}
 			}
 			// if all is well we add it 
-			if($c['d'][0]['n'] < 11){
-				$N1_possibilities[0]++;
+			if($c->d[0]->n < 11){
+				$N1_possibilities['n1_10']++;
 			}
 			if(($c->d[0]->n >= 11) && ($c->d[0]->n <21)){
-				$N1_possibilities[1]++;
+				$N1_possibilities['n11_20']++;
 			}
 			if($c->d[0]->n >= 21){
-				$N1_possibilities[2]++;
+				$N1_possibilities['n21_30']++;
 			}
-			$N1_possibilities[3]++;
-			d($N1_possibilities);
+			$N1_possibilities['total']++;
 			$cg->addBettingCombination($c);
 		} while ($numOfCombinations > count($cg->currentBettingCombinations));
 		$p->end_timer("Over All");
 		$p->sortByTotalTime();
 		sort($cg->currentBettingCombinations);
+		d($c);
+		d($N1_possibilities);
 
 		$cl = new CombinationList($cg->currentBettingCombinations);
 
