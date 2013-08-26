@@ -232,8 +232,8 @@ class CombinationEngineController extends Controller
 		$p->end_timer("Over All");
 		$p->sortByTotalTime();
 		sort($cg->currentBettingCombinations);
-		d($c);
-		d($N1_possibilities);
+		//d($c);
+		//d($N1_possibilities);
 
 		$cl = new CombinationList($cg->currentBettingCombinations);
 
