@@ -332,17 +332,15 @@
 			$c = count($DFs);
 			for ($i=0; $i < $c-1; $i++) { 
 				if($DFs[$i+1]-$DFs[$i] <= 1) {
-
+					$k++;
 				} else {
 					return true;
 				} 
-				$k++;
 			}
 			if($k == $c) {
 				return false;
-			} else {
-				return true;
-			}
+			} 
+			return true;
 		}
 
 		/*	Com 2 NDif = 1 (~ 1 trinca ou 2 duplas de N consecutivos)
@@ -554,6 +552,7 @@
 
 		public function rule_1d($C) {
 			//d($this->wCombs[0]);
+			return true;
 		}
 
 		public function rule_2_1a($combination, $list){
