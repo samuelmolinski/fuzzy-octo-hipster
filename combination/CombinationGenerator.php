@@ -70,11 +70,12 @@
 				$this->groups_2_2 = $args['group2_2'];
 			} else {
 				$this->groups_2_2 = array(
-					array('2211-21111'),
-					array('2211-3111','2211-2211','2211-111111'),
-					array('21111-21111','3111-21111'),
-					array('3111-2211','3111-111111','21111-3111','21111-2211','21111-111111'),
-					array('411-21111','321-21111','222-21111','111111-21111','321-2211','321-111111','3111-3111', '2211-321', '21111-321')
+				array('2211-21111'),
+				array('21111-21111','3111-21111'),
+				array('321-21111','222-21111','111111-21111'),
+				array('321-2211','3111-2211','2211-2211','21111-2211'),
+				array('321-111111','311-111111','2211-111111','21111-111111'),
+				array('2211-3111','21111-3111')
 				);
 			}
 
@@ -307,7 +308,7 @@
 			@return TRUE if it passes the rule and 
 			False if it fails
 		 */
-		public function rule_1a5($C) {
+		public function rule_1a5a($C) {
 
 			$DFs = array();
 			foreach ($C->d as $k => $N) {
@@ -318,6 +319,30 @@
 				return FALSE;
 			}
 			return TRUE;
+		}
+
+		public function rule_1a5b($C) {
+			$k = 0;
+			$DFs = array();
+			foreach ($C->d as $k => $N) {
+				$DFs[] = $N->DF;
+			}
+			sort($DFs);
+			//echo Yii::trace(CVarDumper::dumpAsString($DFs),'comment_here');			d($DFs);
+			$c = count($DFs);
+			for ($i=0; $i < $c-1; $i++) { 
+				if($DFs[$i+1]-$DFs[$i] <= 1) {
+
+				} else {
+					return true;
+				} 
+				$k++;
+			}
+			if($k == $c) {
+				return false;
+			} else {
+				return true;
+			}
 		}
 
 		/*	Com 2 NDif = 1 (~ 1 trinca ou 2 duplas de N consecutivos)
@@ -527,6 +552,10 @@
 			$this->limit_2_1c = $limits;
 		}
 
+		public function rule_1d($C) {
+			//d($this->wCombs[0]);
+		}
+
 		public function rule_2_1a($combination, $list){
 			//d(count($list));
 			return $this->rule_1b1($combination, $this->currentBettingCombinations);
@@ -630,6 +659,9 @@
 			if((in_array($this->wCombs[0]->cRf, $arr)&&(in_array($combination->cRf, $arr)))) {
 				return false;
 			}
+		}
+		public function rule_b3($combination) {
+
 			// Additional rules
 
 				// remove :				
@@ -1125,7 +1157,7 @@
 			$e1 = $this->numElementsEqual($C, $c1);
 			$e2 = $this->numElementsEqual($C, $c2);
 
-			if($e1 >= 2) {
+			if($e1 >= 1) {
 				//d('false');
 				return false;
 			}
