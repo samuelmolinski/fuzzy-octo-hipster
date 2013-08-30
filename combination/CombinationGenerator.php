@@ -1237,4 +1237,127 @@
 				}
 			}
 		}
+
+		// Last Test (previous test)
+
+		public function rule_b1($C) {
+			if($this->numElementsEqual($C, $this->wCombs[0]) >=1){
+				return false;
+			}
+			return true;
+		}
+
+		/*
+			remove C if  both it and the previous test had 1N or 5N even/odd 
+		*/
+		public function rule_b2($C){
+			$e1 = 0; //even num in $C
+			$e2 = 0; //even num in $this->wCombs[0]
+			foreach ($this->wCombs[0]->d as $N) {
+				if($N->n%2 == 0){
+					$e2++;
+				}
+			}
+			if(($e2 == 1)||($e2 == 5)) {				
+				foreach ($this->wCombs[0]->d as $N) {
+					if($N->n%2 == 0){
+						$e1++;
+					}
+				}
+				if(($e1 == 1)||($e1 == 5)) {
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public function rule_b3($C) {
+			$ft1 = 0; // N in the 1-3 tens place
+			$ft2 = 0; // N in the 1-3 tens place
+			foreach ($c->d as $N) {
+				if($N->d <4){
+					$ft1++;
+				}
+			}
+			foreach ($this->wCombs[0]->d as $N) {
+				if($N->d <4){
+					$ft2++;
+				}
+			}321
+			//part A:  1N or 5N in the 1-3 tens place
+			if((($ft1==1)||($ft1==5))&&(($ft2==1)||($ft2==5))) {
+				return false;
+			}
+			//part B: 2N in the 1-3 tens place
+			if(($ft1==2)&&($ft2==2)){
+				return false;
+			}
+			//part A:  1N or 5N in the 1-3 tens place
+			if(($ft1==4)&&($ft2==4)){
+				return false;
+			}
+			return true;
+		}
+
+		/*
+			For cRd that occur in the last test
+		*/
+		public function rule_b5a1() {
+			if(('321' == $this->wCombs[0]->cRd)&&('321' == $combination->cRd)){
+				return false;
+			}
+			return true;
+		}
+		public function rule_b5a2() {
+			if(('3111' == $this->wCombs[0]->cRd)&&('321' == $combination->cRd)){
+				return false;
+			}
+			return true;
+		}
+		public function rule_b5a3() {			
+			$arr = array('222','111111');
+			if((in_array($this->wCombs[0]->cRf, $arr)&&(in_array($combination->cRf, $arr)))) {
+				return false;
+			}
+			return true;
+		}
+
+		/*
+			For cRf that occur in the last test
+		*/
+		public function rule_b5b1() {
+			if(('2211' == $this->wCombs[0]->cRf)&&('2211' == $combination->cRf)){
+				return false;
+			}
+			return true;
+		}
+		public function rule_b5b2() {
+			if(('111111' == $this->wCombs[0]->cRf)&&('111111' == $combination->cRf)){
+				return false;
+			}
+			return true;
+		}
+		public function rule_b5b3() {	
+			if(('3111' == $this->wCombs[0]->cRf)&&('3111' == $combination->cRf)){
+				return false;
+			}
+			return true;
+		}
+
+
+		/*
+			For cRd-cRf that occur in the last test
+		*/
+		public function rule_b5b1() {
+			if(('2211-21111' == $this->wCombs[0]->cRd_cRf)&&('2211-21111' == $combination->cRd_cRf)){
+				return false;
+			}
+			return true;
+		}
+		public function rule_b5b2() {
+			if(('21111-21111' == $this->wCombs[0]->cRd_cRf)&&('21111-21111' == $combination->cRd_cRf)){
+				return false;
+			}
+			return true;
+		}
 	}
