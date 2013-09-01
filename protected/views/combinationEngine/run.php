@@ -75,9 +75,13 @@
 <?php 
 	echo "<h3>Group Totals</h3>\n\r";
 	echo "<ul>";
-	for ($i=0; $i < count($sorted); $i++) { 
+	for ($i=0; $i < count($sorted[0]); $i++) { 
 		$gn = $i +1;
-		echo "<li>Group $gn - {$sorted[$i]}</li>";
+		echo "<li>Group $gn - {$sorted[0][$i]}".
+			($sorted[1][$i]['321']? " (321) ".$sorted[1][$i]['321']: "").
+			" ".($sorted[1][$i]['3111']? " (3111) ".$sorted[1][$i]['3111']: "").
+			" ".($sorted[1][$i]['222_111111']? " (222/111111) ".$sorted[1][$i]['222_111111']: "").
+			"</li>";
 	}
 	echo "</ul>";
 	//d($cg->returnConfig());

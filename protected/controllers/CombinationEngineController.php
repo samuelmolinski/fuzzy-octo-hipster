@@ -154,6 +154,7 @@ class CombinationEngineController extends Controller
 		$fail = 0;
 		$count = 0;
 		$comb = array();
+		$testFailed = array();
 		$N1_possibilities = array('n1_10'=>0, 'n11_20'=>0, 'n21_30'=>0, 'total'=>0);
 		do {
 			do {
@@ -199,7 +200,6 @@ class CombinationEngineController extends Controller
 					/*if(($c->group2_2 == 4) && (!$r)){
 						d($currentFunction);
 					}*/
-					if(!$r){$numTestsFailed++;}
 					if(!$r && ($numTestsFailed>=2)) {
 						$fail++;
 						continue 2;
@@ -213,6 +213,18 @@ class CombinationEngineController extends Controller
 					if(!$r && ($numTestsFailed>=2)) {
 						$fail++;
 						continue 2;
+					}
+				}
+				if(!$r){
+					if(empty($testFailed[$currentFunction])) {
+						$testFailed[$currentFunction] = 0;
+					}
+					$testFailed[$currentFunction]++;
+					$numTestsFailed++;
+					if($count>1000){
+						d($testFailed);
+						exit;
+						break 2;
 					}
 				}
 			}
@@ -238,6 +250,7 @@ class CombinationEngineController extends Controller
 		$cl = new CombinationList($cg->currentBettingCombinations);
 
 		$sorted = $cl->sort_CRD_CRF();
+
 
 		$list = new CombinationList($cg->currentBettingCombinations);		
 		$model = new CombinationSet;

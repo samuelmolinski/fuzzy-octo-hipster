@@ -274,6 +274,28 @@
 			}
 		}
 
+		/*
+			remove C: if no N is both ten 0 (1-10) and 5 (51-60)
+		*/
+		public function rule_a1d1($C) {
+			$tens = array();
+			foreach ($C->d as $N) {
+				if(@$tens[$N->D]==null) {
+					$tens[$N->D]=0;
+				}
+				$tens[$N->D]++;
+			}
+			// Part A
+			if(empty($tens[0])&&empty($tens[5])) {
+				return false;
+			}
+			// Part B
+			if(empty($tens[4])&&empty($tens[5])) {
+				return false;
+			}
+
+			return true;
+		}
 		/*	Com todos os DF consecutivos (ex: 01-11-22-33-44-54)
 			@param array of Numbers(class)
 			@return TRUE if it passes the rule and 
@@ -303,7 +325,7 @@
 			}
 		}
 
-		/*	Com o menor DF >= 4 ou com o maior DF <= 5 (05-15-26-28-37-49 ou 02-10-33-43-52-54)
+		/*	Com o menor DF >= 3 ou com o maior DF <= 6 (05-15-26-28-37-49 ou 02-10-33-43-52-54)
 			@param array of Numbers(class)
 			@return TRUE if it passes the rule and 
 			False if it fails
@@ -321,6 +343,9 @@
 			return TRUE;
 		}
 
+		/*
+			Remove C: all FD being consecutive ones, in order or not (e.g. 01-22-24-33-41-53)
+		*/
 		public function rule_1a5b($C) {
 			$k = 0;
 			$DFs = array();
@@ -372,10 +397,32 @@
 			$count = count($C->d);
 			$limit = 0;
 			$NDifs = array();
+			$threeN_NDifs = array();
 			for ($i=0; $i < $count-1; $i++) { 
-				$NDifs[] = $C->d[$i+1]->n - $C->d[$i]->n+1;
+				$diff = $C->d[$i+1]->n - $C->d[$i]->n+1;
+				$NDifs[] = $diff;
+				if(@$threeN_NDifs[$diff] == null){
+					$threeN_NDifs[$diff] = 0;
+				}
+				$threeN_NDifs[$diff]++;
 			}
 			sort($NDifs);
+			// part a (4b3)
+			ksort($threeN_NDifs);
+			foreach ($threeN_NDifs as $num_times) {
+				if($num_times >=3) {
+					return false;
+				}
+			}
+			
+			// part b (4c1)
+			if($NDifs[0]> 6) {
+				return false;
+			}
+			// part c (4c2)
+			if($NDifs[count($NDifs)-1]< 6) {
+				return false;
+			}
 			$freq = array_count_values($NDifs);
 			foreach ($freq as $k => $NDif) {
 				if($NDif>=3) {
@@ -659,7 +706,7 @@
 				return false;
 			}
 		}
-		public function rule_b3($combination) {
+		public function rule_b1_plus_b3($combination) {  // not sure where this name came from
 
 			// Additional rules
 
@@ -1156,11 +1203,13 @@
 			$e1 = $this->numElementsEqual($C, $c1);
 			$e2 = $this->numElementsEqual($C, $c2);
 
+			//part a
 			if($e1 >= 1) {
 				//d('false');
 				return false;
 			}
-			//d($e1);
+			
+			//part ???
 			$n3 = array();
 			foreach ($c1->cDd as $n => $v) {
 				if($v >= 2) {
@@ -1221,34 +1270,16 @@
 
 			return true;
 		}
-		public function rule_5a4($C) {
-			if($C->cRf == $this->last_cDf_21111->cRf) {
-				$count = 0;
-				for ($i=0; $i < 10; $i++) { 
-					if(($C->cDf[$i] == $this->last_cDf_21111->cDf[$i])&&($C->cDf[$i] == 1)){
-						$count++;
-						if($count > 2){
-							return false;
-						}
-					}
-					if(($C->cDf[$i] == $this->last_cDf_21111->cDf[$i])&&($C->cDf[$i] == 2)){
-						return false;
-					}
-				}
-			}
-		}
-
-		// Last Test (previous test)
 
 		public function rule_b1($C) {
-			if($this->numElementsEqual($C, $this->wCombs[0]) >=1){
+			if($this->numElementsEqual($C, $this->wCombs[0]) > 1){
 				return false;
 			}
 			return true;
 		}
 
 		/*
-			remove C if  both it and the previous test had 1N or 5N even/odd 
+			remove C if  both it and the previous test had 1N or 5N even
 		*/
 		public function rule_b2($C){
 			$e1 = 0; //even num in $C
@@ -1258,32 +1289,35 @@
 					$e2++;
 				}
 			}
-			if(($e2 == 1)||($e2 == 5)) {				
+			if(($e2 == 1)||($e2 >= 5)) {				
 				foreach ($this->wCombs[0]->d as $N) {
 					if($N->n%2 == 0){
 						$e1++;
 					}
 				}
-				if(($e1 == 1)||($e1 == 5)) {
+				if(($e1 == 1)||($e1 >= 5)) {
 					return false;
 				}
 			}
 			return true;
 		}
 
+		/*
+			remove C: if  both it and the previous test had 1N or 5N  occuring in the first 3 tens
+		*/
 		public function rule_b3($C) {
 			$ft1 = 0; // N in the 1-3 tens place
 			$ft2 = 0; // N in the 1-3 tens place
-			foreach ($c->d as $N) {
-				if($N->d <4){
+			foreach ($C->d as $N) {
+				if($N->D <4){
 					$ft1++;
 				}
 			}
 			foreach ($this->wCombs[0]->d as $N) {
-				if($N->d <4){
+				if($N->D <4){
 					$ft2++;
 				}
-			}321
+			}
 			//part A:  1N or 5N in the 1-3 tens place
 			if((($ft1==1)||($ft1==5))&&(($ft2==1)||($ft2==5))) {
 				return false;
@@ -1292,72 +1326,199 @@
 			if(($ft1==2)&&($ft2==2)){
 				return false;
 			}
-			//part A:  1N or 5N in the 1-3 tens place
+			//part C:  4N in the 1-3 tens place
 			if(($ft1==4)&&($ft2==4)){
 				return false;
 			}
 			return true;
 		}
 
+		//
+		// Last 3 Tests (previous 3 test)
+		//
 		/*
-			For cRd that occur in the last test
+			Remove C: if 0 or 3N occured in the earlier 3 tests
 		*/
-		public function rule_b5a1() {
-			if(('321' == $this->wCombs[0]->cRd)&&('321' == $combination->cRd)){
+		public function rule_b4a($C){
+			$prev = 0;
+			$cur = 0;
+			for ($i=1; $i < 4; $i++) { 
+				if(($this->numElementsEqual($this->wCombs[0], $this->wCombs[$i+1]) == 0)||($this->numElementsEqual($this->wCombs[0], $this->wCombs[$i+1])==3)) {
+					$prev++;
+				}
+				if(($this->numElementsEqual($C, $this->wCombs[$i]) == 0)||($this->numElementsEqual($C, $this->wCombs[$i])==3)) {
+					$cur++;
+				}
+			}
+			if(($prev==3)&&($cur==3)){
+
 				return false;
 			}
 			return true;
 		}
-		public function rule_b5a2() {
-			if(('3111' == $this->wCombs[0]->cRd)&&('321' == $combination->cRd)){
+		/*
+			Remove C: if 2N occured in the earlier 3 tests
+		*/
+		public function rule_b4b($C){
+			$prev = 0;
+			$cur = 0;
+			for ($i=1; $i < 4; $i++) { 
+				if($this->numElementsEqual($this->wCombs[0], $this->wCombs[$i+1]) == 2) {
+					$prev++;
+				} 
+				if($this->numElementsEqual($C, $this->wCombs[$i]) == 2) {
+					$cur++;
+				}
+			}
+			if(($prev==3)&&($cur==3)){
 				return false;
 			}
 			return true;
 		}
-		public function rule_b5a3() {			
+		/*
+			Remove C: if 4N occured in the earlier 3 tests
+		*/
+		public function rule_b4c($C){
+			$prev = 0;
+			$cur = 0;
+			for ($i=1; $i < 4; $i++) { 
+				if($this->numElementsEqual($this->wCombs[0], $this->wCombs[$i+1]) >= 3) {
+					$prev++;
+				} 
+				if($this->numElementsEqual($C, $this->wCombs[$i]) >= 3) {
+					$cur++;
+				}
+			}
+			if(($prev==3)&&($cur==3)){
+				return false;
+			}
+			return true;
+		}
+
+		//
+		// Last Tests (cRd, cRd test)
+		//
+		/*
+			Remove C: For cRd 321 that occur in the last test
+		*/
+		public function rule_b5a1($C) {
+			if(('321' == $this->wCombs[0]->cRd)&&('321' == $C->cRd)){
+				return false;
+			}
+			return true;
+		}
+		/*
+			Remove C: For cRd 3111 that occur in the last test
+		*/
+		public function rule_b5a2($C) {
+			if(('3111' == $this->wCombs[0]->cRd)&&('321' == $C->cRd)){
+				return false;
+			}
+			return true;
+		}
+		/*
+			Remove C: For cRd 222 or 111111 that occur in the last test
+		*/
+		public function rule_b5a3($C) {			
 			$arr = array('222','111111');
-			if((in_array($this->wCombs[0]->cRf, $arr)&&(in_array($combination->cRf, $arr)))) {
+			if((in_array($this->wCombs[0]->cRf, $arr)&&(in_array($C->cRf, $arr)))) {
 				return false;
 			}
 			return true;
 		}
-
 		/*
-			For cRf that occur in the last test
+			Remove C: For cRf 2211 that occur in the last test
 		*/
-		public function rule_b5b1() {
-			if(('2211' == $this->wCombs[0]->cRf)&&('2211' == $combination->cRf)){
+		public function rule_b5b1($C) {
+			if(('2211' == $this->wCombs[0]->cRf)&&('2211' == $C->cRf)){
 				return false;
 			}
 			return true;
 		}
-		public function rule_b5b2() {
-			if(('111111' == $this->wCombs[0]->cRf)&&('111111' == $combination->cRf)){
-				return false;
-			}
-			return true;
-		}
-		public function rule_b5b3() {	
-			if(('3111' == $this->wCombs[0]->cRf)&&('3111' == $combination->cRf)){
-				return false;
-			}
-			return true;
-		}
-
-
 		/*
-			For cRd-cRf that occur in the last test
+			Remove C: For cRf 111111 that occur in the last test
 		*/
-		public function rule_b5b1() {
-			if(('2211-21111' == $this->wCombs[0]->cRd_cRf)&&('2211-21111' == $combination->cRd_cRf)){
+		public function rule_b5b2($C) {
+			if(('111111' == $this->wCombs[0]->cRf)&&('111111' == $C->cRf)){
 				return false;
 			}
 			return true;
 		}
-		public function rule_b5b2() {
-			if(('21111-21111' == $this->wCombs[0]->cRd_cRf)&&('21111-21111' == $combination->cRd_cRf)){
+		/*
+			Remove C: For cRf 3111 that occur in the last test
+		*/
+		public function rule_b5b3($C) {	
+			if(('3111' == $this->wCombs[0]->cRf)&&('3111' == $C->cRf)){
 				return false;
 			}
 			return true;
 		}
+		/*
+			For cRd-cRf 2211-21111 that occur in the last test
+		*/
+		public function rule_b5c1($C) {
+			if(('2211-21111' == $this->wCombs[0]->cRd_cRf)&&('2211-21111' == $C->cRd_cRf)){
+				return false;
+			}
+			return true;
+		}
+		/*
+			For cRd-cRf 21111-21111 that occur in the last test
+		*/
+		public function rule_b5c2($C) {
+			if(('21111-21111' == $this->wCombs[0]->cRd_cRf)&&('21111-21111' == $C->cRd_cRf)){
+				return false;
+			}
+			return true;
+		}
+
+		//
+		// Last Occurrance 
+		//
+
+		public function rule_b6a1($C) {
+			if($C->cRf == '21111') { //$this->last_cDf_21111->cRf)
+				$count = 0;
+				for ($i=0; $i < 10; $i++) { 
+					// Part A
+					$DF = array();
+					//if both 2N (the 2 from 21111) from the pair of C are in the same tens
+					if(($C->cDf[$i] == $this->last_cDf_21111->cDf[$i])&&($C->cDf[$i] == 2)){
+						foreach ($C->d as $N) {
+							if($N->DF == $i) {
+								if(@$DF[$N->D] == null){
+									$DF[$N->D]=0;
+								}
+								$DF[$N->D]++;
+							}
+						}						
+						foreach ($DF as $D => $num) {
+							if(($num==2)||($num==4)){
+								return false;
+							}
+						}
+					}
+					// Part B
+					$DF = array();
+					if(($C->cDf[$i] == $this->last_cDf_21111->cDf[$i])&&($C->cDf[$i] == 1)){
+						$count = 0;
+						foreach ($C->d as $N) {
+							if($N->DF == $i) {
+								if(empty($DF[$N->D])){
+									$DF[$N->D]=0;
+								}
+								$DF[$N->D]++;
+							}
+						}						
+						foreach ($DF as $D => $num) {
+							if(($num>=2)||($num==0)){
+								return false;
+							}
+						}
+					}
+				}
+			}
+			return true;
+		}
+		
 	}

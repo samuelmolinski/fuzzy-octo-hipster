@@ -170,6 +170,14 @@
 
 	    public function sort_CRD_CRF(){
 	    	$sort = array(0,0,0,0,0,0);
+	    	$sub = array(
+	    		array('321'=>0,'3111'=>0,'222_111111'=>0),
+	    		array('321'=>0,'3111'=>0,'222_111111'=>0),
+	    		array('321'=>0,'3111'=>0,'222_111111'=>0),
+	    		array('321'=>0,'3111'=>0,'222_111111'=>0),
+	    		array('321'=>0,'3111'=>0,'222_111111'=>0),
+	    		array('321'=>0,'3111'=>0,'222_111111'=>0)
+    		);
 	    	$groups_2_2 = array(
 				array('2211-21111'),
 				array('21111-21111','3111-21111'),
@@ -180,17 +188,26 @@
 			);
 			foreach ($this->list as $key => $Cstring) {
 
-            //echo Yii::trace(CVarDumper::dumpAsString($Cstring),'combination $Cstring');
-			$C = new CombinationStatistics($Cstring);
+            	//echo Yii::trace(CVarDumper::dumpAsString($Cstring),'combination $Cstring');
+				$C = new CombinationStatistics($Cstring);
 				foreach ($groups_2_2 as $key => $group) {
 					if(in_array($C->cRd_cRf, $group)){
 						$sort[$key]++;
+						
+						if($C->cRd == '321'){
+							$sub[$key]['321']++; 
+						}
+						if($C->cRd == '3111'){
+							$sub[$key]['321']++; 
+						}
+						if(($C->cRd == '222')||($C->cRd == '111111')) {
+							$sub[$key]['222_111111']++; 
+						}
 						break;
-
 					}
 				}
 			}
-			return $sort;
+			return array($sort, $sub);
 	    }
 
 	}
