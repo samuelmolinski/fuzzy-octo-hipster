@@ -1,4 +1,4 @@
-<h1>Test 1.b.1</h1>
+<h1>Test 4N</h1>
 <?php 
 	
 	set_time_limit(0);
@@ -10,7 +10,7 @@
 	require_once('../CombinationEvaluation.php');
 	require_once('../CombinationPreliminarEvaluation.php');
 
-	$megaSc = mLoadXml('dd_megasc.htm');
+	$megaSc = mLoadXml('../D_MEGA.htm');
 	$megaSc = $megaSc->body->table->xpath('tr');
 	array_shift($megaSc);
 
@@ -38,32 +38,49 @@
 		return strcmp($a, $b);
 	}
 
-	d($winningNumbers);
+	//d($winningNumbers);
 
 	$test = new CombinationTest;
 	$pTest = new CombinationPreliminarTest;
 	$perf = new performance;
 
-	$perf->start_timer('p_test_1b1');
-	//$results = $pTest->p_test_1b1($arrTest, $arrTest);
-	$results = $pTest->p_test_1b1($winningNumbers, $winningNumbers);
-	$perf->end_timer('p_test_1b1');
-	//$results = $test->numElementsEqual($c1, $c2);
-
-	//d($perf->timers);
-	//d($perf->timeToReadable($perf->timers['p_test_1b1']['total']));
+	$data = array();
+	foreach ($winningNumbers as $k => $combination) {
+		//d($combination);
+		//$combination = $winningNumbers[0];
+		//d($combination);
+		foreach ($winningNumbers as $j => $value) {
+			//d($value->id);
+			if($combination != $value){
+				$return = numElementsEqual($combination, $value);
+				//d($return);
+				if($return['num'] >= 4) {
+					if(!is_array(@$data[$return['subComb']])) {
+						$data[$return['subComb']] = array('total'=>0, 'combinations'=>array());
+					}
+					if(!in_array($combination->id, $data[$return['subComb']]['combinations'])) {
+						$data[$return['subComb']]['combinations'][] = $combination->id;
+					}
+					if(!in_array($value->id, $data[$return['subComb']]['combinations'])) {
+						$data[$return['subComb']]['combinations'][] = $value->id;
+					}
+					$data[$return['subComb']]['total']++;
+				}
+			}
+		}
+	}
 
 	$total = count($winningNumbers);
 	$totalOccurance = 0;
 
-	foreach($results as $k=>$v) {
+	foreach($data as $k=>$v) {
 		$totalOccurance += ($v['total']);
 	}
 	$percent = $totalOccurance/$total *100;
 	//d($perf->timers['p_test_1b1']['total']/$total);
-	echo "The following 5N were found in the current drawn lottery tickets:";
+	echo "The following 4N were found in the current drawn lottery tickets:";
 	echo "<ol>";
-	foreach ($results as $key => $value) {
+	foreach ($data as $key => $value) {
 		$count = count($value['combinations']);
 		echo "<li>$key: was found $count times in the following cominations:<ul>";
 		foreach ($value['combinations'] as $key => $value) {
@@ -73,11 +90,25 @@
 	}
 	echo "</ol>";
 
-	//d($results);
+	//d($data);
 
-	/*
-	Comb 	count
-	1 		2
-	2		4
-	3 		6
-	*/
+function numElementsEqual($c1, $c2) {
+	$return = array('num'=>0, 'subComb'=>'');
+	$num = 0;
+	if($c1 != $c2) {
+		foreach ($c2->d as $key => $value) {
+			if(in_array($value, $c1->d)) {
+				$return['num']++;
+				if($return['subComb'] == ''){
+					$return['subComb'] = $value->n;
+				} else {
+					$return['subComb'] .= '-'.$value->n;
+				}
+			}
+		}
+	} else {
+		$return['num'] = 6;
+	}
+	return $return;
+}
+?>
