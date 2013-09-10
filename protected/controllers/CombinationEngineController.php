@@ -190,7 +190,7 @@ class CombinationEngineController extends Controller
 				}
 			}
 
-			//$count++;
+			$count++;
 			$numTestsFailed = 0;
 			foreach ($tests as $j => $test) {
 				$currentFunction = $test[0];
@@ -213,11 +213,11 @@ class CombinationEngineController extends Controller
 					}
 					$testFailed[$currentFunction]++;
 					$numTestsFailed++;
-					if($count>1000){
+					/*if($count>1000){
 						//d($testFailed);
 						exit;
 						break 2;
-					}
+					}*/
 
 					if($numTestsFailed>=2) {
 						$fail++;
