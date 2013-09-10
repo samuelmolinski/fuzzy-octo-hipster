@@ -190,7 +190,7 @@ class CombinationEngineController extends Controller
 				}
 			}
 
-			$count++;
+			//$count++;
 			$numTestsFailed = 0;
 			foreach ($tests as $j => $test) {
 				$currentFunction = $test[0];
