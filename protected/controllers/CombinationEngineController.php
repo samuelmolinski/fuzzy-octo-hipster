@@ -200,31 +200,28 @@ class CombinationEngineController extends Controller
 					/*if(($c->group2_2 == 4) && (!$r)){
 						d($currentFunction);
 					}*/
-					if(!$r && ($numTestsFailed>=2)) {
-						$fail++;
-						continue 2;
-					}
 				} else {
 					$r = $cg->$currentFunction($c);					
 					/*if(($c->group2_2 == 4) && (!$r)){
 						d($currentFunction);
 					}*/
-					if(!$r){$numTestsFailed++;}
-					if(!$r && ($numTestsFailed>=2)) {
-						$fail++;
-						continue 2;
-					}
 				}
 				if(!$r){
+					$numTestsFailed++;
 					if(empty($testFailed[$currentFunction])) {
 						$testFailed[$currentFunction] = 0;
 					}
 					$testFailed[$currentFunction]++;
 					$numTestsFailed++;
 					if($count>1000){
-						d($testFailed);
+						//d($testFailed);
 						exit;
 						break 2;
+					}
+
+					if($numTestsFailed>=2) {
+						$fail++;
+						continue 2;
 					}
 				}
 			}
@@ -246,6 +243,7 @@ class CombinationEngineController extends Controller
 		sort($cg->currentBettingCombinations);
 		//d($c);
 		//d($N1_possibilities);
+		echo Yii::trace(CVarDumper::dumpAsString($testFailed),'$testFailed[$currentFunction]');
 
 		$cl = new CombinationList($cg->currentBettingCombinations);
 
