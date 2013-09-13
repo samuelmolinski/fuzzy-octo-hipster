@@ -212,8 +212,7 @@ class CombinationEngineController extends Controller
 						$testFailed[$currentFunction] = 0;
 					}
 					$testFailed[$currentFunction]++;
-					$numTestsFailed++;
-					if($count>10000){
+					if($count>1000){
 						//d($testFailed);
 						exit;
 						break 2;
