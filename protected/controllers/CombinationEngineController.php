@@ -252,6 +252,11 @@ class CombinationEngineController extends Controller
 		$list = new CombinationList($cg->currentBettingCombinations);		
 		$model = new CombinationSet;
 		$model->combinations = serialize($list);
+		echo Yii::trace(CVarDumper::dumpAsString($list),'$list');
+
+		echo Yii::trace(CVarDumper::dumpAsString($model->combinations),'$model->combinations');
+		echo Yii::trace(CVarDumper::dumpAsString($model),'$list');
+		
 		if($model->save()) {
 			$render =array(
 				"numOfCombinations"=>$numOfCombinations,
