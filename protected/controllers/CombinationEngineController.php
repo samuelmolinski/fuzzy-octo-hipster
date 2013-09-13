@@ -214,7 +214,7 @@ class CombinationEngineController extends Controller
 					$testFailed[$currentFunction]++;
 					if($count>1000){
 						//d($testFailed);
-						exit;
+						//exit;
 						break 2;
 					}
 
@@ -256,7 +256,7 @@ class CombinationEngineController extends Controller
 
 		echo Yii::trace(CVarDumper::dumpAsString($model->combinations),'$model->combinations');
 		echo Yii::trace(CVarDumper::dumpAsString($model),'$list');
-		
+
 		if($model->save()) {
 			$render =array(
 				"numOfCombinations"=>$numOfCombinations,
