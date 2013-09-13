@@ -119,6 +119,8 @@ $this->menu=array(
 <br />
 
 <?php 
+	echo $tables;
+	
 	echo "<h3>Group Totals</h3>\n\r";
 	echo "<ul>";
 	for ($i=0; $i < count($sorted[0]); $i++) { 
