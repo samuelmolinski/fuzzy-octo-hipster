@@ -164,7 +164,8 @@ class CombinationEngineController extends Controller
 					$list[] = $comb[$i]->n;
 				}
 				$c = new CombinationStatistics($comb);
-				//d($c);				//d($c->group2_2);
+				//d($c);				//d($c->group2_2); 
+				
 			} while (in_array($c, $cg->currentBettingCombinations));
 
 			//lets keep the combinations N1 with in these ranges
@@ -172,13 +173,13 @@ class CombinationEngineController extends Controller
 			if($N1_possibilities['total']>10) { // let it get some numbers first
 				if($c->d[0]->n < 11){
 						$num = (($N1_possibilities['n1_10'])/($N1_possibilities['total']));
-					if($num>.775) {
+					if($num>.80) {
 						continue;
 					}
 				}
 				if(($c->d[0]->n >= 11) && ($c->d[0]->n <21)){
 						$num = ($N1_possibilities['n11_20'])/($N1_possibilities['total']);
-					if($num>.175) {
+					if($num>.15) {
 						continue;
 					}
 				}
