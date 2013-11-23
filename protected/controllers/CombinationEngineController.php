@@ -201,31 +201,27 @@ class CombinationEngineController extends Controller
 					/*if(($c->group2_2 == 4) && (!$r)){
 						d($currentFunction);
 					}*/
-					if(!$r && ($numTestsFailed>=2)) {
-						$fail++;
-						continue 2;
-					}
 				} else {
 					$r = $cg->$currentFunction($c);					
 					/*if(($c->group2_2 == 4) && (!$r)){
 						d($currentFunction);
 					}*/
-					if(!$r){$numTestsFailed++;}
-					if(!$r && ($numTestsFailed>=2)) {
-						$fail++;
-						continue 2;
-					}
 				}
 				if(!$r){
+					$numTestsFailed++;
 					if(empty($testFailed[$currentFunction])) {
 						$testFailed[$currentFunction] = 0;
 					}
 					$testFailed[$currentFunction]++;
-					$numTestsFailed++;
-					if($count>1000){
-						d($testFailed);
-						exit;
+					/*if($count>1000){
+						//d($testFailed);
+						//exit;
 						break 2;
+					}*/
+
+					if($numTestsFailed>=2) {
+						$fail++;
+						continue 2;
 					}
 				}
 			}
@@ -247,6 +243,7 @@ class CombinationEngineController extends Controller
 		sort($cg->currentBettingCombinations);
 		//d($c);
 		//d($N1_possibilities);
+		echo Yii::trace(CVarDumper::dumpAsString($testFailed),'$testFailed[$currentFunction]');
 
 		$cl = new CombinationList($cg->currentBettingCombinations);
 
@@ -256,6 +253,11 @@ class CombinationEngineController extends Controller
 		$list = new CombinationList($cg->currentBettingCombinations);		
 		$model = new CombinationSet;
 		$model->combinations = serialize($list);
+		echo Yii::trace(CVarDumper::dumpAsString($list),'$list');
+
+		echo Yii::trace(CVarDumper::dumpAsString($model->combinations),'$model->combinations');
+		echo Yii::trace(CVarDumper::dumpAsString($model),'$list');
+
 		if($model->save()) {
 			$render =array(
 				"numOfCombinations"=>$numOfCombinations,
