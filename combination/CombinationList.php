@@ -178,17 +178,12 @@
 	    		array('321'=>0,'3111'=>0,'222_111111'=>0),
 	    		array('321'=>0,'3111'=>0,'222_111111'=>0)
     		);
-	    	$groups_2_2 = array(
-				array('2211-21111'),
-				array('21111-21111','3111-21111'),
-				array('321-21111','222-21111','111111-21111'),
-				array('321-2211','3111-2211','2211-2211','21111-2211'),
-				array('321-111111','311-111111','2211-111111','21111-111111'),
-				array('2211-3111','21111-3111')
-			);
+	    	$groups_2_2 = Yii::app()->params['cRd_cRf_groups'];
+
+
 			foreach ($this->list as $key => $Cstring) {
 
-            	//echo Yii::trace(CVarDumper::dumpAsString($Cstring),'combination $Cstring');
+            	//echo Yii::trace(CVarDumper::dumpAsString($groups_2_2),'combination $Cstring');
 				$C = new CombinationStatistics($Cstring);
 				foreach ($groups_2_2 as $key => $group) {
 					if(in_array($C->cRd_cRf, $group)){

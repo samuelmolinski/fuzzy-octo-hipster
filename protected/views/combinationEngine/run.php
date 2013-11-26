@@ -50,6 +50,7 @@
 	echo "</ol>";*/
 
 	$count = 0;
+	$nTotal = array();
 ?>
 <div class="portlet-content">
     
@@ -64,6 +65,13 @@
 		<tbody>
 			<?php 
 				foreach ($cg->currentBettingCombinations as $k => $c) {
+					foreach ($c->d as $k => $N) {
+						if(isset($nTotal[$N->n])) {
+							$nTotal[$N->n]++;
+						} else {
+							$nTotal[$N->n] = 0;
+						}
+					}
 					$count++;
 					echo "<tr><td>$count</td><td>".$c->print_id()."</td></tr>";
 				}
@@ -72,8 +80,9 @@
 	</table>
 </div>
 
-<?php 
-	echo "<h3>Group Totals</h3>\n\r";
+<?php 	
+	echo "<h3 style=\"clear:both\">Group Totals</h3>\n\r";
+
 	echo "<ul>";
 	for ($i=0; $i < count($sorted[0]); $i++) { 
 		$gn = $i +1;
@@ -85,4 +94,12 @@
 	}
 	echo "</ul>";
 	//d($cg->returnConfig());
+	//d($nTotal);
+
+	ksort($nTotal);
+	echo "<div class='' style=\"clear:both\">";
+	foreach ($nTotal as $k => $vez) {
+		echo "<span> $k [$vez],</span>";
+	}
+	echo "</div>"
 ?>

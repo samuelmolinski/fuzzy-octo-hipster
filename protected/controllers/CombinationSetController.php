@@ -100,7 +100,7 @@ class CombinationSetController extends Controller
 
 		$sorted = $CL->sort_CRD_CRF();
 		
-		$this->render('view', array('model'=>$this->loadModel($id),'engineSettings'=>$engineSettings, 'engineSettingId'=>$engineSettingId, 'wc'=>$wc, 'premade'=>$premade, 'tables'=>$tables['table'], 'results'=>$tables['results'], 'testedCombination'=>$testedCombination, 'users'=>$users, 'sorted'=>$sorted));
+		$this->render('view', array('model'=>$this->loadModel($id),'engineSettings'=>$engineSettings, 'engineSettingId'=>$engineSettingId, 'wc'=>$wc, 'premade'=>$premade, 'tables'=>$tables['table'], 'results'=>$tables['results'], 'testedCombination'=>$testedCombination, 'users'=>$users, 'sorted'=>$sorted, 'cl'=>$CL));
 	}
 	/**
 	 * Export a new model.

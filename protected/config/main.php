@@ -95,9 +95,9 @@ return array(
 				),
 				// uncomment the following to show log messages on web pages
 				
-				/*array(
+				/**/array(
 					'class'=>'CWebLogRoute',
-				),*/
+				),
 				
 			),
 		),
@@ -112,5 +112,13 @@ return array(
 		//'root'=> 'http://localhost/fuzzy-octo-hipster/',
 		'root'=> 'http://nissenidea.com/',
 		'engine'=> 'Mega Sena',
+		'cRd_cRf_groups'=>array(			
+				array('2211-21111'),
+				array('21111-21111','3111-21111'),
+				array('321-21111','222-21111','111111-21111'),
+				array('321-2211','3111-2211','2211-2211','21111-2211'),
+				array('321-111111','3111-111111','2211-111111','21111-111111'),
+				array('2211-3111','21111-3111')
+			)
 	),
 );

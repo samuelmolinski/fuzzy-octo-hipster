@@ -121,7 +121,7 @@ $this->menu=array(
 <?php 
 	echo $tables;
 	
-	echo "<h3>Group Totals</h3>\n\r";
+	echo "<h3 style=\"clear:both\">Group Totals</h3>\n\r";
 	echo "<ul>";
 	for ($i=0; $i < count($sorted[0]); $i++) { 
 		$gn = $i +1;
@@ -132,5 +132,23 @@ $this->menu=array(
 			"</li>";
 	}
 	echo "</ul>";
-	//d($cg->returnConfig());
+
+	$nTotal = array();
+	foreach ($cl->list as $k => $c_string) {
+		$c = new CombinationStatistics($c_string);
+		foreach ($c->d as $k => $N) {
+			if(isset($nTotal[$N->n])) {
+				$nTotal[$N->n]++;
+			} else {
+				$nTotal[$N->n] = 1;
+			}
+		}
+	}
+	ksort($nTotal);
+	d($c);
+	echo "<div class='' style=\"clear:both\">";
+	foreach ($nTotal as $k => $vez) {
+		echo "<span> $k [$vez],</span>";
+	}
+	echo "</div>"
 ?>

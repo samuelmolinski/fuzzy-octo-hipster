@@ -115,7 +115,8 @@ class CombinationEngineController extends Controller
 			$tests = unserialize($engineSettings->ruleOrder);
 		}
 
-		/*$tests == array (	array ('rule_2_2_2','c'),
+		/*
+			$tests == array (	array ('rule_2_2_2','c'),
 							array ('rule_2_2_1b','c'),
 							array ('rule_2_2_1a','c'),
 							array ('rule_2_2_1c','c'),
@@ -139,7 +140,8 @@ class CombinationEngineController extends Controller
 							array ('rule_2_1_2b','c'),
 							array ('rule_2_1_2c','c'),
 							array ('rule_2_1_2d','c'),
-						);*/
+						);
+						*/
 
 		set_time_limit(0);
 		$p = new Performance();
@@ -169,7 +171,7 @@ class CombinationEngineController extends Controller
 			} while (in_array($c, $cg->currentBettingCombinations));
 
 			//lets keep the combinations N1 with in these ranges
-			// 1-10 => 77.5%, 11-20 => 17.5%, 21-30 => 5% (of the total values possible for N1)
+			// 1-10 => 80%, 11-20 => 15%, 21-30 => 5% (of the total values possible for N1)
 			if($N1_possibilities['total']>10) { // let it get some numbers first
 				if($c->d[0]->n < 11){
 						$num = (($N1_possibilities['n1_10'])/($N1_possibilities['total']));
@@ -208,7 +210,7 @@ class CombinationEngineController extends Controller
 					}*/
 				}
 				if(!$r){
-					$numTestsFailed++;
+					$numTestsFailed += $test[1];
 					if(empty($testFailed[$currentFunction])) {
 						$testFailed[$currentFunction] = 0;
 					}

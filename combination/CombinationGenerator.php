@@ -5,11 +5,22 @@
 	//require_once("Number.php");
 
 	class CombinationGenerator {
+		/*
+		Mega system
+		The system is based in 4 types of restrictions: those related to the arrangement of Ns, pairs of cRd-cRf, cRd and cRf.
+		There are 35 itens of restrictions distributed by the 4 types. 
+		*/
 
-
-		public $CL;
-		public $currentBettingCombinations;
-		public $rule_1a1_ranges;
+		public $CL; /* required */
+		public $currentBettingCombinations;  /* required */
+		public $rule_1a1_ranges = array(
+						array('min'=>1,'max'=>30),
+						array('min'=>2,'max'=>40),
+						array('min'=>4,'max'=>49),
+						array('min'=>11,'max'=>55),
+						array('min'=>18,'max'=>59),
+						array('min'=>31,'max'=>60)
+					);
 		public $permited_1a8;
 		public $limit_2_1c;
 		public $groups_2_1_2;
@@ -67,16 +78,18 @@
 			}
 
 			if(isset($args['group2_2'])){
-				$this->groups_2_2 = $args['group2_2'];
+				//$this->groups_2_2 = $args['group2_2'];
+				$this->groups_2_2 = Yii::app()->params['cRd_cRf_groups'];
 			} else {
-				$this->groups_2_2 = array(
+				/*$this->groups_2_2 = array(
 				array('2211-21111'),
 				array('21111-21111','3111-21111'),
 				array('321-21111','222-21111','111111-21111'),
 				array('321-2211','3111-2211','2211-2211','21111-2211'),
 				array('321-111111','311-111111','2211-111111','21111-111111'),
 				array('2211-3111','21111-3111')
-				);
+				);*/
+				$this->groups_2_2 = Yii::app()->params['cRd_cRf_groups'];
 			}
 
 			if(isset($args['rule_2_2_2_limit'])){
@@ -157,6 +170,9 @@
 			}
 			$this->currentBettingCombinations[] = $C;
 		}
+
+		
+
 
 		/*	Com todos os DF consecutivos (ex: 01-11-22-33-44-54)
 			Generates the base Combination based on the Rule 1a1
@@ -1476,7 +1492,7 @@
 		// Last Occurrance 
 		//
 
-		public function rule_b6a1($C) {
+		/*public function rule_b6a1($C) {
 			if($C->cRf == '21111') { //$this->last_cDf_21111->cRf)
 				$count = 0;
 				for ($i=0; $i < 10; $i++) { 
@@ -1518,6 +1534,61 @@
 					}
 				}
 			}
+			return true;
+		}*/
+
+		public function rule_b6a1($C) {
+				$count = 0;
+			// Part A
+			$D1 = array();
+			$D2 = array();
+			//if both 2N (the 2 from 21111) from the pair of C are in the same tens
+			foreach ($C->d as $k => $N) {
+				if(!isset($D1[$N->D])){$D1[$N->D]=0;}
+				$D1[$N->D]++;
+			}
+			foreach ($this->wCombs[0]->d as $k => $N) {
+				if(!isset($D2[$N->D])){$D2[$N->D]=0;}
+				$D2[$N->D]++;
+			}
+			foreach ($D1 as $k => $nOccured) {
+				//if($nOccured)
+			}
+
+			/*if(($C->cDf[$i] == $this->last_cDf_21111->cDf[$i])&&($C->cDf[$i] == 2)){
+				foreach ($C->d as $N) {
+					if($N->DF == $i) {
+						if(@$DF[$N->D] == null){
+							$DF[$N->D]=0;
+						}
+						$DF[$N->D]++;
+					}
+				}						
+				foreach ($DF as $D => $num) {
+					if(($num==2)||($num==4)){
+						return false;
+					}
+				}
+			}
+
+			// Part B
+			$DF = array();
+			if(($C->cDf[$i] == $this->last_cDf_21111->cDf[$i])&&($C->cDf[$i] == 1)){
+				$count = 0;
+				foreach ($C->d as $N) {
+					if($N->DF == $i) {
+						if(empty($DF[$N->D])){
+							$DF[$N->D]=0;
+						}
+						$DF[$N->D]++;
+					}
+				}						
+				foreach ($DF as $D => $num) {
+					if(($num>=2)||($num==0)){
+						return false;
+					}
+				}
+			}*/
 			return true;
 		}
 		
