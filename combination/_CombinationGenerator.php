@@ -226,8 +226,7 @@
 			return $N;
 		}
 
-		public function make_seed()
-		{
+		public function make_seed() {
 			list($usec, $sec) = explode(' ', microtime());
   			return (float) $sec + ((float) $usec * 100000);
 		}
@@ -346,9 +345,7 @@
 			return TRUE;
 		}
 
-		/*
-			Remove C: all FD being consecutive ones, in order or not (e.g. 01-22-24-33-41-53)
-		*/
+		/*  Remove C: all FD being consecutive ones, in order or not (e.g. 01-22-24-33-41-53) */
 		public function rule_1a5b($C) {
 			$k = 0;
 			$DFs = array();
@@ -387,7 +384,6 @@
 					}
 				}
 			}
-			//print_r($limit."\n");
 			return TRUE;
 		}		
 

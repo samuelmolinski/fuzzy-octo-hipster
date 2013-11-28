@@ -24,6 +24,7 @@
 		);
 
 		public $stats = array();
+		public $permited_cRd_cRf = array();
 
 		public $rule_1a1_ranges = array(
 			array('min'=>1,'max'=>30),
@@ -50,7 +51,7 @@
 		public $rule_2_1b_subList;
 		public $last_cDf_21111;
 		public $last_cRf_21111;
-		public $rule_2_1c_prev_3n_in_last_10;
+		public $previous_60N;
 		public $last_N3 = array();
 
 		public function CombinationGenerator($args = null) {
@@ -97,12 +98,29 @@
 				"p" => new Performance()
 			);
 
+			if(count($this->wCombs) > 9){
+				$last_N3 = array();
+				for ($j=0; $j < 10; $j++) { 				
+					for ($i=0; $i < 6; $i++) { 
+						if(!isset($this->last_N3[$this->wCombs[$j]->d[$i]->n])){
+							$this->previous_60N[$this->wCombs[$j]->d[$i]->n] = 0;
+						} 
+						$this->previous_60N[$this->wCombs[$j]->d[$i]->n]++;			
+					}
+				}
+			}
+
+			$this->permited_cRd_cRf = array(
+				'2211-21111','21111-21111','3111-21111',
+				'321-21111','222-21111','111111-21111',
+				'321-2211','3111-2211','2211-2211',
+				'21111-2211','321-111111','3111-111111',
+				'2211-111111','21111-111111','2211-3111','21111-3111'
+			);
+
+				
 			// OLD STUFF BELOW
 
-			$this->rule_2_2_2_total = 0;
-			if(isset($args['permitted1a8'])){
-				$this->permited_1a8 = $args['permitted1a8'];
-			} else {
 				$this->permited_1a8 = array('2211-2211',	'21111-2211',
 											'3111-2211',	'321-2211',
 											'3111-21111',	'321-21111',
@@ -140,6 +158,8 @@
 			if(isset($args['winningCombinations'])){
 				$this->setWinningCombinations($args['winningCombinations']);
 			}
+
+
 		}
 
 		// Replaces parts of the CombinationEngineController->actionRun() to remove engine logic to this class
@@ -255,25 +275,58 @@
 			return $N;
 		}
 
-
 		/**
-		 * make_seed() primes the random number generator		 * 
+		 * make_seed() primes the random number generator
 		 **/
 		public function make_seed() {
 			list($usec, $sec) = explode(' ', microtime());
   			return (float) $sec + ((float) $usec * 100000);
 		}
 
-		/////////////////////////////////////////////////////
-		////////	Restrictions below
-		/////////////////////////////////////////////////////
+		public function previous_60N_config($C){
+			$config = array();
+			//print_r($this->rule_2_1c_prev_3n_in_last_10);
+			foreach ($C->d as $d => $N) {
+				if(isset($this->previous_60N[$N->n])) {
+					$config[] = $this->previous_60N[$N->n];
+				} else {
+					$config[] = 0;
+				}
+			}
+			return $config;
+		}	
 
 		/**
+		 * [numElementsEqual description] Returns the number of N matching form the two combinations
+		 * provided
+		 * @param  CombinationStatistics $c1
+		 * @param  CombinationStatistics $c2
+		 * @return int - number of N matching
+		 */
+		public function numElementsEqual($c1, $c2) {
+			$num = 0;
+			if($c1 != $c2) {
+				foreach ($c2->d as $key => $value) {
+					if(in_array($value, $c1->d)) {
+						$num++;
+					}
+				}
+			} else {
+				$num = 6;
+			}
+			return $num;
+		}
+
+		/////////////////////////////////////////////////////
+		////////	Restrictions Below
+		/////////////////////////////////////////////////////
+
+		/*******************************************************************************
 		 * 
 		 * Description: Restriction for N 
 		 * Restriction prefix: restrict_N_
 		 * 
-		 **/
+		 *******************************************************************************/
 
 		/**
 		 * [restrict_N_A1 description] generates the combination based on the intervals for each N
@@ -337,8 +390,544 @@
 		 * @param  CombinationStatistics $C
 		 * @return boolean 
 		 */
-		public function restrict_N_B1($C){
+		public function restrict_N_B1($C) {
 			
+			//lets keep the combinations N1 with in these ranges
+			// 1-10 => 80%, 11-20 => 20%, 21-30 => 5% (of the total values possible for N1)
+			if($this->N1_possibilities['total']>10) { // let it get some numbers first
+				if($C->d[0]->n < 11){
+						$num = (($this->N1_possibilities['n1_10'])/($this->N1_possibilities['total']));
+					if($num>.80) {
+						return true;
+					} else {
+						return false;
+					}
+				}
+				if(($C->d[0]->n >= 11) && ($C->d[0]->n <21)){
+						$num = ($this->N1_possibilities['n11_20'])/($this->N1_possibilities['total']);
+					if($num>.20) {
+						return true;
+					} else {
+						return false;
+					}
+				}
+				if($C->d[0]->n >= 21){		
+						$num = ($this->N1_possibilities['n21_30'])/($this->N1_possibilities['total']);
+					if($num>.05) {
+						return true;
+					} else {
+						return false;
+					}
+				}
+			} else {
+				return true;
+			}
+		}
+
+		/**
+		 * [restrict_N_C1 description] all 6N in 3 consecutive tens
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_N_C1($C){			
+			$tens = array();
+			foreach ($C->d as $k => $N) {
+				if(!in_array($N->D, $tens)) {
+					$tens[] = $N->D;
+				}
+			}
+			if(3 == count($tens)) {
+				sort($tens);
+				//d($tens);
+				if(($tens[1]==$tens[0]+1)&&($tens[2]==$tens[0]+2)) {
+					return FALSE;
+				} else {
+					return TRUE;
+				}
+			} else {
+				return TRUE;
+			}
+		}
+
+		/**
+		 * [restrict_N_C2ab description] 
+		 * a - can not have no Ns in tens 0 (01-10) and tens 5 (51-60)
+		 * b - can not have no Ns in tens 4 (41-50) and tens 5 (51-60)
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_N_C2ab($C){
+			$tens = array();
+			foreach ($C->d as $N) {
+				if(@$tens[$N->D]==null) {
+					$tens[$N->D]=0;
+				}
+				$tens[$N->D]++;
+			}
+			// Part A
+			if(empty($tens[0])&&empty($tens[5])) {
+				return false;
+			}
+			// Part B
+			if(empty($tens[4])&&empty($tens[5])) {
+				return false;
+			}
+			return true;
+		}
+
+		/**
+		 * [restrict_N_C2a description] Reject if it occurred in the last test
+		 * a - 2N in the 1-3 tens place
+		 * b - 4N in the 1-3 tens place
+		 * c - 1N or 5N in the 1-3 tens place
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_N_C3abc($C){
+			$ft1 = 0; // N in the 1-3 tens place
+			$ft2 = 0; // N in the 1-3 tens place
+			foreach ($C->d as $N) {
+				if($N->D <4){
+					$ft1++;
+				}
+			}
+			foreach ($this->wCombs[0]->d as $N) {
+				if($N->D <4){
+					$ft2++;
+				}
+			}
+			//part a: 2N in the 1-3 tens place
+			if(($ft1==2)&&($ft2==2)){
+				return false;
+			}
+			//part b:  4N in the 1-3 tens place
+			if(($ft1==4)&&($ft2==4)){
+				return false;
+			}
+			//part c:  1N or 5N in the 1-3 tens place
+			if((($ft1==1)||($ft1==5))&&(($ft2==1)||($ft2==5))) {
+				return false;
+			}
+			return true;
+		}
+
+		/**
+		 * [restrict_N_D1 description] Reject if 6N are even or odd
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_N_D1($C){
+			$total = 0;
+			$count = count($C->d); 
+
+			foreach($C->d as $k=>$N){
+				$total += $N->n % 2;
+			}
+			//if the N are all even the total will be 0; if the N are all odd then the total will be 6
+			if((0 == $total)||($count == $total)){
+				return FALSE;
+			}
+			return TRUE;
+		}
+
+		/**
+		 * [restrict_N_D2 description] Reject if has 1N or 5N, even or odd, if it occurred in the last test
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_N_D2($C){
+			$e1 = 0; //even num in $C
+			$e2 = 0; //even num in $this->wCombs[0]
+			foreach ($this->wCombs[0]->d as $N) {
+				if($N->n%2 == 0){
+					$e2++;
+				}
+			}
+			if(($e2 == 1)||($e2 >= 5)) {				
+				foreach ($C->d as $N) {
+					if($N->n%2 == 0){
+						$e1++;
+					}
+				}
+				if(($e1 == 1)||($e1 >= 5)) {
+					return false;
+				}
+			}
+			return true;
+		}
+
+		/**
+		 * [restrict_N_E1 description] Reject if the smallest FD bigger than 3 or the largest FD lesser than 6
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_N_E1($C){
+			$DFs = array();
+			foreach ($C->d as $k => $N) {
+				$DFs[] = $N->DF;
+			}
+			sort($DFs);
+			if(($DFs[0] >= 3)||($DFs[5] <= 6)) {
+				return FALSE;
+			}
+			return TRUE;
+		}
+
+		/**
+		 * [restrict_N_E2 description] Rejects if all DF are consecutive
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_N_E2($C){
+			$k = 0;
+			$DFs = array();
+			foreach ($C->d as $k => $N) {
+				$DFs[] = $N->DF;
+			}
+			sort($DFs);
+			$c = count($DFs);
+			for ($i=0; $i < $c-1; $i++) { 
+				if($DFs[$i+1]-$DFs[$i] <= 1) {
+					$k++;
+				} else {
+					return true;
+				} 
+			}
+			if($k == $c) {
+				return false;
+			} 
+			return true;
+		}
+
+		/**
+		 * [restrict_N_F1 description] Reject if it contains Ndif = 1 (a triple or 2 pairs)
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_N_F1($C){			
+			$count = count($C->d);
+			$limit = 0;
+			for ($i=0; $i < $count-1; $i++) { 
+				if($C->d[$i]->n+1 == $C->d[$i+1]->n) { 
+					$limit++;
+					if($limit >= 2) {
+						return FALSE;
+					}
+				}
+			}
+			return TRUE;
+		}
+
+		/**
+		 * [restrict_N_F2 description] Reject combinations with three Ndif equal
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_N_F2($C){
+			$count = count($C->d);
+			$NDifs = array();
+			$threeN_NDifs = array();
+			for ($i=0; $i < $count-1; $i++) { 
+				$diff = $C->d[$i+1]->n - $C->d[$i]->n+1;
+				//$NDifs[] = $diff;
+				if(@$threeN_NDifs[$diff] == null){
+					$threeN_NDifs[$diff] = 0;
+				}
+				$threeN_NDifs[$diff]++;
+			}
+			//sort($NDifs);
+			// part a (4b3)
+			ksort($threeN_NDifs);
+			foreach ($threeN_NDifs as $num_times) {
+				if($num_times >=3) {
+					return false;
+				}
+			}
+			return TRUE;
+		}
+
+		/**
+		 * [restrict_N_F3 description] Reject all 5 NDif larger than 6 or lesser than 6
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_N_F3($C) {
+
+			$count = count($C->d);
+			$NDifs = array();
+			for ($i=0; $i < $count-1; $i++) { 
+				$diff = $C->d[$i+1]->n - $C->d[$i]->n+1;
+				$NDifs[] = $diff;
+			}
+			
+			if($NDifs[0]> 6) {
+				return false;
+			}
+
+			if($NDifs[count($NDifs)-1]< 6) {
+				return false;
+			}
+
+			$freq = array_count_values($NDifs);
+			foreach ($freq as $k => $NDif) {
+				if($NDif>=3) {
+					return FALSE;
+				}
+			}
+		}
+
+		/**
+		 * [restrict_N_H1 description] Reject if it has more than 1N equal to previous test
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_N_H1($C){
+			if($this->numElementsEqual($C, $this->wCombs[0]) > 1){
+				return false;
+			}
+			return true;
+		}
+
+		/**
+		 * [restrict_N_H2 description] Reject if it has 0 or 3N equal to previous 3 test
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_N_H2a($C){			
+			$prev = 0;
+			$cur = 0;
+			for ($i=1; $i < 4; $i++) { 
+				if(($this->numElementsEqual($this->wCombs[0], $this->wCombs[$i+1]) == 0)||($this->numElementsEqual($this->wCombs[0], $this->wCombs[$i+1])==3)) {
+					$prev++;
+				}
+				if(($this->numElementsEqual($C, $this->wCombs[$i]) == 0)||($this->numElementsEqual($C, $this->wCombs[$i])==3)) {
+					$cur++;
+				}
+			}
+			if(($prev==3)&&($cur==3)){
+
+				return false;
+			}
+			return true;
+		}
+
+		/**
+		 * [Restrict_N_H2b description] Reject if 2N equal to previous 3 test
+		 * @param CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_N_H2b($C){	
+			$prev = 0;
+			$cur = 0;
+			for ($i=1; $i < 4; $i++) { 
+				if($this->numElementsEqual($this->wCombs[0], $this->wCombs[$i+1]) == 2) {
+					$prev++;
+				} 
+				if($this->numElementsEqual($C, $this->wCombs[$i]) == 2) {
+					$cur++;
+				}
+			}
+			if(($prev==3)&&($cur==3)){
+				return false;
+			}
+			return true;
+		}
+
+		/**
+		 * [restrict_N_I1 description] Reject if 4N occured in the earlier 3 tests
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_N_I1($C){
+			$prev = 0;
+			$cur = 0;
+			for ($i=1; $i < 4; $i++) { 
+				if($this->numElementsEqual($this->wCombs[0], $this->wCombs[$i+1]) >= 3) {
+					$prev++;
+				} 
+				if($this->numElementsEqual($C, $this->wCombs[$i]) >= 3) {
+					$cur++;
+				}
+			}
+			if(($prev==3)&&($cur==3)){
+				return false;
+			}
+			return true;
+		}
+
+		/**
+		 * [restrict_N_J1 description] Reject if more than 1N already given 3 or more times 
+		 * in the previous 10 tests
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_N_J1($C){
+			$config = $this->previous_60N_config($C);
+			$count = 0;
+			foreach ($config as $k => $c) {
+				if($c > 2) {
+					$count++;
+				}
+			}
+			if($count > 3) {
+				return false;
+			}
+			return true;
+		}
+
+		/**
+		 * [restrict_N_J2 description] Reject if more than 3N in the last 10 test with 2 or more times
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_N_J2($C){
+			$config = $this->previous_60N_config($C);
+			$count = 0;
+			foreach ($config as $k => $c) {
+				if($c >= 2) {
+					$count++;
+				}
+			}
+			if($count > 3) {
+				return false;
+			}
+		}
+
+		/**
+		 * [restrict_N_J3 description] Reject if more than 3N in the last 10 test with 1 time
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_N_J3($C){
+			$config = $this->previous_60N_config($C);
+			$count = 0;
+			foreach ($config as $k => $c) {
+				if($c == 1) {
+					$count++;
+				}
+			}
+			if(($count ==0 )||($count > 3)) {
+				return false;
+			}
+			return true;
+		}
+
+		/**
+		 * [restrict_N_J4 description] Reject if more than 4N in the last 10 test with 0 time
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */	
+		public function restrict_N_J4($C){
+			$config = $this->previous_60N_config($C);
+			$count = 0;
+			foreach ($config as $k => $c) {
+				if($c == 0) {
+					$count++;
+				}
+			}
+			if(($count == 0 )||($count > 4)) {
+				return false;
+			}
+		}
+
+		/**
+		 * [restrict_N_K1 description]
+		 * @param  CombinationStatistics  $C
+		 * @param  array  $list
+		 * @param  integer $threshold
+		 * @return boolean
+		 */
+		public function restrict_N_K1($C, $list, $threshold = 5){			
+			foreach ($list as $j => $value) {
+				if($this->numElementsEqual($C, $value) >= $threshold) {
+					return FALSE;
+				}
+			}
+			return TRUE;
+		}
+
+		
+		/*******************************************************************************
+		 * 
+		 * Description: Restriction for pairs of cRd-cRf
+		 * Restriction prefix: restrict_cRd_cRf
+		 * 
+		 *******************************************************************************/
+
+		/**
+		 * [restrict_cRd_cRf_A1 description] Reject is part of the 48 pairs of non-playable cRd-cRf
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_cRd_cRf_A1($C){
+			if(in_array($C->cRd_cRf, $this->permited_cRd_cRf)) {
+				return TRUE;
+			}
+			return FALSE;
+		}
+
+		/**
+		 * [restrict_cRd_cRf_C1 description] Reject if the previous test was 2211-2111 or 21111-21111
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_cRd_cRf_C1($C){
+			if(($this->wCombs[0]->cRd_cRf == '21111-111111') && ($combination->cRd_cRf == $this->wCombs[0]->cRd_cRf) && ($combination->cDf == $this->wCombs[0]->cDf)) {
+				return false;
+			}
+
+			if( (($this->wCombs[0]->cRf == '2211')||($this->wCombs[0]->cRf == '111111')||($this->wCombs[0]->cRf == '3111')) && ($combination->cRf == $this->wCombs[0]->cRf) && ($combination->cDf == $this->wCombs[0]->cDf)) {
+				return false;
+			}
+			return TRUE;
+		}
+
+		
+		/*******************************************************************************
+		 * 
+		 * Description: Restriction for cRd
+		 * Restriction prefix: restrict_cRd
+		 * 
+		 *******************************************************************************/
+
+
+		public function restrict_cRd_A1($C){
+
+			if(('321' == $this->wCombs[0]->cRd)&&('321' == $C->cRd)){
+				return false;
+			}
+			if(('3111' == $this->wCombs[0]->cRd)&&('3111' == $C->cRd)){
+				return false;
+			}
+			$arr = array('222','111111');
+			if((in_array($this->wCombs[0]->cRf, $arr)&&(in_array($C->cRf, $arr)))) {
+				return false;
+			}
+			return true;
+		}
+
+		public function restrict_cRd_B1($C){
+			$count = 0;
+			// Part A
+			$D1 = array();
+			$D2 = array();
+			$o = array()
+
+			//if both 2N (the 2 from 21111) from the pair of C are in the same tens
+			foreach ($C->d as $k => $N) {
+				if(!isset($D1[$N->D])){$D1[$N->D]=0;}
+				$D1[$N->D]++;
+			}
+			foreach ($this->wCombs[0]->d as $k => $N) {
+				if(!isset($D2[$N->D])){$D2[$N->D]=0;}
+				$D2[$N->D]++;
+			}
+			foreach ($D1 as $k => $nOccured) {
+				if(($nOccured > 1)&&(isset($D2[$k]))&&($D2[$k] > 1)) {
+					return false;
+				}
+			}
+			return true;
 		}
 
 	}
