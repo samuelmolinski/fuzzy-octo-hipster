@@ -61,8 +61,7 @@ class CombinationEngineController extends Controller
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
-	public function actionRun()
-	{	
+	public function actionRunOld() {	
 		//d($_POST);
 		set_time_limit(0);
 		$engineSettingId = SystemOptions::model()->findByAttributes(array('name'=>'engineSettingId'));
@@ -283,6 +282,62 @@ class CombinationEngineController extends Controller
 				'saved'=>false
 			);
 		}
+
+		$this->render('run',$render);
+	}
+	/**
+	 * Creates a new model.
+	 * If creation is successful, the browser will be redirected to the 'view' page.
+	 */
+	public function actionRun()	{	
+
+		if(isset($_POST)&&!empty($_POST['engineRun'])){
+			$engineRun = $_POST['engineRun'];
+
+			if(@$engineRun['numOfCombs']){
+				$numOfCombinations = $engineRun['numOfCombs'];
+			} else {
+				$numOfCombinations = 100;
+			}
+		} else {						
+			$numOfCombinations = 100;
+		}
+
+		$cg = new CombinationGenerator();
+
+		$dc = CombinationDrawn::model()->findAll();
+		$previousTest_CL = new CombinationList;
+
+
+    	foreach ($dc as $k => $c) {
+    		$previousTest_CL->addString($c->combination);
+    	}
+  	
+		$numberOfWinningCombinations = count($previousTest_CL->list);
+		$cg->generateCombinations($previousTest_CL, $numOfCombinations);
+
+		/*if($model->save()) {
+			$render =array(
+				"numOfCombinations"=>$numOfCombinations,
+				"numberOfWinningCombinations"=>$numberOfWinningCombinations,
+				"cg"=>$cg,
+				"totalTested"=>$count,
+				"performance"=>$p,
+				"sorted"=>$sorted,
+				"tests"=>$tests,
+				'saved'=>true
+			);
+		} else { */
+			$render =array(
+				"numOfCombinations"=>$numOfCombinations,
+				"numberOfWinningCombinations"=>$numberOfWinningCombinations,
+				"cg"=>$cg,
+				"totalTested"=>$cg->stats['totalTested'],
+				"performance"=>$cg->stats['p'],
+				"sorted"=>$cg->CL->sort_CRD_CRF(),
+				'saved'=>false
+			);
+		//}
 
 		$this->render('run',$render);
 	}

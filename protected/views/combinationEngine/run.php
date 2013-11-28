@@ -101,5 +101,7 @@
 	foreach ($nTotal as $k => $vez) {
 		echo "<span> $k [$vez],</span>";
 	}
-	echo "</div>"
+	echo "</div>";
+
+	d($performance->timers);
 ?>
