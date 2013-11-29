@@ -12,6 +12,7 @@
 		*/
 
 		public $CL; 									/* required */
+		public $wCombs; 								// intended to be an array of all previous winning combinations
 		public $currentBettingCombinations;  			/* required */
 		public $restrictionsToBeChecked;				/* required */
 		public $threshold = 1;							/* required */
@@ -25,6 +26,10 @@
 
 		public $stats = array();
 		public $permited_cRd_cRf = array();
+		public $lastOccuranceOf = array('cRd'=>array(), 'cRf'=>array());
+		public $previousTest_60Nconfig;
+		public $previous_60N;
+		public $last_N3 = array();
 
 		public $rule_1a1_ranges = array(
 			array('min'=>1,'max'=>30),
@@ -39,7 +44,6 @@
 		public $groups_2_1_2;
 		public $configuration_2_1_2;
 		public $groups_2_2;
-		public $wCombs; // intended to be an array of all previous winning combinations
 		public $rule_2_2_1a_invalid; // -1 if we do not use it, 0-4 to indicate which group to exclude
 		public $rule_2_2_1b_invalid; // Boolean
 		public $rule_2_2_1c_invalid; // Boolean
@@ -51,8 +55,6 @@
 		public $rule_2_1b_subList;
 		public $last_cDf_21111;
 		public $last_cRf_21111;
-		public $previous_60N;
-		public $last_N3 = array();
 
 		public function CombinationGenerator($args = null) {
 			$this->CL = new CombinationList;
@@ -98,16 +100,26 @@
 				"p" => new Performance()
 			);
 
-			if(count($this->wCombs) > 9){
+			if(count($this->wCombs) > 10){
 				$last_N3 = array();
 				for ($j=0; $j < 10; $j++) { 				
 					for ($i=0; $i < 6; $i++) { 
-						if(!isset($this->last_N3[$this->wCombs[$j]->d[$i]->n])){
+						if(!isset($this->previous_60N[$this->wCombs[$j]->d[$i]->n])){
 							$this->previous_60N[$this->wCombs[$j]->d[$i]->n] = 0;
 						} 
 						$this->previous_60N[$this->wCombs[$j]->d[$i]->n]++;			
 					}
 				}
+				$p = array();
+				for ($j=1; $j < 11; $j++) { 				
+					for ($i=0; $i < 6; $i++) { 
+						if(!isset($p[$this->wCombs[$j]->d[$i]->n])){
+							$p[$this->wCombs[$j]->d[$i]->n] = 0;
+						} 
+						$p[$this->wCombs[$j]->d[$i]->n]++;			
+					}
+				}
+				$this->previousTest_60Nconfig = $this->previous_xN_config($this->wCombs[0], $p);
 			}
 
 			$this->permited_cRd_cRf = array(
@@ -118,58 +130,47 @@
 				'2211-111111','21111-111111','2211-3111','21111-3111'
 			);
 
+			// lets get the last occurance of ...
+			foreach($this->wCombs as $k=> $c) {
+				// cRd
+				if (($c->cRd == 222)&&(!isset($this->lastOccuranceOf['cRd'][222]))) {
+					$this->lastOccuranceOf['cRd'][222] = $c;
+				}
+				if (($c->cRd == 2211)&&(!isset($this->lastOccuranceOf['cRd'][2211]))) {
+					$this->lastOccuranceOf['cRd'][2211] = $c;
+				}
+				if (($c->cRd == 411)&&(!isset($this->lastOccuranceOf['cRd'][411]))) {
+					$this->lastOccuranceOf['cRd'][411] = $c;
+				}
+				if (($c->cRd == 321)&&(!isset($this->lastOccuranceOf['cRd'][321]))) {
+					$this->lastOccuranceOf['cRd'][321] = $c;
+				}
+				if (($c->cRd == 3111)&&(!isset($this->lastOccuranceOf['cRd'][3111]))) {
+					$this->lastOccuranceOf['cRd'][3111] = $c;
+				}
+
+				// cRf
+				if (($c->cRf == 2211)&&(!isset($this->lastOccuranceOf['cRf'][2211]))) {
+					$this->lastOccuranceOf['cRf'][2211] = $c;
+				}
+				if (($c->cRf == 111111)&&(!isset($this->lastOccuranceOf['cRf'][111111]))) {
+					$this->lastOccuranceOf['cRf'][111111] = $c;
+				}
+				if (($c->cRf == 3111)&&(!isset($this->lastOccuranceOf['cRf'][3111]))) {
+					$this->lastOccuranceOf['cRf'][3111] = $c;
+				}
+				if (($c->cRf == 21111)&&(!isset($this->lastOccuranceOf['cRf'][21111]))) {
+					$this->lastOccuranceOf['cRf'][21111] = $c;
+				}
+			}
 				
-			// OLD STUFF BELOW
-
-				$this->permited_1a8 = array('2211-2211',	'21111-2211',
-											'3111-2211',	'321-2211',
-											'3111-21111',	'321-21111',
-											'2211-3111',	'21111-3111',
-											'111111-21111',	'222-21111',
-											'411-21111',	'3111-3111',
-											'2211-21111',	'2211-111111',
-											'21111-21111',	'21111-111111',
-											'321-111111',	'3111-111111',
-											'2211-321',		'21111-321',
-											);
-			}
-
-			if(isset($args['group2_2'])){
-				//$this->groups_2_2 = $args['group2_2'];
-				$this->groups_2_2 = Yii::app()->params['cRd_cRf_groups'];
-			} else {
-				/*$this->groups_2_2 = array(
-				array('2211-21111'),
-				array('21111-21111','3111-21111'),
-				array('321-21111','222-21111','111111-21111'),
-				array('321-2211','3111-2211','2211-2211','21111-2211'),
-				array('321-111111','311-111111','2211-111111','21111-111111'),
-				array('2211-3111','21111-3111')
-				);*/
-				$this->groups_2_2 = Yii::app()->params['cRd_cRf_groups'];
-			}
-
-			if(isset($args['rule_2_2_2_limit'])){
-				$this->rule_2_2_2_limit = $args['rule_2_2_2_limit'];
-			} else {
-				$this->rule_2_2_2_limit = .05;
-			}
-
-			if(isset($args['winningCombinations'])){
-				$this->setWinningCombinations($args['winningCombinations']);
-			}
-
-
 		}
 
 		// Replaces parts of the CombinationEngineController->actionRun() to remove engine logic to this class
 		public function generateCombinations($previousTest_CL, $numOfCombinations = 100){
-			//$CL = new CombinationList();
-
 			set_time_limit(0);
-			
-	    	//$winningNumbers = array();
-	    	//$cgSettings = array('winningCombinations'=>$CL, 'ranges1a1'=> unserialize($engineSettings->ranges1a1), 'permitted1a8'=> unserialize($engineSettings->permitted1a8), 'group2_2'=> unserialize($engineSettings->group2_2), 'rule_2_2_2_limit'=>$engineSettings->rule_2_2_2_limit);
+
+			// convert $previousTest_CL => wCombs[]
 	    	
 	    	$numberOfWinningCombinations = count($this->wCombs);
 
@@ -315,6 +316,60 @@
 				$num = 6;
 			}
 			return $num;
+		}
+
+		/**
+		 * [getTensConfig description]
+		 * @param  CombinationStatistics $C 
+		 * @return array  - array with the keys representing the tens place 
+		 * and the value giving the number of occurences for a given Combination
+		 */
+		public function getTensConfig($C){
+			$D1 = array();
+			foreach ($C->d as $k => $N) {
+				if(!isset($D1[$N->D])){$D1[$N->D]=0;}
+				$D1[$N->D]++;
+			}
+			return $D1
+		}
+
+		/**
+		 * [getTensConfigN description] Gives the getTensConfig() but with the actual N obj
+		 * @param  CombinationStatistics $C
+		 * @return array  - array with the keys representing the tens place 
+		 * and the value giving an array of Number objects
+		 */
+		public function getTensConfigN($C){
+			$D = array();			
+			foreach ($C->d as $k => $N) {
+				if(!isset($D[$N->D])){$D1[$N->D] = array();}
+				$D[$N->D][] = $N;
+			}
+			return $D;
+		}
+
+		/**
+		 * [previous_xN_config description]
+		 * @param  CombinationStatistics $C 
+		 * @param  array() $previousNs - keys are the N with the value equal to the number of 
+		 * occurences of each N, generally in the last 10 test
+		 * @return array() - [0] N that didn't occure in the prior list, [1] N that occured 1 time
+		 * in the prior list, [2] N that occured 2 or more times in the prior list
+		 */
+		public function previous_xN_config($C, $previousNs){			
+			$xyz1 = array(0,0,0);
+			foreach ($C->d as $k => $N) {
+				if(isset($previousNs[$N->n])){
+					if($previousNs[$N->n] > 1){
+						$xyz[2]++;
+					} elseif($previousNs[$N->n] == 1) {	
+						$xyz[1]++;
+					}
+				} else {
+					$xyz[0]++;
+				}
+			}
+			return $xyz;
 		}
 
 		/////////////////////////////////////////////////////
@@ -831,6 +886,45 @@
 		}
 
 		/**
+		 * [restrict_N_J5 description]
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_N_J5($C){
+			$xyz1 = array(0,0,0);
+			$xyz2 = array(0,0,0);
+			foreach ($C->d as $k => $N) {
+				if(isset($this->previous_60N[$N->n])){
+					if($this->previous_60N[$N->n] > 1){
+						$xyz[2]++;
+					} elseif($this->previous_60N[$N->n] == 1) {	
+						$xyz[1]++;
+					}
+				} else {
+					$xyz[0]++;
+				}
+			}
+
+			//sub part a - X is larger than 3
+			if($xyz[2] > 3) {return false;}
+
+			//sub part b - Y is zero or larger than 4
+			if(($xyz[1] == 0)||($xyz[1] > 4)) {return false;}
+
+			//sub part c - Z is zero or larger than 4
+			if(($xyz[0] == 0)||($xyz[0] > 4)) {return false;}
+
+			// If any of the previous values where X = 3  or Y = 4 or Z = 4 we do not allow them now
+			if ($this->previousTest_60Nconfig[0] == 3){return false;}
+			if ($this->previousTest_60Nconfig[1] == 4){return false;}
+			if ($this->previousTest_60Nconfig[2] == 4){return false;}
+
+			if($xyz == $this->previousTest_60Nconfig){return false;}
+
+			return true;
+		}
+
+		/**
 		 * [restrict_N_K1 description]
 		 * @param  CombinationStatistics  $C
 		 * @param  array  $list
@@ -890,7 +984,11 @@
 		 * 
 		 *******************************************************************************/
 
-
+		/**
+		 * [restrict_cRd_A1 description] if it occurred in the last tests
+		 * @param  CombinationStatistics $C
+		 * @return boolean 
+		 */
 		public function restrict_cRd_A1($C){
 
 			if(('321' == $this->wCombs[0]->cRd)&&('321' == $C->cRd)){
@@ -900,34 +998,136 @@
 				return false;
 			}
 			$arr = array('222','111111');
-			if((in_array($this->wCombs[0]->cRf, $arr)&&(in_array($C->cRf, $arr)))) {
+			if((in_array($this->wCombs[0]->cRd, $arr)&&(in_array($C->cRd, $arr)))) {
+				return false;
+			}
+			return true;
+		}
+		
+		/**
+		 * [restrict_cRd_B1 description] In its last occurrence of cRd 222, the same 2 tens with 2N 
+		 * @param  CombinationStatistics $C 
+		 * @return boolean
+		 */
+		public function restrict_cRd_B1($C){
+			$D1 = getTensConfig($C);			
+			$count = 0;
+
+			if(in_array($C->cRd, array(222, 2211)){			
+				$D2 = getTensConfig($this->lastOccuranceOf['cRd'][$C->cRd]);			
+				foreach ($D1 as $k => $nOccured) {
+					if(($nOccured > 1)&&(isset($D2[$k]))&&($D2[$k] > 1)) {
+						$count++;
+					}
+				}
+				if($count >1){ return false; }
+			}
+
+
+			return true;
+		}
+
+		/**
+		 * [restrict_cRd_B2 description] In its last occurrence of cRd 2211, the same 2 tens with 2N 
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_cRd_B2($C){
+			$D1 = getTensConfig($C);		
+			$count = 0;
+			
+			if(in_array($C->cRd, array(411, 321, 222, 3111, 2211)){					
+				$D2 = getTensConfig($this->lastOccuranceOf['cRd'][$C->cRd]);			
+				foreach ($D1 as $k => $nOccured) {
+					if(($nOccured > 1)&&(isset($D2[$k]))&&($D2[$k] > 1)) {
+						$count++;
+					}
+				}
+				if($count < 1){ return false; }
+			}
+
+			return true;
+		}
+
+
+		/*******************************************************************************
+		 * 
+		 * Description: Restriction for cRf
+		 * Restriction prefix: restrict_cRf
+		 * 
+		 *******************************************************************************/
+
+		/**
+		 * [restrict_cRf_A1 description] if it occurred in the last test 2211, 111111, 3111
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_cRf_A1($C){
+			if(('2211' == $this->wCombs[0]->cRf)&&('2211' == $C->cRf)){
+				return false;
+			}
+			if(('111111' == $this->wCombs[0]->cRf)&&('111111' == $C->cRf)){
+				return false;
+			}
+			if(('3111' == $this->wCombs[0]->cRf)&&('3111' == $C->cRf)){
 				return false;
 			}
 			return true;
 		}
 
-		public function restrict_cRd_B1($C){
-			$count = 0;
-			// Part A
-			$D1 = array();
-			$D2 = array();
-			$o = array()
+		/**
+		 * [restrict_cRf_B1 description] 21111 In its last occurrence if with the same FD in 2N
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_cRf_B1($C){			
+			$D1 = $this->getTensConfigN($C);
+			$D2 = $this->getTensConfigN($this->lastOccuranceOf["cRf"][21111]);
 
-			//if both 2N (the 2 from 21111) from the pair of C are in the same tens
-			foreach ($C->d as $k => $N) {
-				if(!isset($D1[$N->D])){$D1[$N->D]=0;}
-				$D1[$N->D]++;
-			}
-			foreach ($this->wCombs[0]->d as $k => $N) {
-				if(!isset($D2[$N->D])){$D2[$N->D]=0;}
-				$D2[$N->D]++;
-			}
-			foreach ($D1 as $k => $nOccured) {
-				if(($nOccured > 1)&&(isset($D2[$k]))&&($D2[$k] > 1)) {
-					return false;
+			foreach ($D1 as $k => $arrN1) {
+				if(count($arrN1)>1){
+					foreach ($D2 as $j => $arrN2) {
+						if(count($arrN2)>1){
+							$haystack = array(array($arrN2[0]->DF), array($arrN2[1]->DF));
+							if(in_array($arrN1[0]->DF, $haystack && in_array($arrN1[1]->DF, $haystack)){
+								return false;
+							} else {
+								return true;
+							}						
+						}
+					}
 				}
+			}
+		}
+
+
+		/**
+		 * [restrict_cRf_B2 description] 21111 In its last occurrence with 0 or greater than 2 FD equal to the 4 FD represented by the “1111”
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_cRf_B2($C){			
+			$D1 = $this->getTensConfigN($C);
+			$D2 = $this->getTensConfigN($this->lastOccuranceOf["cRf"][21111]);
+
+			$DF1 = array();
+
+			foreach ($D1 as $k => $arrN1) {
+				if(count($arrN1) == 1){
+					$DF1[] = $arrN1->DF;					
+				}
+			}
+			foreach ($D2 as $k => $arrN2) {
+				if(count($arrN2) == 1){
+					$DF2[] = $arrN2->DF;					
+				}
+			}
+
+			$shared = count(array_intersect($DF1, $DF2));
+
+			if(($shared == 0)|| ($shared > 2)) {
+				return false;
 			}
 			return true;
 		}
-
 	}
