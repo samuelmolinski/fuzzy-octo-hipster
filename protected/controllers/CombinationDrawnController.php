@@ -123,25 +123,23 @@ class CombinationDrawnController extends Controller
 	    	// The order of the test to be used
 			$numOfCombinations = $engineSettings->numOfCombs;
 
-		$tests = array (	
-						array ('rule_2_1a','c','list'),
-						array ('rule_2_1c','c'),
-						array ('rule_1b3','c','list'),
-						array ('rule_2_1b','c'),
-						array ('rule_1b2','c','list'),
-						array ('rule_1b1','c','list'),
-						);
+		/*$tests = array (	
+			array ('rule_2_1a','c','list'),
+			array ('rule_2_1c','c'),
+			array ('rule_1b3','c','list'),
+			array ('rule_2_1b','c'),
+			array ('rule_1b2','c','list'),
+			array ('rule_1b1','c','list'),
+		);*/
 
 		set_time_limit(180);
 		$p = new Performance();
     	$winningNumbers = array();
-    	$cgSettings = array('winningCombinations'=>$CL, 'ranges1a1'=> unserialize($engineSettings->ranges1a1), 'permitted1a8'=> unserialize($engineSettings->permitted1a8), 'group2_2'=> unserialize($engineSettings->group2_2), 'rule_2_2_2_limit'=>$engineSettings->rule_2_2_2_limit);
     	
-    	$cg = new CombinationGenerator($cgSettings);
-
+    	$cg = new CombinationGenerator();
 		$c = new CombinationStatistics($model->combination);
 		//starting the process
-		$fail =  "<h3>Failed :</h3><ul>";
+		/*$fail =  "<h3>Failed :</h3><ul>";
 		//d($tests);
 		foreach ($tests as $j => $test) {
 			$currentFunction = $test[0];
@@ -158,10 +156,10 @@ class CombinationDrawnController extends Controller
 			
 		}
 
-		$fail .=  "</ul>";
+		$fail .=  "</ul>";*/
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
-			'fail'=>$fail,
+			'fail'=>"",
 			"cg"=>$cg,
 		));
 	}

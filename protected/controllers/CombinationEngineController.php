@@ -303,7 +303,6 @@ class CombinationEngineController extends Controller
 			$numOfCombinations = 100;
 		}
 
-		$cg = new CombinationGenerator();
 
 		$dc = CombinationDrawn::model()->findAll();
 		$previousTest_CL = new CombinationList;
@@ -313,6 +312,8 @@ class CombinationEngineController extends Controller
     		$previousTest_CL->addString($c->combination);
     	}
   	
+		$cg = new CombinationGenerator($previousTest_CL);
+		
 		$numberOfWinningCombinations = count($previousTest_CL->list);
 		$cg->generateCombinations($previousTest_CL, $numOfCombinations);
 

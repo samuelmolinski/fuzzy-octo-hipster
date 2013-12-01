@@ -28,8 +28,10 @@
 		public $permited_cRd_cRf = array();
 		public $lastOccuranceOf = array('cRd'=>array(), 'cRf'=>array());
 		public $previousTest_60Nconfig;
-		public $previous_60N;
-		public $last_N3 = array();
+		public $previous_60N = array();
+		public $previous_18N = array();
+		public $testPassed = array();
+		public $testFailed = array();
 
 		public $rule_1a1_ranges = array(
 			array('min'=>1,'max'=>30),
@@ -56,71 +58,122 @@
 		public $last_cDf_21111;
 		public $last_cRf_21111;
 
-		public function CombinationGenerator($args = null) {
+		public function CombinationGenerator($previousTest_CL = null) {
+
+			if($previousTest_CL != null){
+				$this->wCombs = array_reverse($previousTest_CL->toCombinations());
+
+				if(count($this->wCombs) > 10){
+					$previous_18N = array();
+					for ($j=0; $j < 10; $j++) { 				
+						for ($i=0; $i < 6; $i++) { 
+							if(!isset($this->previous_60N[$this->wCombs[$j]->d[$i]->n])){
+								$this->previous_60N[$this->wCombs[$j]->d[$i]->n] = 0;
+							} 
+							$this->previous_60N[$this->wCombs[$j]->d[$i]->n]++;			
+						}
+					}
+					for ($j=0; $j < 3; $j++) { 				
+						for ($i=0; $i < 6; $i++) { 
+							if(!isset($this->previous_18N[$this->wCombs[$j]->d[$i]->n])){
+								$this->previous_18N[$this->wCombs[$j]->d[$i]->n] = 0;
+							} 
+							$this->previous_18N[$this->wCombs[$j]->d[$i]->n]++;			
+						}
+					}
+					$p = array();
+					for ($j=1; $j < 11; $j++) { 				
+						for ($i=0; $i < 6; $i++) { 
+							if(!isset($p[$this->wCombs[$j]->d[$i]->n])) {
+								$p[$this->wCombs[$j]->d[$i]->n] = 0;
+							} 
+							$p[$this->wCombs[$j]->d[$i]->n]++;			
+						}
+					}
+					ksort($this->previous_60N);
+					ksort($p);
+
+					$this->previousTest_60Nconfig = $this->previous_xN_config($this->wCombs[0], $p);
+				}
+
+				// lets get the last occurance of ...
+				foreach($this->wCombs as $k=> $c) {
+					// cRd
+					if (($c->cRd == 222)&&(!isset($this->lastOccuranceOf['cRd'][222]))) {
+						$this->lastOccuranceOf['cRd'][222] = $c;
+					}
+					if (($c->cRd == 2211)&&(!isset($this->lastOccuranceOf['cRd'][2211]))) {
+						$this->lastOccuranceOf['cRd'][2211] = $c;
+					}
+					if (($c->cRd == 411)&&(!isset($this->lastOccuranceOf['cRd'][411]))) {
+						$this->lastOccuranceOf['cRd'][411] = $c;
+					}
+					if (($c->cRd == 321)&&(!isset($this->lastOccuranceOf['cRd'][321]))) {
+						$this->lastOccuranceOf['cRd'][321] = $c;
+					}
+					if (($c->cRd == 3111)&&(!isset($this->lastOccuranceOf['cRd'][3111]))) {
+						$this->lastOccuranceOf['cRd'][3111] = $c;
+					}
+
+					// cRf
+					if (($c->cRf == 2211)&&(!isset($this->lastOccuranceOf['cRf'][2211]))) {
+						$this->lastOccuranceOf['cRf'][2211] = $c;
+					}
+					if (($c->cRf == 111111)&&(!isset($this->lastOccuranceOf['cRf'][111111]))) {
+						$this->lastOccuranceOf['cRf'][111111] = $c;
+					}
+					if (($c->cRf == 3111)&&(!isset($this->lastOccuranceOf['cRf'][3111]))) {
+						$this->lastOccuranceOf['cRf'][3111] = $c;
+					}
+					if (($c->cRf == 21111)&&(!isset($this->lastOccuranceOf['cRf'][21111]))) {
+						$this->lastOccuranceOf['cRf'][21111] = $c;
+					}
+				}
+			}
+			
+			//echo Yii::trace(CVarDumper::dumpAsString($this->wCombs),'$previousTest_CL->toCombinations()');
+
 			$this->CL = new CombinationList;
 			$this->currentBettingCombinations = array();
 			mt_srand($this->make_seed());
 
 			$this->restrictionsToBeChekced = array ( 
-				array ('restrict_N_A1',		1, ), 
-				/*array ('rule_b1_plus_b3',	1, ), 
-				array ('rule_1a1',			1, ), 
-				array ('rule_1a2',			1, ), 
-				array ('rule_1a8',			1, ), 
-				array ('rule_1a6',			1, ), 
-				array ('rule_1a5a',			1, ), 
-				array ('rule_1a5b',			1, ), 
-				array ('rule_1a7',			1, ), 
-				array ('rule_1a3',			1, ), 
-				array ('rule_1a4',			1, ), 
-				array ('rule_a1d1',			1, ), 
-				array ('rule_1d',			1, ), 
-				array ('rule_1b3',			1,	'list', ), 
-				array ('rule_1b2',			1,	'list', ), 
-				array ('rule_1b1',			1,	'list', ), 
-				array ('rule_b1',			1, ), 
-				array ('rule_b2',			1, ), 
-				array ('rule_b3',			1, ), 
-				array ('rule_b4a',			1, ), 
-				array ('rule_b4b',			1, ), 
-				array ('rule_b4c',			1, ), 
-				array ('rule_b5a1',			1, ), 
-				array ('rule_b5a2',			1, ), 
-				array ('rule_b5a3',			1, ), 
-				array ('rule_b5b1',			1, ), 
-				array ('rule_b5b2',			1, ), 
-				array ('rule_b5b3',			1, ), 
-				array ('rule_b5c1',			1, ), 
-				array ('rule_b5c2',			1, ), 
-				array ('rule_b6a1',			1, )*/
+				array ('restrict_N_A1',			1, ), 
+				array ('restrict_N_B1',			1, ), 
+				array ('restrict_N_C1',			1, ), 
+				array ('restrict_N_C2ab',		1, ), 
+				array ('restrict_N_C3abc',		1, ), 
+				array ('restrict_N_D1',			1, ), 
+				array ('restrict_N_D2',			1, ), 
+				array ('restrict_N_E1',			1, ), 
+				array ('restrict_N_E2',			1, ), 
+				array ('restrict_N_F1',			1, ), 
+				array ('restrict_N_F2',			1, ), 
+				array ('restrict_N_F3',			1, ), 
+				array ('restrict_N_H1',			1, ), 
+				array ('restrict_N_H2a',		1, ), 
+				array ('restrict_N_H2b',		1, ), 
+				array ('restrict_N_I1',			1, ), 
+				array ('restrict_N_J1',			1, ), 
+				array ('restrict_N_J2',			1, ), 
+				array ('restrict_N_J3',			1, ), 
+				array ('restrict_N_J4',			1, ), 
+				array ('restrict_N_J5',			1, ), 
+				array ('restrict_N_K1',			1, ), 
+				array ('restrict_cRd_cRf_A1',	1, ), 
+				array ('restrict_cRd_cRf_C1',	1, ), 
+				array ('restrict_cRd_A1',		1, ), 
+				array ('restrict_cRd_B1',		1, ), 
+				array ('restrict_cRd_B2',		1, ), 
+				array ('restrict_cRf_A1',		1, ), 
+				array ('restrict_cRf_B1',		1, ), 
+				array ('restrict_cRf_B2',		1, )
 			);
 	
 			$this->stats = array(
 				"totalTested" => 0,
 				"p" => new Performance()
 			);
-
-			if(count($this->wCombs) > 10){
-				$last_N3 = array();
-				for ($j=0; $j < 10; $j++) { 				
-					for ($i=0; $i < 6; $i++) { 
-						if(!isset($this->previous_60N[$this->wCombs[$j]->d[$i]->n])){
-							$this->previous_60N[$this->wCombs[$j]->d[$i]->n] = 0;
-						} 
-						$this->previous_60N[$this->wCombs[$j]->d[$i]->n]++;			
-					}
-				}
-				$p = array();
-				for ($j=1; $j < 11; $j++) { 				
-					for ($i=0; $i < 6; $i++) { 
-						if(!isset($p[$this->wCombs[$j]->d[$i]->n])){
-							$p[$this->wCombs[$j]->d[$i]->n] = 0;
-						} 
-						$p[$this->wCombs[$j]->d[$i]->n]++;			
-					}
-				}
-				$this->previousTest_60Nconfig = $this->previous_xN_config($this->wCombs[0], $p);
-			}
 
 			$this->permited_cRd_cRf = array(
 				'2211-21111','21111-21111','3111-21111',
@@ -129,40 +182,6 @@
 				'21111-2211','321-111111','3111-111111',
 				'2211-111111','21111-111111','2211-3111','21111-3111'
 			);
-
-			// lets get the last occurance of ...
-			foreach($this->wCombs as $k=> $c) {
-				// cRd
-				if (($c->cRd == 222)&&(!isset($this->lastOccuranceOf['cRd'][222]))) {
-					$this->lastOccuranceOf['cRd'][222] = $c;
-				}
-				if (($c->cRd == 2211)&&(!isset($this->lastOccuranceOf['cRd'][2211]))) {
-					$this->lastOccuranceOf['cRd'][2211] = $c;
-				}
-				if (($c->cRd == 411)&&(!isset($this->lastOccuranceOf['cRd'][411]))) {
-					$this->lastOccuranceOf['cRd'][411] = $c;
-				}
-				if (($c->cRd == 321)&&(!isset($this->lastOccuranceOf['cRd'][321]))) {
-					$this->lastOccuranceOf['cRd'][321] = $c;
-				}
-				if (($c->cRd == 3111)&&(!isset($this->lastOccuranceOf['cRd'][3111]))) {
-					$this->lastOccuranceOf['cRd'][3111] = $c;
-				}
-
-				// cRf
-				if (($c->cRf == 2211)&&(!isset($this->lastOccuranceOf['cRf'][2211]))) {
-					$this->lastOccuranceOf['cRf'][2211] = $c;
-				}
-				if (($c->cRf == 111111)&&(!isset($this->lastOccuranceOf['cRf'][111111]))) {
-					$this->lastOccuranceOf['cRf'][111111] = $c;
-				}
-				if (($c->cRf == 3111)&&(!isset($this->lastOccuranceOf['cRf'][3111]))) {
-					$this->lastOccuranceOf['cRf'][3111] = $c;
-				}
-				if (($c->cRf == 21111)&&(!isset($this->lastOccuranceOf['cRf'][21111]))) {
-					$this->lastOccuranceOf['cRf'][21111] = $c;
-				}
-			}
 				
 		}
 
@@ -179,7 +198,8 @@
 			$fail = 0;
 			$count = 0;
 			$comb = array();
-			$testFailed = array();
+			$this->testPassed = array();
+			$this->testFailed = array();
 
 			// the actual generation loop
 			$this->stats["p"]->start_timer("Over All");
@@ -200,6 +220,12 @@
 				$this->stats["p"]->start_timer("Average restriction test time");
 				foreach ($this->restrictionsToBeChekced as $restriction) {
 					$currentFunction = $restriction[0];
+					if(empty($this->testPassed[$currentFunction])) {
+						$this->testPassed[$currentFunction] = 0;
+					}
+					if(empty($this->testFailed[$currentFunction])) {
+						$this->testFailed[$currentFunction] = 0;
+					}
 					if(2 < count($restriction)) {
 						$this->stats["p"]->start_timer("$currentFunction");
 						$r = $this->$currentFunction($c, $cg->wCombs);
@@ -211,16 +237,24 @@
 					}
 					if(!$r){
 						$numTestsFailed += $restriction[1];
-						if(empty($testFailed[$currentFunction])) {
-							$testFailed[$currentFunction] = 0;
+						$this->testFailed[$currentFunction]++;
+
+						if($this->testFailed[$currentFunction] > 10000){
+							break;
 						}
-						$testFailed[$currentFunction]++;
 
 						if($numTestsFailed>= $this->threshold) {
 							$fail++;
 							$this->stats["p"]->plus_end_timer("Average restriction test time");
 							continue 2;
 						}
+					} else {
+						//Debugging:for endless loops test purposes
+						$this->testPassed[$currentFunction]++;
+					}
+					//Debugging:for endless loops test purposes
+					if($count > 10000){
+						//break;
 					}
 				}
 				$this->stats["p"]->plus_end_timer("Average restriction test time");
@@ -330,7 +364,7 @@
 				if(!isset($D1[$N->D])){$D1[$N->D]=0;}
 				$D1[$N->D]++;
 			}
-			return $D1
+			return $D1;
 		}
 
 		/**
@@ -357,7 +391,7 @@
 		 * in the prior list, [2] N that occured 2 or more times in the prior list
 		 */
 		public function previous_xN_config($C, $previousNs){			
-			$xyz1 = array(0,0,0);
+			$xyz = array(0,0,0);
 			foreach ($C->d as $k => $N) {
 				if(isset($previousNs[$N->n])){
 					if($previousNs[$N->n] > 1){
@@ -598,6 +632,7 @@
 					$e2++;
 				}
 			}
+
 			if(($e2 == 1)||($e2 >= 5)) {				
 				foreach ($C->d as $N) {
 					if($N->n%2 == 0){
@@ -640,13 +675,12 @@
 				$DFs[] = $N->DF;
 			}
 			sort($DFs);
+
 			$c = count($DFs);
 			for ($i=0; $i < $c-1; $i++) { 
 				if($DFs[$i+1]-$DFs[$i] <= 1) {
 					$k++;
-				} else {
-					return true;
-				} 
+				}
 			}
 			if($k == $c) {
 				return false;
@@ -729,6 +763,7 @@
 					return FALSE;
 				}
 			}
+			return true;
 		}
 
 		/**
@@ -751,16 +786,18 @@
 		public function restrict_N_H2a($C){			
 			$prev = 0;
 			$cur = 0;
-			for ($i=1; $i < 4; $i++) { 
-				if(($this->numElementsEqual($this->wCombs[0], $this->wCombs[$i+1]) == 0)||($this->numElementsEqual($this->wCombs[0], $this->wCombs[$i+1])==3)) {
+			for ($i=0; $i < 4; $i++) { 
+				$pe = $this->numElementsEqual($this->wCombs[0], $this->wCombs[$i+1]);
+				$ce = $this->numElementsEqual($C, $this->wCombs[$i]);
+
+				if(($pe == 0)||($pe == 3)) {
 					$prev++;
 				}
-				if(($this->numElementsEqual($C, $this->wCombs[$i]) == 0)||($this->numElementsEqual($C, $this->wCombs[$i])==3)) {
+				if(($ce == 0)||($ce == 3)) {
 					$cur++;
 				}
 			}
-			if(($prev==3)&&($cur==3)){
-
+			if(($prev == 3)&&($cur == 3)){
 				return false;
 			}
 			return true;
@@ -774,14 +811,17 @@
 		public function restrict_N_H2b($C){	
 			$prev = 0;
 			$cur = 0;
-			for ($i=1; $i < 4; $i++) { 
-				if($this->numElementsEqual($this->wCombs[0], $this->wCombs[$i+1]) == 2) {
+			for ($i=0; $i < 4; $i++) { 
+				$pe = $this->numElementsEqual($this->wCombs[0], $this->wCombs[$i+1]);
+				$ce = $this->numElementsEqual($C, $this->wCombs[$i]);
+				if($pe == 2) {
 					$prev++;
 				} 
-				if($this->numElementsEqual($C, $this->wCombs[$i]) == 2) {
+				if($ce == 2) {
 					$cur++;
 				}
 			}
+
 			if(($prev==3)&&($cur==3)){
 				return false;
 			}
@@ -794,17 +834,13 @@
 		 * @return boolean
 		 */
 		public function restrict_N_I1($C){
-			$prev = 0;
-			$cur = 0;
-			for ($i=1; $i < 4; $i++) { 
-				if($this->numElementsEqual($this->wCombs[0], $this->wCombs[$i+1]) >= 3) {
-					$prev++;
-				} 
-				if($this->numElementsEqual($C, $this->wCombs[$i]) >= 3) {
-					$cur++;
+			$count = 0;
+			foreach ($C->d as $k => $N) {
+				if(array_key_exists($N->n, $this->previous_18N)){
+					$count++;
 				}
-			}
-			if(($prev==3)&&($cur==3)){
+			}			
+			if($count > 3){
 				return false;
 			}
 			return true;
@@ -846,6 +882,8 @@
 			if($count > 3) {
 				return false;
 			}
+			return true;
+
 		}
 
 		/**
@@ -883,6 +921,7 @@
 			if(($count == 0 )||($count > 4)) {
 				return false;
 			}
+			return true;
 		}
 
 		/**
@@ -891,19 +930,7 @@
 		 * @return boolean
 		 */
 		public function restrict_N_J5($C){
-			$xyz1 = array(0,0,0);
-			$xyz2 = array(0,0,0);
-			foreach ($C->d as $k => $N) {
-				if(isset($this->previous_60N[$N->n])){
-					if($this->previous_60N[$N->n] > 1){
-						$xyz[2]++;
-					} elseif($this->previous_60N[$N->n] == 1) {	
-						$xyz[1]++;
-					}
-				} else {
-					$xyz[0]++;
-				}
-			}
+			$xyz = $this->previous_xN_config($C, $this->previous_60N);	
 
 			//sub part a - X is larger than 3
 			if($xyz[2] > 3) {return false;}
@@ -915,9 +942,9 @@
 			if(($xyz[0] == 0)||($xyz[0] > 4)) {return false;}
 
 			// If any of the previous values where X = 3  or Y = 4 or Z = 4 we do not allow them now
-			if ($this->previousTest_60Nconfig[0] == 3){return false;}
-			if ($this->previousTest_60Nconfig[1] == 4){return false;}
-			if ($this->previousTest_60Nconfig[2] == 4){return false;}
+			if (($this->previousTest_60Nconfig[0] == 3)&&($xyz[0] == 3)){return false;}
+			if (($this->previousTest_60Nconfig[1] == 4)&&($xyz[1] == 4)){return false;}
+			if (($this->previousTest_60Nconfig[2] == 4)&&($xyz[2] == 4)){return false;}
 
 			if($xyz == $this->previousTest_60Nconfig){return false;}
 
@@ -931,7 +958,10 @@
 		 * @param  integer $threshold
 		 * @return boolean
 		 */
-		public function restrict_N_K1($C, $list, $threshold = 5){			
+		public function restrict_N_K1($C, $list = null, $threshold = 5){
+			if($list == null) {
+				$list = $this->wCombs;
+			}
 			foreach ($list as $j => $value) {
 				if($this->numElementsEqual($C, $value) >= $threshold) {
 					return FALSE;
@@ -966,11 +996,11 @@
 		 * @return boolean
 		 */
 		public function restrict_cRd_cRf_C1($C){
-			if(($this->wCombs[0]->cRd_cRf == '21111-111111') && ($combination->cRd_cRf == $this->wCombs[0]->cRd_cRf) && ($combination->cDf == $this->wCombs[0]->cDf)) {
+			if(($this->wCombs[0]->cRd_cRf == '21111-111111') && ($C->cRd_cRf == $this->wCombs[0]->cRd_cRf) && ($C->cDf == $this->wCombs[0]->cDf)) {
 				return false;
 			}
 
-			if( (($this->wCombs[0]->cRf == '2211')||($this->wCombs[0]->cRf == '111111')||($this->wCombs[0]->cRf == '3111')) && ($combination->cRf == $this->wCombs[0]->cRf) && ($combination->cDf == $this->wCombs[0]->cDf)) {
+			if( (($this->wCombs[0]->cRf == '2211')||($this->wCombs[0]->cRf == '111111')||($this->wCombs[0]->cRf == '3111')) && ($C->cRf == $this->wCombs[0]->cRf) && ($C->cDf == $this->wCombs[0]->cDf)) {
 				return false;
 			}
 			return TRUE;
@@ -1010,11 +1040,11 @@
 		 * @return boolean
 		 */
 		public function restrict_cRd_B1($C){
-			$D1 = getTensConfig($C);			
+			$D1 = $this->getTensConfig($C);			
 			$count = 0;
 
-			if(in_array($C->cRd, array(222, 2211)){			
-				$D2 = getTensConfig($this->lastOccuranceOf['cRd'][$C->cRd]);			
+			if(in_array($C->cRd, array(222, 2211))) {			
+				$D2 =  $this->getTensConfig($this->lastOccuranceOf['cRd'][$C->cRd]);			
 				foreach ($D1 as $k => $nOccured) {
 					if(($nOccured > 1)&&(isset($D2[$k]))&&($D2[$k] > 1)) {
 						$count++;
@@ -1022,8 +1052,6 @@
 				}
 				if($count >1){ return false; }
 			}
-
-
 			return true;
 		}
 
@@ -1033,11 +1061,11 @@
 		 * @return boolean
 		 */
 		public function restrict_cRd_B2($C){
-			$D1 = getTensConfig($C);		
+			$D1 =  $this->getTensConfig($C);		
 			$count = 0;
 			
-			if(in_array($C->cRd, array(411, 321, 222, 3111, 2211)){					
-				$D2 = getTensConfig($this->lastOccuranceOf['cRd'][$C->cRd]);			
+			if(in_array($C->cRd, array(411, 321, 222, 3111, 2211))) {					
+				$D2 =  $this->getTensConfig($this->lastOccuranceOf['cRd'][$C->cRd]);			
 				foreach ($D1 as $k => $nOccured) {
 					if(($nOccured > 1)&&(isset($D2[$k]))&&($D2[$k] > 1)) {
 						$count++;
@@ -1045,7 +1073,6 @@
 				}
 				if($count < 1){ return false; }
 			}
-
 			return true;
 		}
 
@@ -1089,7 +1116,7 @@
 					foreach ($D2 as $j => $arrN2) {
 						if(count($arrN2)>1){
 							$haystack = array(array($arrN2[0]->DF), array($arrN2[1]->DF));
-							if(in_array($arrN1[0]->DF, $haystack && in_array($arrN1[1]->DF, $haystack)){
+							if(in_array($arrN1[0]->DF, $haystack) && in_array($arrN1[1]->DF, $haystack)) {
 								return false;
 							} else {
 								return true;
@@ -1098,6 +1125,7 @@
 					}
 				}
 			}
+			return true;
 		}
 
 
@@ -1114,12 +1142,12 @@
 
 			foreach ($D1 as $k => $arrN1) {
 				if(count($arrN1) == 1){
-					$DF1[] = $arrN1->DF;					
+					$DF1[] = $arrN1[0]->DF;					
 				}
 			}
 			foreach ($D2 as $k => $arrN2) {
 				if(count($arrN2) == 1){
-					$DF2[] = $arrN2->DF;					
+					$DF2[] = $arrN2[0]->DF;					
 				}
 			}
 

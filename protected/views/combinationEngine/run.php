@@ -103,5 +103,7 @@
 	}
 	echo "</div>";
 
-	d($performance->timers);
+	d($cg->testFailed);
+	d($cg->testPassed);
+	//d($performance->timers);
 ?>

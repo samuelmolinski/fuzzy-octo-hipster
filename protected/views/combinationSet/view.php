@@ -145,7 +145,7 @@ $this->menu=array(
 		}
 	}
 	ksort($nTotal);
-	d($c);
+	//d($c);
 	echo "<div class='' style=\"clear:both\">";
 	foreach ($nTotal as $k => $vez) {
 		echo "<span> $k [$vez],</span>";
