@@ -181,12 +181,13 @@
 	    	$groups_2_2 = Yii::app()->params['cRd_cRf_groups'];
 
 
+			Yii::trace(CVarDumper::dumpAsString($groups_2_2),'sort_CRD_CRF $groups_2_2');
 			foreach ($this->list as $key => $Cstring) {
 
             	//echo Yii::trace(CVarDumper::dumpAsString($groups_2_2),'combination $Cstring');
 				$C = new CombinationStatistics($Cstring);
-				Yii::trace(CVarDumper::dumpAsString($groups_2_2),'sort_CRD_CRF $groups_2_2');
 				foreach ($groups_2_2 as $key => $group) {
+					Yii::trace(CVarDumper::dumpAsString($C->cRd_cRf),'$key');
 					if(in_array($C->cRd_cRf, $group)){
 						$sort[$key]++;
 						
@@ -200,9 +201,10 @@
 							$sub[$key]['222_111111']++;
 						}
 						break;
-					} 
-					if($key >5) {
-						Yii::trace(CVarDumper::dumpAsString($C->cRd_cRf),'sort_CRD_CRF $C->cRd_cRf');
+					}
+
+					if($key > 5) {
+						Yii::trace(CVarDumper::dumpAsString($C->cRd_cRf),'moreThan5');
 					}
 				}
 			}
