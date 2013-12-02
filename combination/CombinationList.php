@@ -170,6 +170,7 @@
 
 	    public function sort_CRD_CRF(){
 	    	$sort = array(0,0,0,0,0,0);
+	    	$counter = 0;
 	    	$sub = array(
 	    		array('321'=>0,'3111'=>0,'222_111111'=>0),
 	    		array('321'=>0,'3111'=>0,'222_111111'=>0),
@@ -189,6 +190,7 @@
 				foreach ($groups_2_2 as $key => $group) {
 					Yii::trace(CVarDumper::dumpAsString("key $key"),'$key');
 					if(in_array($C->cRd_cRf, $group)){
+						$counter++;
 						$sort[$key]++;
 						Yii::trace(CVarDumper::dumpAsString("Accepted"),'Accepted');
 						
@@ -210,6 +212,7 @@
 				}
 			}
 
+					Yii::trace(CVarDumper::dumpAsString($counter),'$counter');
 					Yii::trace(CVarDumper::dumpAsString(count($this->list)),'count($this->list)');
 			return array($sort, $sub);
 	    }
