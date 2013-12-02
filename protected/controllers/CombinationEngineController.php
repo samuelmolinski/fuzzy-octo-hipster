@@ -317,18 +317,16 @@ class CombinationEngineController extends Controller
 		$numberOfWinningCombinations = count($previousTest_CL->list);
 		$cg->generateCombinations($previousTest_CL, $numOfCombinations);
 
-		/*if($model->save()) {
+		if($model->save()) {
 			$render =array(
 				"numOfCombinations"=>$numOfCombinations,
 				"numberOfWinningCombinations"=>$numberOfWinningCombinations,
 				"cg"=>$cg,
-				"totalTested"=>$count,
-				"performance"=>$p,
-				"sorted"=>$sorted,
-				"tests"=>$tests,
-				'saved'=>true
+				"totalTested"=>$cg->stats['totalTested'],
+				"performance"=>$cg->stats['p'],
+				"sorted"=>$cg->CL->sort_CRD_CRF(),
 			);
-		} else { */
+		} else { 
 			$render =array(
 				"numOfCombinations"=>$numOfCombinations,
 				"numberOfWinningCombinations"=>$numberOfWinningCombinations,

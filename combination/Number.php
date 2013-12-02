@@ -1,6 +1,6 @@
 <?php
 	class Number {
-		public $n; // the numbers value (usually from 1-60)
+		public $n; // the numbers value (usually from 01-60)
 		public $D; // which tens group it belongs. values 0-5
 		public $DF; // final digit
 

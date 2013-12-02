@@ -33,15 +33,21 @@
 		public $testPassed = array();
 		public $testFailed = array();
 
-		public $rule_1a1_ranges = array(
-			array('min'=>1,'max'=>30),
-			array('min'=>2,'max'=>40),
-			array('min'=>4,'max'=>49),
-			array('min'=>11,'max'=>55),
-			array('min'=>18,'max'=>59),
-			array('min'=>31,'max'=>60)
+		public $restrict_N_ranges = array(
+			array('min'=>1,'max'=>25),
+			array('min'=>2,'max'=>35),
+			array('min'=>6,'max'=>45),
+			array('min'=>18,'max'=>54),
+			array('min'=>25,'max'=>59),
+			array('min'=>38,'max'=>60)
 		);
-		public $permited_1a8;
+
+		public $total_N_limit = 0;
+		public $total_N_values = array();
+
+		/* old  variables */
+
+		/*public $permited_1a8;
 		public $limit_2_1c;
 		public $groups_2_1_2;
 		public $configuration_2_1_2;
@@ -56,7 +62,7 @@
 		public $rule_2_2_2_total;
 		public $rule_2_1b_subList;
 		public $last_cDf_21111;
-		public $last_cRf_21111;
+		public $last_cRf_21111;*/
 
 		public function CombinationGenerator($previousTest_CL = null) {
 
@@ -140,6 +146,7 @@
 			$this->restrictionsToBeChekced = array ( 
 				array ('restrict_N_A1',			1, ), 
 				array ('restrict_N_B1',			1, ), 
+				array ('restrict_N_B2',			1, ), 
 				array ('restrict_N_C1',			1, ), 
 				array ('restrict_N_C2ab',		1, ), 
 				array ('restrict_N_C3abc',		1, ), 
@@ -154,7 +161,7 @@
 				array ('restrict_N_H2a',		1, ), 
 				array ('restrict_N_H2b',		1, ), 
 				array ('restrict_N_I1',			1, ), 
-				array ('restrict_N_J1',			1, ), 
+				//array ('restrict_N_J1',			1, ), 
 				array ('restrict_N_J2',			1, ), 
 				array ('restrict_N_J3',			1, ), 
 				array ('restrict_N_J4',			1, ), 
@@ -175,19 +182,30 @@
 				"p" => new Performance()
 			);
 
-			$this->permited_cRd_cRf = array(
+			//$this->permited_cRd_cRf = Yii::app()->params['cRd_cRf_groups'];
+			
+			foreach (Yii::app()->params['cRd_cRf_groups'] as $arr => $cRd_cRf) {
+				$this->permited_cRd_cRf[] = $cRd_cRf;
+			}
+			
+			/*$this->permited_cRd_cRf = array(
 				'2211-21111','21111-21111','3111-21111',
 				'321-21111','222-21111','111111-21111',
 				'321-2211','3111-2211','2211-2211',
 				'21111-2211','321-111111','3111-111111',
 				'2211-111111','21111-111111','2211-3111','21111-3111'
-			);
-				
+			);*/
+		
+			for ($i=0; $i < 60; $i++) { 
+				$this->total_N_values[] = 0;
+			}
 		}
 
 		// Replaces parts of the CombinationEngineController->actionRun() to remove engine logic to this class
 		public function generateCombinations($previousTest_CL, $numOfCombinations = 100){
 			set_time_limit(0);
+
+			$this->total_N_limit = $numOfCombinations * .11;
 
 			// convert $previousTest_CL => wCombs[]
 	    	
@@ -286,6 +304,10 @@
 			if($C->d[0]->n < 11){ $this->N1_possibilities['n1_10']++;}
 			if(($C->d[0]->n >= 11) && ($C->d[0]->n <21)){ $this->N1_possibilities['n11_20']++;}
 			if($C->d[0]->n >= 21){$this->N1_possibilities['n21_30']++;}
+
+			foreach ($C->d as $k => $N) {
+				$this->total_N_values[(int)$N->n]++;
+			}
 
 			$this->N1_possibilities['total']++;
 
@@ -427,7 +449,7 @@
 		public function restrict_N_A1($C = array(), $generating = false) {
 			//1º N- 01 a 30; 2º N- 02 a 40; 3º N- 04 a 49; 4º N- 11 a 55; 5º N- 18 a 59; 6º N- 31 a 60;
 			$list = array();
-			$ranges = $this->rule_1a1_ranges;
+			$ranges = $this->restrict_N_ranges;
 			//pre existing combination does this with recursion
 			if (!empty($C) && $generating) {
 				sort($C->d);
@@ -511,6 +533,16 @@
 			} else {
 				return true;
 			}
+		}
+
+
+		public function restrict_N_B2($C){
+			foreach ($C->d as $k => $N) {
+				if($this->total_N_values[$N->n] > $this->total_N_limit) {
+					return false;
+				}
+			}
+			return true;
 		}
 
 		/**
@@ -643,6 +675,42 @@
 					return false;
 				}
 			}
+			return true;
+		}
+
+		/**
+		 * [restrict_N_D3 description] Reject if has 2N or 4N, even or odd, if it occurred in the last 2 test
+		 * @param  CombinationStatistics $C
+		 * @return boolean 
+		 */
+		public function restrict_N_D3($C){
+
+			$e1 = 0; //even num in $C
+			$e2 = 0; //even num in $this->wCombs[0]
+			$e3 = 0; //even num in $this->wCombs[0]
+			foreach ($this->wCombs[0]->d as $N) {
+				if($N->n%2 == 0){
+					$e3++;
+				}
+			}
+
+			foreach ($this->wCombs[0]->d as $N) {
+				if($N->n%2 == 0){
+					$e3++;
+				}
+			}
+
+			if((($e2 == 2)||($e2 >= 4))&&($e3 == 2)||($e3 >= 4)) {				
+				foreach ($C->d as $N) {
+					if($N->n%2 == 0){
+						$e1++;
+					}
+				}
+				if(($e1 == 1)||($e1 >= 5)) {
+					return false;
+				}
+			}
+
 			return true;
 		}
 
@@ -899,7 +967,7 @@
 					$count++;
 				}
 			}
-			if(($count ==0 )||($count > 3)) {
+			if(($count == 0 )||($count > 3)) {
 				return false;
 			}
 			return true;
