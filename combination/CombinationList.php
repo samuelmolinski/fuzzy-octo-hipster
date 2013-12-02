@@ -196,9 +196,12 @@
 							$sub[$key]['3111']++; 
 						}
 						if(($C->cRd == '222')||($C->cRd == '111111')) {
-							$sub[$key]['222_111111']++; 
+							$sub[$key]['222_111111']++;
 						}
 						break;
+					} else {
+						Yii::trace(CVarDumper::dumpAsString($group),'sort_CRD_CRF $group');
+						Yii::trace(CVarDumper::dumpAsString($C->cRd_cRf),'sort_CRD_CRF $C->cRd_cRf');
 					}
 				}
 			}
