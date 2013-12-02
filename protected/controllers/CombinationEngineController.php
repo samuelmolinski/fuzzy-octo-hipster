@@ -336,7 +336,7 @@ class CombinationEngineController extends Controller
 				"sorted"=>$cg->CL->sort_CRD_CRF(),
 				'saved'=>false
 			);
-		//}
+		}
 
 		$this->render('run',$render);
 	}
