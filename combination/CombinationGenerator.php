@@ -187,7 +187,7 @@
 			foreach (Yii::app()->params['cRd_cRf_groups'] as $arr => $cRd_cRf) {
 				$this->permited_cRd_cRf[] = $cRd_cRf;
 			}
-			
+
 			/*$this->permited_cRd_cRf = array(
 				'2211-21111','21111-21111','3111-21111',
 				'321-21111','222-21111','111111-21111',
@@ -538,7 +538,7 @@
 
 		public function restrict_N_B2($C){
 			foreach ($C->d as $k => $N) {
-				if($this->total_N_values[$N->n] > $this->total_N_limit) {
+				if($this->total_N_values[(int)$N->n] > $this->total_N_limit) {
 					return false;
 				}
 			}
