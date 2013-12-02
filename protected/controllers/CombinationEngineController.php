@@ -317,6 +317,11 @@ class CombinationEngineController extends Controller
 		$numberOfWinningCombinations = count($previousTest_CL->list);
 		$cg->generateCombinations($previousTest_CL, $numOfCombinations);
 
+		
+		$list = new CombinationList($cg->currentBettingCombinations);		
+		$model = new CombinationSet;
+		$model->combinations = serialize($list);
+
 		if($model->save()) {
 			$render =array(
 				"numOfCombinations"=>$numOfCombinations,
