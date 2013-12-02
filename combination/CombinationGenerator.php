@@ -167,6 +167,7 @@
 				array ('restrict_N_J4',			1, ), 
 				array ('restrict_N_J5',			1, ), 
 				array ('restrict_N_K1',			1, ), 
+				array ('restrict_N_K2',			1, ), 
 				array ('restrict_cRd_cRf_A1',	1, ), 
 				array ('restrict_cRd_cRf_C1',	1, ), 
 				array ('restrict_cRd_A1',		1, ), 
@@ -1035,6 +1036,25 @@
 			}
 			foreach ($list as $j => $value) {
 				if($this->numElementsEqual($C, $value) >= $threshold) {
+					return FALSE;
+				}
+			}
+			return TRUE;
+		}
+
+		/**
+		 * [restrict_N_K2 description]
+		 * @param  CombinationStatistics  $C
+		 * @param  array  $list
+		 * @param  integer $threshold
+		 * @return boolean
+		 */
+		public function restrict_N_K2($C, $list = null, $threshold = 4){
+			if($list == null) {
+				$list = $this->wCombs;
+			}
+			foreach ($list as $j => $value) {
+				if(($this->numElementsEqual($C, $value) >= $threshold)&&($C->cRd_cRf==$value->cRd_cRf)) {
 					return FALSE;
 				}
 			}

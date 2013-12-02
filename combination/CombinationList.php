@@ -182,17 +182,17 @@
 	    	$groups_2_2 = Yii::app()->params['cRd_cRf_groups'];
 
 
-			Yii::trace(CVarDumper::dumpAsString($groups_2_2),'sort_CRD_CRF $groups_2_2');
+			//Yii::trace(CVarDumper::dumpAsString($groups_2_2),'sort_CRD_CRF $groups_2_2');
 			foreach ($this->list as $key => $Cstring) {
 
             	//echo Yii::trace(CVarDumper::dumpAsString($groups_2_2),'combination $Cstring');
 				$C = new CombinationStatistics($Cstring);
 				foreach ($groups_2_2 as $key => $group) {
-					Yii::trace(CVarDumper::dumpAsString("key $key"),'$key');
+					//Yii::trace(CVarDumper::dumpAsString("key $key"),'$key');
 					if(in_array($C->cRd_cRf, $group)){
 						$counter++;
 						$sort[$key]++;
-						Yii::trace(CVarDumper::dumpAsString("Accepted"),'Accepted');
+						//Yii::trace(CVarDumper::dumpAsString("Accepted"),'Accepted');
 						
 						if($C->cRd == '321'){
 							$sub[$key]['321']++; 
@@ -205,15 +205,8 @@
 						}
 						break;
 					}
-
-					if($key > 4) {
-						Yii::trace(CVarDumper::dumpAsString($C->cRd_cRf),'moreThan5');
-					}
 				}
 			}
-
-					Yii::trace(CVarDumper::dumpAsString($counter),'$counter');
-					Yii::trace(CVarDumper::dumpAsString(count($this->list)),'count($this->list)');
 			return array($sort, $sub);
 	    }
 
