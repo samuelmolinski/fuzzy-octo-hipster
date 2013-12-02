@@ -261,7 +261,7 @@
 						$this->testFailed[$currentFunction]++;
 
 						if($this->testFailed[$currentFunction] > 10000){
-							break;
+							continue;
 						}
 
 						if($numTestsFailed>= $this->threshold) {
