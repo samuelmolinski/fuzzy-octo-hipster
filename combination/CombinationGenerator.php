@@ -197,7 +197,7 @@
 			);*/
 		
 			for ($i=1; $i <= 60; $i++) { 
-				$this->total_N_values[] = 0;
+				$this->total_N_values[$i] = 0;
 			}
 		}
 
