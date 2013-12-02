@@ -184,8 +184,10 @@
 
 			//$this->permited_cRd_cRf = Yii::app()->params['cRd_cRf_groups'];
 			
-			foreach (Yii::app()->params['cRd_cRf_groups'] as $arr => $cRd_cRf) {
-				$this->permited_cRd_cRf[] = $cRd_cRf;
+			foreach (Yii::app()->params['cRd_cRf_groups'] as $arr => $cRd_cRf_group) {
+				foreach ($cRd_cRf_group as $arr => $cRd_cRf) {
+					$this->permited_cRd_cRf[] = $cRd_cRf;
+				}
 			}
 			Yii::trace(CVarDumper::dumpAsString($this->permited_cRd_cRf), '$this->permited_cRd_cRf');
 
