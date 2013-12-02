@@ -187,9 +187,10 @@
             	//echo Yii::trace(CVarDumper::dumpAsString($groups_2_2),'combination $Cstring');
 				$C = new CombinationStatistics($Cstring);
 				foreach ($groups_2_2 as $key => $group) {
-					Yii::trace(CVarDumper::dumpAsString($C->cRd_cRf),'$key');
+					Yii::trace(CVarDumper::dumpAsString($key),'$key');
 					if(in_array($C->cRd_cRf, $group)){
 						$sort[$key]++;
+						Yii::trace(CVarDumper::dumpAsString("Accepted"),'Accepted');
 						
 						if($C->cRd == '321'){
 							$sub[$key]['321']++; 
@@ -208,6 +209,8 @@
 					}
 				}
 			}
+
+					Yii::trace(CVarDumper::dumpAsString(count($this->list)),'count($this->list)');
 			return array($sort, $sub);
 	    }
 
