@@ -47,7 +47,7 @@
 
 		/* old  variables */
 
-		/*public $permited_1a8;
+		public $permited_1a8;
 		public $limit_2_1c;
 		public $groups_2_1_2;
 		public $configuration_2_1_2;
@@ -62,7 +62,7 @@
 		public $rule_2_2_2_total;
 		public $rule_2_1b_subList;
 		public $last_cDf_21111;
-		public $last_cRf_21111;*/
+		public $last_cRf_21111;
 
 		public function CombinationGenerator($previousTest_CL = null) {
 
@@ -311,9 +311,9 @@
 
 			$this->N1_possibilities['total']++;
 
-			if(($this->rule_2_2_2_invalid == $C->group2_2)) {
+			/*if(($this->rule_2_2_2_invalid == $C->group2_2)) {
 				$this->rule_2_2_2_total++;
-			}
+			}*/
 			$this->currentBettingCombinations[] = $C;
 		}
 
