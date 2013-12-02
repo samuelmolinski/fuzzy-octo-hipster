@@ -187,7 +187,7 @@
             	//echo Yii::trace(CVarDumper::dumpAsString($groups_2_2),'combination $Cstring');
 				$C = new CombinationStatistics($Cstring);
 				foreach ($groups_2_2 as $key => $group) {
-					Yii::trace(CVarDumper::dumpAsString($key),'$key');
+					Yii::trace(CVarDumper::dumpAsString("key $key"),'$key');
 					if(in_array($C->cRd_cRf, $group)){
 						$sort[$key]++;
 						Yii::trace(CVarDumper::dumpAsString("Accepted"),'Accepted');
@@ -204,7 +204,7 @@
 						break;
 					}
 
-					if($key > 5) {
+					if($key > 4) {
 						Yii::trace(CVarDumper::dumpAsString($C->cRd_cRf),'moreThan5');
 					}
 				}
