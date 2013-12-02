@@ -317,7 +317,7 @@ class CombinationEngineController extends Controller
 		$numberOfWinningCombinations = count($previousTest_CL->list);
 		$cg->generateCombinations($previousTest_CL, $numOfCombinations);
 
-		
+
 		$list = new CombinationList($cg->currentBettingCombinations);		
 		$model = new CombinationSet;
 		$model->combinations = serialize($list);
@@ -330,6 +330,7 @@ class CombinationEngineController extends Controller
 				"totalTested"=>$cg->stats['totalTested'],
 				"performance"=>$cg->stats['p'],
 				"sorted"=>$cg->CL->sort_CRD_CRF(),
+				'saved'=>true
 			);
 		} else { 
 			$render =array(
