@@ -210,6 +210,7 @@
 			set_time_limit(0);
 
 			$this->total_N_limit = $numOfCombinations * .11;
+			Yii::trace(CVarDumper::dumpAsString($this->total_N_limit),'$this->total_N_limit');
 
 			// convert $previousTest_CL => wCombs[]
 	    	
@@ -228,11 +229,12 @@
 			do {
 				do {
 					$list = array();
-					for ($i=0; $i < 6; $i++) { 
+					/*for ($i=0; $i < 6; $i++) { 
 						$comb[$i] = $this->genUniqueRand($list);
 						$list[] = $comb[$i]->n;
-					}
-					$c = new CombinationStatistics($comb);
+					}*/
+					$c = $this->restrict_N_A1(array(), true);
+					//$c = new CombinationStatistics($comb);
 					//d($c);				//d($c->group2_2); 
 					
 				} while (in_array($c, $this->currentBettingCombinations));
@@ -261,11 +263,16 @@
 						$numTestsFailed += $restriction[1];
 						$this->testFailed[$currentFunction]++;
 
-						if($this->testFailed[$currentFunction] > 10000){
-							continue;
+						if($this->testFailed[$currentFunction] >30000){
+							//continue;
 						}
 
-						if($numTestsFailed>= $this->threshold) {
+						if($currentFunction == 'restrict_N_B2'){
+							//Yii::trace(CVarDumper::dumpAsString($numTestsFailed),'$numTestsFailed');
+							//Yii::trace(CVarDumper::dumpAsString(($numTestsFailed >= $this->threshold)),'($numTestsFailed >= $this->threshold)');
+						}
+						
+						if($numTestsFailed >= $this->threshold) {
 							$fail++;
 							$this->stats["p"]->plus_end_timer("Average restriction test time");
 							continue 2;
@@ -298,7 +305,6 @@
 
 			$this->CL = new CombinationList($this->currentBettingCombinations);
 
-			//return $CL;
 		}
 
 		// Utility functions 
@@ -481,7 +487,7 @@
 
 				//if its for generation initial value
 				for ($i=0; $i < 6; $i++) {
-					$comb[$i] = $this->genUniqueRand($list, 1, 60);
+					$comb[$i] = $this->genUniqueRand($list, $this->restrict_N_ranges[$i]['min'], $this->restrict_N_ranges[$i]['max']);
 					$list[] = $comb[$i]->n;
 				}
 				//must return a CombinationStatistics
@@ -543,6 +549,8 @@
 		public function restrict_N_B2($C){
 			foreach ($C->d as $k => $N) {
 				if($this->total_N_values[(int)$N->n] > $this->total_N_limit) {
+					//Yii::trace("(n=["+CVarDumper::dumpAsString((int)$N->n)+"])", '$this->total_N_values[(int)$N->n]');
+					//Yii::trace("(["+CVarDumper::dumpAsString($this->total_N_values[(int)$N->n])+"])", '$this->total_N_values[(int)$N->n]');
 					return false;
 				}
 			}
