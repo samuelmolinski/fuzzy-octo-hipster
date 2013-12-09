@@ -170,7 +170,7 @@
 				array ('restrict_N_J5c',			1.0, ), 
 				array ('restrict_N_J5d',			1.0, ), 
 				array ('restrict_N_K1',			1.0, ), 
-				//array ('restrict_N_K2',			0.4, ), 
+				array ('restrict_N_K2',			0.4, ), 
 				array ('restrict_cRd_cRf_A1',	1.0, ), 
 				array ('restrict_cRd_cRf_C1',	0.4, ), 
 				array ('restrict_cRd_A1',		1.0, ), 
