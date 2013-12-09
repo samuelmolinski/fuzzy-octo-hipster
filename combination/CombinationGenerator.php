@@ -146,7 +146,7 @@
 			$this->restrictionsToBeChekced = array ( 
 				array ('restrict_N_A1',			1.0, ), 
 				array ('restrict_N_B1',			1.0, ), 
-				array ('restrict_N_B2',			1.0, ), 
+				//array ('restrict_N_B2',			1.0, ), 
 				array ('restrict_N_C1',			0.4, ), 
 				array ('restrict_N_C2ab',		0.4, ), 
 				array ('restrict_N_C3abc',		0.4, ), 
@@ -548,7 +548,7 @@
 
 		public function restrict_N_B2($C){
 			foreach ($C->d as $k => $N) {
-				if($this->total_N_values[(int)$N->n] > $this->total_N_limit) {
+				if(($N->n>10)&&($this->total_N_values[(int)$N->n] > $this->total_N_limit)) {
 					//Yii::trace("(n=["+CVarDumper::dumpAsString((int)$N->n)+"])", '$this->total_N_values[(int)$N->n]');
 					//Yii::trace("(["+CVarDumper::dumpAsString($this->total_N_values[(int)$N->n])+"])", '$this->total_N_values[(int)$N->n]');
 					return false;
