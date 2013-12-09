@@ -165,7 +165,11 @@
 				array ('restrict_N_J2',			1.0, ), 
 				array ('restrict_N_J3',			0.4, ), 
 				array ('restrict_N_J4',			0.4, ), 
-				array ('restrict_N_J5',			1.0, ), 
+				array ('restrict_N_J5a',			1.0, ), 
+				array ('restrict_N_J5b',			1.0, ), 
+				array ('restrict_N_J5c',			1.0, ), 
+				array ('restrict_N_J5d',			1.0, ), 
+				array ('restrict_N_J5e',			1.0, ), 
 				array ('restrict_N_K1',			1.0, ), 
 				//array ('restrict_N_K2',			0.4, ), 
 				array ('restrict_cRd_cRf_A1',	1.0, ), 
@@ -1005,11 +1009,11 @@
 		}
 
 		/**
-		 * [restrict_N_J5 description]
+		 * [restrict_N_J5a description]
 		 * @param  CombinationStatistics $C
 		 * @return boolean
 		 */
-		public function restrict_N_J5($C){
+		public function restrict_N_J5a($C){
 			$xyz = $this->previous_xN_config($C, $this->previous_60N);	
 
 			//sub part a - X is larger than 3
@@ -1021,12 +1025,47 @@
 			//sub part c - Z is zero or larger than 4
 			if(($xyz[0] == 0)||($xyz[0] > 4)) {return false;}
 
+			return true;
+		}
+
+
+		/**
+		 * [restrict_N_J5b description]
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_N_J5b($C){
+			$xyz = $this->previous_xN_config($C, $this->previous_60N);	
+
 			// If any of the previous values where X = 3  or Y = 4 or Z = 4 we do not allow them now
 			if (($this->previousTest_60Nconfig[0] == 3)&&($xyz[0] == 3)){return false;}
-			if (($this->previousTest_60Nconfig[1] == 4)&&($xyz[1] == 4)){return false;}
-			if (($this->previousTest_60Nconfig[2] == 4)&&($xyz[2] == 4)){return false;}
 
-			if($xyz == $this->previousTest_60Nconfig){return false;}
+			return true;
+		}
+
+
+		/**
+		 * [restrict_N_J5c description]
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_N_J5c($C){
+			$xyz = $this->previous_xN_config($C, $this->previous_60N);	
+			if (($this->previousTest_60Nconfig[1] == 4)&&($xyz[1] == 4)){return false;}
+
+			return true;
+		}
+
+
+		/**
+		 * [restrict_N_J5d description]
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_N_J5d($C){
+			$xyz = $this->previous_xN_config($C, $this->previous_60N);	
+
+			if (($this->previousTest_60Nconfig[2] == 4)&&($xyz[2] == 4)){return false;}
 
 			return true;
 		}
