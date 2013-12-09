@@ -48,10 +48,10 @@
 						}
 					}
 					if(!isset($cRd_cRf[$c1->cRd_cRf])) { $cRd_cRf[$c1->cRd_cRf] = array();}
-					if(!isset($cRd_cRf[$c1->cRd_cRf][$N_same[1].'-'.$N_same[2].'-'.$N_same[3]])){$cRd_cRf[$c1->cRd_cRf][$N_same[1].'-'.$N_same[2].'-'.$N_same[3]] = 0}
-					if(!isset($cRd_cRf[$c1->cRd_cRf][$N_same[0].'-'.$N_same[2].'-'.$N_same[3]])){$cRd_cRf[$c1->cRd_cRf][$N_same[0].'-'.$N_same[2].'-'.$N_same[3]] = 0}
-					if(!isset($cRd_cRf[$c1->cRd_cRf][$N_same[0].'-'.$N_same[1].'-'.$N_same[3]])){$cRd_cRf[$c1->cRd_cRf][$N_same[0].'-'.$N_same[1].'-'.$N_same[3]] = 0}
-					if(!isset($cRd_cRf[$c1->cRd_cRf][$N_same[0].'-'.$N_same[1].'-'.$N_same[2]])){$cRd_cRf[$c1->cRd_cRf][$N_same[0].'-'.$N_same[1].'-'.$N_same[2]] = 0}
+					if(!isset($cRd_cRf[$c1->cRd_cRf][$N_same[1].'-'.$N_same[2].'-'.$N_same[3]])) {$cRd_cRf[$c1->cRd_cRf][$N_same[1].'-'.$N_same[2].'-'.$N_same[3]] = 0;}
+					if(!isset($cRd_cRf[$c1->cRd_cRf][$N_same[0].'-'.$N_same[2].'-'.$N_same[3]])) {$cRd_cRf[$c1->cRd_cRf][$N_same[0].'-'.$N_same[2].'-'.$N_same[3]] = 0;}
+					if(!isset($cRd_cRf[$c1->cRd_cRf][$N_same[0].'-'.$N_same[1].'-'.$N_same[3]])) {$cRd_cRf[$c1->cRd_cRf][$N_same[0].'-'.$N_same[1].'-'.$N_same[3]] = 0;}
+					if(!isset($cRd_cRf[$c1->cRd_cRf][$N_same[0].'-'.$N_same[1].'-'.$N_same[2]])) {$cRd_cRf[$c1->cRd_cRf][$N_same[0].'-'.$N_same[1].'-'.$N_same[2]] = 0;}
 
 					$cRd_cRf[$c1->cRd_cRf][$N_same[1].'-'.$N_same[2].'-'.$N_same[3]]++;
 					$cRd_cRf[$c1->cRd_cRf][$N_same[0].'-'.$N_same[2].'-'.$N_same[3]]++;
@@ -71,7 +71,7 @@
 						}
 					}
 					if(!isset($cRd_cRf[$c1->cRd_cRf])) { $cRd_cRf[$c1->cRd_cRf] = array();}
-					if(!isset($cRd_cRf[$c1->cRd_cRf][$N_same[0].'-'.$N_same[1].'-'.$N_same[2]])){$cRd_cRf[$c1->cRd_cRf][$N_same[0].'-'.$N_same[1].'-'.$N_same[2]] = 0}
+					if(!isset($cRd_cRf[$c1->cRd_cRf][$N_same[0].'-'.$N_same[1].'-'.$N_same[2]])){$cRd_cRf[$c1->cRd_cRf][$N_same[0].'-'.$N_same[1].'-'.$N_same[2]] = 0;}
 
 					$cRd_cRf[$c1->cRd_cRf][$N_same[0].'-'.$N_same[1].'-'.$N_same[2]]++;
 				}
@@ -91,26 +91,27 @@
 
 	foreach ($cRd_cRf as $cRdcRf => $N4s) {
 		echo "<li>[$cRdcRf]</br>";
-		foreach ($N4s as $k => $N4) {
-			sort($N4);
-			echo "$k, &nbsp;&nbsp;";
+		foreach ($N4s as $k => $count) {
+			//sort($N4);
+			if($count > 2)
+				echo "$k:$count, &nbsp;&nbsp;";
 		}
 		echo "</li>";
 	}
 	echo "</ol>";
 
 
-		function numElementsEqual($c1, $c2) {
-			$num = 0;
-			if($c1 != $c2) {
-				foreach ($c2->d as $key => $value) {
-					if(in_array($value, $c1->d)) {
-						$num++;
-					}
+	function numElementsEqual($c1, $c2) {
+		$num = 0;
+		if($c1 != $c2) {
+			foreach ($c2->d as $key => $value) {
+				if(in_array($value, $c1->d)) {
+					$num++;
 				}
-			} else {
-				$num = 6;
 			}
-			return $num;
+		} else {
+			$num = 6;
 		}
+		return $num;
+	}
 	
