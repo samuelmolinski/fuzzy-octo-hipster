@@ -169,7 +169,6 @@
 				array ('restrict_N_J5b',			1.0, ), 
 				array ('restrict_N_J5c',			1.0, ), 
 				array ('restrict_N_J5d',			1.0, ), 
-				array ('restrict_N_J5e',			1.0, ), 
 				array ('restrict_N_K1',			1.0, ), 
 				//array ('restrict_N_K2',			0.4, ), 
 				array ('restrict_cRd_cRf_A1',	1.0, ), 
@@ -519,26 +518,30 @@
 			
 			//lets keep the combinations N1 with in these ranges
 			// 1-10 => 80%, 11-20 => 20%, 21-30 => 5% (of the total values possible for N1)
+			//Yii::trace(CVarDumper::dumpAsString($this->N1_possibilities), '$this->N1_possibilities');
 			if($this->N1_possibilities['total']>10) { // let it get some numbers first
 				if($C->d[0]->n < 11){
-						$num = (($this->N1_possibilities['n1_10'])/($this->N1_possibilities['total']));
-					if($num>.80) {
+					$num = (($this->N1_possibilities['n1_10'])/($this->N1_possibilities['total']));
+					//Yii::trace(CVarDumper::dumpAsString($num), '$num n1_10');
+					if($num<.80) {
 						return true;
 					} else {
 						return false;
 					}
 				}
 				if(($C->d[0]->n >= 11) && ($C->d[0]->n <21)){
-						$num = ($this->N1_possibilities['n11_20'])/($this->N1_possibilities['total']);
-					if($num>.20) {
+					$num = ($this->N1_possibilities['n11_20'])/($this->N1_possibilities['total']);
+					//Yii::trace(CVarDumper::dumpAsString($num), '$num n11_20');
+					if($num<.20) {
 						return true;
 					} else {
 						return false;
 					}
 				}
 				if($C->d[0]->n >= 21){		
-						$num = ($this->N1_possibilities['n21_30'])/($this->N1_possibilities['total']);
-					if($num>.05) {
+					$num = ($this->N1_possibilities['n21_30'])/($this->N1_possibilities['total']);
+					//Yii::trace(CVarDumper::dumpAsString($num), '$num n21_30');
+					if($num<.05) {
 						return true;
 					} else {
 						return false;
@@ -552,7 +555,7 @@
 
 		public function restrict_N_B2($C){
 			foreach ($C->d as $k => $N) {
-				if(($N->n>10)&&($this->total_N_values[(int)$N->n] > $this->total_N_limit)) {
+				if(($this->total_N_values[(int)$N->n] > $this->total_N_limit)) {
 					//Yii::trace("(n=["+CVarDumper::dumpAsString((int)$N->n)+"])", '$this->total_N_values[(int)$N->n]');
 					//Yii::trace("(["+CVarDumper::dumpAsString($this->total_N_values[(int)$N->n])+"])", '$this->total_N_values[(int)$N->n]');
 					return false;
