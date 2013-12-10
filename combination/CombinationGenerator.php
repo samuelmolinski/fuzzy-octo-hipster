@@ -177,7 +177,7 @@
 				array ('restrict_cRd_A1',		1.0, ), 
 				array ('restrict_cRd_B1',		0.4, ), 
 				array ('restrict_cRd_B2',		0.4, ), 
-				array ('restrict_cRf_A1',		1.0, ), 
+				array ('restrict_cRf_A1',		0.4, ), 
 				array ('restrict_cRf_B1',		0.4, ), 
 				array ('restrict_cRf_B2',		0.4, )
 			);
@@ -1253,8 +1253,8 @@
 		public function restrict_cRf_B1($C){			
 			$D1 = $this->getTensConfigN($C);
 			$D2 = $this->getTensConfigN($this->lastOccuranceOf["cRf"][21111]);
-			Yii::trace(CVarDumper::dumpAsString($D1),'$D1');
-			Yii::trace(CVarDumper::dumpAsString($D2),'$D2');
+			//Yii::trace(CVarDumper::dumpAsString($D1),'$D1');
+			//Yii::trace(CVarDumper::dumpAsString($D2),'$D2');
 
 			foreach ($D1 as $k => $arrN1) {
 				if(count($arrN1) > 1){
