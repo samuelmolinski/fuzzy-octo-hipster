@@ -152,6 +152,7 @@
 				array ('restrict_N_C3abc',		0.4, ), 
 				array ('restrict_N_D1',			1.0, ), 
 				array ('restrict_N_D2',			0.4, ), 
+				array ('restrict_N_D3',			0.4, ), 
 				array ('restrict_N_E1',			0.4, ), 
 				array ('restrict_N_E2',			0.4, ), 
 				array ('restrict_N_F1',			0.4, ), 
@@ -870,10 +871,11 @@
 		 * @param  CombinationStatistics $C
 		 * @return boolean
 		 */
-		public function restrict_N_H2a($C){			
+		public function restrict_N_H2a($C){	
+			// 30-32-49-50-52-53		
 			$prev = 0;
 			$cur = 0;
-			for ($i=0; $i < 4; $i++) { 
+			for ($i=0; $i < 3; $i++) { 
 				$pe = $this->numElementsEqual($this->wCombs[0], $this->wCombs[$i+1]);
 				$ce = $this->numElementsEqual($C, $this->wCombs[$i]);
 
@@ -884,7 +886,7 @@
 					$cur++;
 				}
 			}
-			if(($prev == 3)&&($cur == 3)){
+			if(($prev == 3)&&($cur == 3)) {
 				return false;
 			}
 			return true;
@@ -898,7 +900,7 @@
 		public function restrict_N_H2b($C){	
 			$prev = 0;
 			$cur = 0;
-			for ($i=0; $i < 4; $i++) { 
+			for ($i=0; $i < 3; $i++) { 
 				$pe = $this->numElementsEqual($this->wCombs[0], $this->wCombs[$i+1]);
 				$ce = $this->numElementsEqual($C, $this->wCombs[$i]);
 				if($pe == 2) {
@@ -1251,13 +1253,24 @@
 		public function restrict_cRf_B1($C){			
 			$D1 = $this->getTensConfigN($C);
 			$D2 = $this->getTensConfigN($this->lastOccuranceOf["cRf"][21111]);
+			Yii::trace(CVarDumper::dumpAsString($D1),'$D1');
+			Yii::trace(CVarDumper::dumpAsString($D2),'$D2');
 
 			foreach ($D1 as $k => $arrN1) {
-				if(count($arrN1)>1){
+				if(count($arrN1) > 1){
 					foreach ($D2 as $j => $arrN2) {
-						if(count($arrN2)>1){
-							$haystack = array(array($arrN2[0]->DF), array($arrN2[1]->DF));
-							if(in_array($arrN1[0]->DF, $haystack) && in_array($arrN1[1]->DF, $haystack)) {
+						if(count($arrN2) > 1){
+							$haystack = array();
+							foreach ($arrN2 as $k => $N) {
+								$haystack[] = $N->DF;
+							}
+							$c = 0;
+							foreach ($arrN1 as $k => $N) {
+								if(in_array($arrN1[0]->DF, $haystack)){
+									$c++;
+								}
+							}
+							if($c >1) {
 								return false;
 							} else {
 								return true;

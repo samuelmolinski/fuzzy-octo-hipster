@@ -93,8 +93,9 @@
 		echo "<li>[$cRdcRf]</br>";
 		foreach ($N4s as $k => $count) {
 			//sort($N4);
-			if($count > 2)
-				echo "$k:$count, &nbsp;&nbsp;";
+			$c = (sqrt(1 + ($count*4))-1)/2;
+			if($c > 1)
+				echo "$k:$c, &nbsp;&nbsp;";
 		}
 		echo "</li>";
 	}
