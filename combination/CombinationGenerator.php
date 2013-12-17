@@ -1084,21 +1084,15 @@
 		}
 
 		/**
-		 * [restrict_N_J5a description]
+		 * [restrict_N_J5a description] Rejected if $C has the same previous 60N config as the last test
 		 * @param  CombinationStatistics $C
 		 * @return boolean
 		 */
 		public function restrict_N_J5a($C){
-			$xyz = $this->previous_xN_config($C, $this->previous_60N);	
+			$xyz = $this->previous_xN_config($C, $this->previous_60N);
+			$p_xyz = $this->previousTest_60Nconfig;
 
-			//sub part a - X is larger than 3
-			if($xyz[0] > 3) {return false;}
-
-			//sub part b - Y is zero or larger than 4
-			if(($xyz[1] == 0)||($xyz[1] > 4)) {return false;}
-
-			//sub part c - Z is zero or larger than 4
-			if(($xyz[2] == 0)||($xyz[2] > 4)) {return false;}
+			if(($xyz[0] == $p_xyz[0])&&($xyz[1] == $p_xyz[1])&&($xyz[2] == $p_xyz[2])) {return false;}
 
 			return true;
 		}
