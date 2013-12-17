@@ -148,8 +148,11 @@
 				array ('restrict_N_B1',			1.0, ), 
 				//array ('restrict_N_B2',			1.0, ), 
 				array ('restrict_N_C1',			1.0, ), 
-				array ('restrict_N_C2ab',		1.0, ), 
-				array ('restrict_N_C3abc',		1.0, ), 
+				array ('restrict_N_C2a',		1.0, ), 
+				array ('restrict_N_C2b',		0.4, ), 
+				array ('restrict_N_C3a',		0.4, ), 
+				array ('restrict_N_C3b',		0.4, ), 
+				array ('restrict_N_C3c',		1.0, ), 
 				array ('restrict_N_D1',			1.0, ), 
 				array ('restrict_N_D2',			0.4, ), 
 				array ('restrict_N_D3a',		0.4, ), 
@@ -168,7 +171,7 @@
 				array ('restrict_N_J2',			1.0, ), 
 				array ('restrict_N_J3',			0.4, ), 
 				array ('restrict_N_J4',			0.4, ), 
-				array ('restrict_N_J5a',			1.0, ), 
+				array ('restrict_N_J5a',			0.4, ), 
 				array ('restrict_N_J5b',			1.0, ), 
 				array ('restrict_N_J5c',			1.0, ), 
 				array ('restrict_N_J5d',			1.0, ), 
@@ -593,13 +596,13 @@
 		}
 
 		/**
-		 * [restrict_N_C2ab description] 
+		 * [restrict_N_C2a description] 
 		 * a - can not have no Ns in tens 0 (01-10) and tens 5 (51-60)
 		 * b - can not have no Ns in tens 4 (41-50) and tens 5 (51-60)
 		 * @param  CombinationStatistics $C
 		 * @return boolean
 		 */
-		public function restrict_N_C2ab($C){
+		public function restrict_N_C2a($C){
 			$tens = array();
 			foreach ($C->d as $N) {
 				if(@$tens[$N->D]==null) {
@@ -619,14 +622,36 @@
 		}
 
 		/**
-		 * [restrict_N_C2a description] Reject if it occurred in the last test
+		 * [restrict_N_C2b description] 
+		 * a - can not have no Ns in tens 0 (01-10) and tens 5 (51-60)
+		 * b - can not have no Ns in tens 4 (41-50) and tens 5 (51-60)
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_N_C2b($C){
+			$tens = array();
+			foreach ($C->d as $N) {
+				if(@$tens[$N->D]==null) {
+					$tens[$N->D]=0;
+				}
+				$tens[$N->D]++;
+			}
+			// Part B
+			if(empty($tens[4])&&empty($tens[5])) {
+				return false;
+			}
+			return true;
+		}
+
+		/**
+		 * [restrict_N_C3a description] Reject if it occurred in the last test
 		 * a - 2N in the 1-3 tens place
 		 * b - 4N in the 1-3 tens place
 		 * c - 1N or 5N in the 1-3 tens place
 		 * @param  CombinationStatistics $C
 		 * @return boolean
 		 */
-		public function restrict_N_C3abc($C){
+		public function restrict_N_C3a($C){
 			$ft1 = 0; // N in the 1-3 tens place
 			$ft2 = 0; // N in the 1-3 tens place
 			foreach ($C->d as $N) {
@@ -643,14 +668,66 @@
 			if(($ft1==2)&&($ft2==2)){
 				return false;
 			}
+			return true;
+		}
+
+		/**
+		 * [restrict_N_C3b description] Reject if it occurred in the last test
+		 * a - 2N in the 1-3 tens place
+		 * b - 4N in the 1-3 tens place
+		 * c - 1N or 5N in the 1-3 tens place
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_N_C3b($C){
+			$ft1 = 0; // N in the 1-3 tens place
+			$ft2 = 0; // N in the 1-3 tens place
+			foreach ($C->d as $N) {
+				if($N->D <4){
+					$ft1++;
+				}
+			}
+			foreach ($this->wCombs[0]->d as $N) {
+				if($N->D <4){
+					$ft2++;
+				}
+			}
+
 			//part b:  4N in the 1-3 tens place
 			if(($ft1==4)&&($ft2==4)){
 				return false;
 			}
+
+			return true;
+		}
+
+		/**
+		 * [restrict_N_C3c description] Reject if it occurred in the last test
+		 * a - 2N in the 1-3 tens place
+		 * b - 4N in the 1-3 tens place
+		 * c - 1N or 5N in the 1-3 tens place
+		 * @param  CombinationStatistics $C
+		 * @return boolean
+		 */
+		public function restrict_N_C3c($C){
+			$ft1 = 0; // N in the 1-3 tens place
+			$ft2 = 0; // N in the 1-3 tens place
+			foreach ($C->d as $N) {
+				if($N->D <4){
+					$ft1++;
+				}
+			}
+			foreach ($this->wCombs[0]->d as $N) {
+				if($N->D <4){
+					$ft2++;
+				}
+			}
+
 			//part c:  1N or 5N in the 1-3 tens place
 			if((($ft1==1)||($ft1==5))&&(($ft2==1)||($ft2==5))) {
 				return false;
 			}
+
 			return true;
 		}
 
@@ -1251,7 +1328,7 @@
 			$D1 = $this->getTensConfig($C);			
 			$count = 0;
 
-			if(in_array($C->cRd, array(222, 2211))) {			
+			if(in_array($C->cRd, array(222, 2211, 321))) {			
 				$D2 =  $this->getTensConfig($this->lastOccuranceOf['cRd'][$C->cRd]);			
 				foreach ($D1 as $k => $nOccured) {
 					if(($nOccured > 1)&&(isset($D2[$k]))&&($D2[$k] > 1)) {
