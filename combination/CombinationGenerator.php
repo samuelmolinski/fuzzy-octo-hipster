@@ -152,7 +152,9 @@
 				array ('restrict_N_C3abc',		1.0, ), 
 				array ('restrict_N_D1',			1.0, ), 
 				array ('restrict_N_D2',			0.4, ), 
-				array ('restrict_N_D3',			0.4, ), 
+				array ('restrict_N_D3a',		0.4, ), 
+				array ('restrict_N_D3b',		0.4, ), 
+				array ('restrict_N_D4',			0.4, ), 
 				array ('restrict_N_E1',			0.4, ), 
 				array ('restrict_N_E2',			0.4, ), 
 				array ('restrict_N_F1',			0.4, ), 
@@ -175,7 +177,7 @@
 				array ('restrict_cRd_cRf_A1',	1.0, ), 
 				array ('restrict_cRd_cRf_C1',	0.4, ), 
 				array ('restrict_cRd_A1',		1.0, ), 
-				array ('restrict_cRd_B1',		0.4, ), 
+				array ('restrict_cRd_B1',		1.0, ), 
 				array ('restrict_cRd_B2',		0.4, ), 
 				array ('restrict_cRf_A1',		0.4, ), 
 				array ('restrict_cRf_B1',		0.4, ), 
@@ -699,38 +701,106 @@
 		}
 
 		/**
-		 * [restrict_N_D3 description] Reject if has 2N or 4N, even or odd, if it occurred in the last 2 test
+		 * [restrict_N_D3a description] Reject if has 4N odd, if it occurred in the last 2 test
 		 * @param  CombinationStatistics $C
 		 * @return boolean 
 		 */
-		public function restrict_N_D3($C){
+		public function restrict_N_D3a($C){
 
 			$e1 = 0; //even num in $C
 			$e2 = 0; //even num in $this->wCombs[0]
 			$e3 = 0; //even num in $this->wCombs[0]
+
 			foreach ($this->wCombs[0]->d as $N) {
+				if($N->n%2 == 0){
+					$e2++;
+				}
+			}
+
+			foreach ($this->wCombs[1]->d as $N) {
 				if($N->n%2 == 0){
 					$e3++;
 				}
 			}
 
-			foreach ($this->wCombs[0]->d as $N) {
-				if($N->n%2 == 0){
-					$e3++;
-				}
-			}
-
-			if((($e2 == 2)||($e2 >= 4))&&($e3 == 2)||($e3 >= 4)) {				
+			if(($e2 <= 2)&&($e3 <= 2)) {				
 				foreach ($C->d as $N) {
 					if($N->n%2 == 0){
 						$e1++;
 					}
 				}
-				if(($e1 == 1)||($e1 >= 5)) {
+				if($e1 <= 2) {
 					return false;
 				}
 			}
 
+			return true;
+		}
+
+		/**
+		 * [restrict_N_D3b description] Reject if has 4N even, if it occurred in the last 2 test
+		 * @param  CombinationStatistics $C
+		 * @return boolean 
+		 */
+		public function restrict_N_D3b($C){
+
+			$e1 = 0; //even num in $C
+			$e2 = 0; //even num in $this->wCombs[0]
+			$e3 = 0; //even num in $this->wCombs[0]
+
+			foreach ($this->wCombs[0]->d as $N) {
+				if($N->n%2 == 0){
+					$e2++;
+				}
+			}
+
+			foreach ($this->wCombs[1]->d as $N) {
+				if($N->n%2 == 0){
+					$e3++;
+				}
+			}
+
+			if(($e2 >= 4)&&($e3 >= 4)) {				
+				foreach ($C->d as $N) {
+					if($N->n%2 == 0){
+						$e1++;
+					}
+				}
+				if($e1 >= 4) {
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		/**
+		 * [restrict_N_D4 description] Reject if has 4N even, if it occurred in the last 2 test
+		 * @param  CombinationStatistics $C
+		 * @return boolean 
+		 */
+		public function restrict_N_D4($C){
+
+			$e1 = 0; //even num in $C
+			$e2 = 0; //even num in $this->wCombs[0]
+			$e3 = 0; //even num in $this->wCombs[0]
+
+			foreach ($this->wCombs[0]->d as $N) {
+				if($N->n%2 == 0){
+					$e2++;
+				}
+			}
+
+			if(($e2 == 3)) {				
+				foreach ($C->d as $N) {
+					if($N->n%2 == 0){
+						$e1++;
+					}
+				}
+				if($e1 == 3) {
+					return false;
+				}
+			}
 			return true;
 		}
 
