@@ -78,8 +78,7 @@ return array(
 			'connectionString' => 'mysql:host=localhost;dbname=nissenidea.com',
 			//'emulatePrepare' => true,
 			'username' => 'admin',
-			//'password' => '123!!@qwe',
-			'password' => '1234',
+			'password' => '123!!@qwe',
 			'charset' => 'utf8',
 		),
 		
