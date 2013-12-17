@@ -433,12 +433,12 @@
 			foreach ($C->d as $k => $N) {
 				if(isset($previousNs[$N->n])){
 					if($previousNs[$N->n] > 1){
-						$xyz[2]++;
+						$xyz[0]++;
 					} elseif($previousNs[$N->n] == 1) {	
 						$xyz[1]++;
 					}
 				} else {
-					$xyz[0]++;
+					$xyz[2]++;
 				}
 			}
 			return $xyz;
@@ -1092,13 +1092,13 @@
 			$xyz = $this->previous_xN_config($C, $this->previous_60N);	
 
 			//sub part a - X is larger than 3
-			if($xyz[2] > 3) {return false;}
+			if($xyz[0] > 3) {return false;}
 
 			//sub part b - Y is zero or larger than 4
 			if(($xyz[1] == 0)||($xyz[1] > 4)) {return false;}
 
 			//sub part c - Z is zero or larger than 4
-			if(($xyz[0] == 0)||($xyz[0] > 4)) {return false;}
+			if(($xyz[2] == 0)||($xyz[2] > 4)) {return false;}
 
 			return true;
 		}
@@ -1126,6 +1126,7 @@
 		 */
 		public function restrict_N_J5c($C){
 			$xyz = $this->previous_xN_config($C, $this->previous_60N);	
+			// If any of the previous values where X = 3  or Y = 4 or Z = 4 we do not allow them now
 			if (($this->previousTest_60Nconfig[1] == 4)&&($xyz[1] == 4)){return false;}
 
 			return true;
@@ -1139,7 +1140,7 @@
 		 */
 		public function restrict_N_J5d($C){
 			$xyz = $this->previous_xN_config($C, $this->previous_60N);	
-
+			// If any of the previous values where X = 3  or Y = 4 or Z = 4 we do not allow them now
 			if (($this->previousTest_60Nconfig[2] == 4)&&($xyz[2] == 4)){return false;}
 
 			return true;
