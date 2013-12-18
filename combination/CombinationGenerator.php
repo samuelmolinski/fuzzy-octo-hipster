@@ -598,7 +598,6 @@
 		/**
 		 * [restrict_N_C2a description] 
 		 * a - can not have no Ns in tens 0 (01-10) and tens 5 (51-60)
-		 * b - can not have no Ns in tens 4 (41-50) and tens 5 (51-60)
 		 * @param  CombinationStatistics $C
 		 * @return boolean
 		 */
@@ -614,16 +613,11 @@
 			if(empty($tens[0])&&empty($tens[5])) {
 				return false;
 			}
-			// Part B
-			if(empty($tens[4])&&empty($tens[5])) {
-				return false;
-			}
 			return true;
 		}
 
 		/**
 		 * [restrict_N_C2b description] 
-		 * a - can not have no Ns in tens 0 (01-10) and tens 5 (51-60)
 		 * b - can not have no Ns in tens 4 (41-50) and tens 5 (51-60)
 		 * @param  CombinationStatistics $C
 		 * @return boolean
