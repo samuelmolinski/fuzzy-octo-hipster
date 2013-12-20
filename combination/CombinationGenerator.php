@@ -143,7 +143,7 @@
 			$this->currentBettingCombinations = array();
 			mt_srand($this->make_seed());
 
-			$this->restrictionsToBeChekced = array ( 
+			$this->restrictionsToBeChecked = array ( 
 				array ('restrict_N_A1',			1.0, ), 
 				array ('restrict_N_B1',			1.0, ), 
 				//array ('restrict_N_B2',			1.0, ), 
@@ -251,13 +251,14 @@
 				$count++;
 				$numTestsFailed = 0;
 				$this->stats["p"]->start_timer("Average restriction test time");
-				foreach ($this->restrictionsToBeChekced as $restriction) {
+				foreach ($this->restrictionsToBeChecked as $restriction) {
 					$currentFunction = $restriction[0];
+					$currentWeight   = number_format($restriction[1],1,'.',',');
 					if(empty($this->testPassed[$currentFunction])) {
-						$this->testPassed[$currentFunction] = 0;
+						$this->testPassed[$currentFunction] = array('weight'=>$currentWeight, 'occured'=>0);
 					}
 					if(empty($this->testFailed[$currentFunction])) {
-						$this->testFailed[$currentFunction] = 0;
+						$this->testFailed[$currentFunction] = array('weight'=>$currentWeight, 'occured'=>0);
 					}
 					if(2 < count($restriction)) {
 						$this->stats["p"]->start_timer("$currentFunction");
@@ -270,9 +271,9 @@
 					}
 					if(!$r){
 						$numTestsFailed += $restriction[1];
-						$this->testFailed[$currentFunction]++;
+						$this->testFailed[$currentFunction]['occured']++;
 
-						if($this->testFailed[$currentFunction] >30000){
+						if($this->testFailed[$currentFunction]['occured'] >30000){
 							//continue;
 						}
 
@@ -288,7 +289,7 @@
 						}
 					} else {
 						//Debugging:for endless loops test purposes
-						$this->testPassed[$currentFunction]++;
+						$this->testPassed[$currentFunction]['occured']++;
 					}
 					//Debugging:for endless loops test purposes
 					if($count > 10000){
