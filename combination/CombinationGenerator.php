@@ -1430,6 +1430,7 @@
 			$D2 = $this->getTensConfigN($this->lastOccuranceOf["cRf"][21111]);
 
 			$DF1 = array();
+			$DF2 = array();
 
 			foreach ($D1 as $k => $arrN1) {
 				if(count($arrN1) == 1){
